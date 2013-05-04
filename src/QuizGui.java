@@ -38,6 +38,21 @@ public class QuizGui {
 	JButton hexadecimalMode = new JButton("Hexadecimal Mode");
 	JButton randomMode      = new JButton("Random Mode");
 	
+	// Score chart references
+	ArrayList<Integer> scores = quiz.getScores();
+	JPanel scoreChart = new JPanel();
+	JLabel score1 = new JLabel("1: " + scores.get(0) + "%");
+	JLabel score2 = new JLabel("2: " + scores.get(1) + "%");
+	JLabel score3 = new JLabel("3: " + scores.get(2) + "%");
+	JLabel score4 = new JLabel("4: " + scores.get(3) + "%");
+	JLabel score5 = new JLabel("5: " + scores.get(4) + "%");
+	JLabel score6 = new JLabel("6: " + scores.get(5) + "%");
+	JLabel score7 = new JLabel("7: " + scores.get(6) + "%");
+	JLabel score8 = new JLabel("8: " + scores.get(7) + "%");
+	JLabel score9 = new JLabel("9: " + scores.get(8) + "%");
+	JLabel score10 = new JLabel("10: " + scores.get(9) + "%");
+
+	
 	// Content references
 	JPanel content = new JPanel();
 	JPanel userInput = new JPanel();
@@ -115,6 +130,32 @@ public class QuizGui {
 		frame.getContentPane().add(BorderLayout.EAST, sidebar);
 		
 		//---------------------
+		//-- Score Chart
+		//---------------------
+		scoreChart.setLayout(new BoxLayout(scoreChart, BoxLayout.Y_AXIS));
+		
+		scoreChart.add(score1);
+		scoreChart.add(box.createVerticalStrut(bottomMargin/2));		
+		scoreChart.add(score2);
+		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
+		scoreChart.add(score3);
+		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
+		scoreChart.add(score4);
+		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
+		scoreChart.add(score5);
+		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
+		scoreChart.add(score6);
+		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
+		scoreChart.add(score7);
+		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
+		scoreChart.add(score8);
+		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
+		scoreChart.add(score9);
+		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
+		scoreChart.add(score10);
+		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
+		
+		//---------------------
 		//-- Main Content
 		//---------------------
 	
@@ -148,8 +189,9 @@ public class QuizGui {
 		// Attach sub-panes to content pane
 		content.add(userInput);
 		content.add(results);
+		//frame.getContentPane().add(BorderLayout.WEST, scoreChart);
+
 		frame.getContentPane().add(BorderLayout.WEST, content);
-		
 		
 		//---------------------
 		//-- Window setup

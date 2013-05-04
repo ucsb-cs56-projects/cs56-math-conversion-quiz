@@ -1,5 +1,9 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
+
 
 /**
  * A command line interface for a binary/octal/hex conversion Quiz.
@@ -14,6 +18,9 @@ public class Quiz {
     
     private ArrayList<Boolean> scores = new ArrayList<Boolean>();
     
+	private String filePath = "scores.txt";
+	private ArrayList<Integer> savedScores; // Holds scores loaded from the save file
+
     /*
      * mode is a magic number to represent the current quiz radix.
      * For example, you can practice conversions to binary by setting it to 2
@@ -102,6 +109,42 @@ public class Quiz {
     }  
     
     /**
+     * Saves a score into the save file
+     * @param score Score to be saved
+     */
+	public void writeScore(int score) {
+		try {
+			ScoreLoader stl = new ScoreLoader(filePath);
+			ArrayList<Integer> scores = stl.loadScores();
+			scores.add(score);
+			stl.saveScore(scores);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Loads the scores from the save file into an ArrayList
+	 * @return List of scores in the save file
+	 */
+	public ArrayList<Integer> getScores(){
+		ArrayList<Integer> scores = new ArrayList<Integer>();
+		try {
+			ScoreLoader stl = new ScoreLoader(filePath);
+			scores = stl.loadScores();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Collections.sort(scores); // sorts scores from least to greatest
+		Collections.reverse(scores); // reverses it to greatest to least
+		return scores;
+	}
+	
+    /**
      * Run the Quiz game on the command line
      * For each question, display its prompt and track the user's answer
      * At the end, display the percentage of correct answers.
@@ -120,7 +163,7 @@ public class Quiz {
     			this.insertScore(false);
     		}
     	}
-    	
+    	writeScore(this.getPercentage());
     	System.out.println("Your score was " + this.getPercentage() + "%!");
     }
 	
