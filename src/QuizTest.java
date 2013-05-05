@@ -2,9 +2,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * 
- * @author Andrew Berls
- * @version CS56, Spring 2012, Mantis 0000611
+ * Original program by Andrew Berls for Mantis 0000611
+ * @author Daniel Ly
+ * @version CS56, Spring 2013
  * @see Quiz
  *
  */
@@ -80,4 +80,27 @@ public class QuizTest {
 		assertEquals(50, q.getPercentage());
 	}
 	
+	/**
+	 * test getScores()
+	 * @see Quiz#getScores()
+	 */
+	@Test
+	public void testScores(){
+		Quiz q = new Quiz(1);
+		q.resetScores();
+		q.writeScore(100);
+		assertEquals("[100, 0, 0, 0, 0, 0, 0, 0, 0, 0]", q.getScores().toString());
+	}
+	
+	/**
+	 * test getScores()
+	 * @see Quiz#getScores()
+	 */
+	@Test
+	public void testScores2(){
+		Quiz q = new Quiz(1);
+		q.resetScores();
+		q.writeScore(50, 60, 100, 20, 40);
+		assertEquals("[100, 60, 50, 40, 20, 0, 0, 0, 0, 0]", q.getScores().toString());
+	}
 }

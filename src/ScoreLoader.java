@@ -70,4 +70,16 @@ public class ScoreLoader {
 		}
 		bufferedWriter.close();
 	}
+	
+	/**
+	 * Resets all scores to 0
+	 */
+	public void resetScores() throws IOException{
+		FileWriter fileWriter = new FileWriter(filePath);
+		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+		for (int i = 0; i < 10; i++){
+			bufferedWriter.write(0 + "\n");
+		}
+		bufferedWriter.close();
+	}
 }

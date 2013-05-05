@@ -6,8 +6,9 @@ import java.awt.event.*;
 /**
  * GUI for binary/octal/hex conversion Quiz
  * Original program by Erick Valle & George Barrios for Mantis 0000391
- * @author Andrew Berls
- * @version CS56, Spring 2012, Mantis 0000611 
+ * Edited by Andrew Berls for Mantis 0000611
+ * @author Daniel Ly
+ * @version CS56, Spring 2013
  */
 
 public class QuizGui {
@@ -38,9 +39,11 @@ public class QuizGui {
 	JButton hexadecimalMode = new JButton("Hexadecimal Mode");
 	JButton randomMode      = new JButton("Random Mode");
 	
+	
 	// Score chart references
 	ArrayList<Integer> scores = quiz.getScores();
 	JPanel scoreChart = new JPanel();
+	JLabel scoreTitle = new JLabel("High Scores:");
 	JLabel score1 = new JLabel("1: " + scores.get(0) + "%");
 	JLabel score2 = new JLabel("2: " + scores.get(1) + "%");
 	JLabel score3 = new JLabel("3: " + scores.get(2) + "%");
@@ -51,7 +54,8 @@ public class QuizGui {
 	JLabel score8 = new JLabel("8: " + scores.get(7) + "%");
 	JLabel score9 = new JLabel("9: " + scores.get(8) + "%");
 	JLabel score10 = new JLabel("10: " + scores.get(9) + "%");
-
+	ArrayList<JLabel> scoreLabels = new ArrayList<JLabel>();
+	JButton resetScore = new JButton("Reset scores");
 	
 	// Content references
 	JPanel content = new JPanel();
@@ -67,6 +71,10 @@ public class QuizGui {
 	JPanel scorePanel   = new JPanel();
 	JLabel scoreReadout = new JLabel("");
 	JButton tryAgain    = new JButton("Try Again!");
+	
+	
+	// Center panel; will contain both scorePanel and content
+	JPanel centerPanel = new JPanel();
 	
 	// Specific question references
 	private static int current;
@@ -132,28 +140,25 @@ public class QuizGui {
 		//---------------------
 		//-- Score Chart
 		//---------------------
+		multiAdd(scoreLabels, score1, score2, score3, score4, score5, score6, 
+				score7, score8, score9, score10);
 		scoreChart.setLayout(new BoxLayout(scoreChart, BoxLayout.Y_AXIS));
 		
+		scoreChart.add(scoreTitle);
 		scoreChart.add(score1);
-		scoreChart.add(box.createVerticalStrut(bottomMargin/2));		
 		scoreChart.add(score2);
-		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
 		scoreChart.add(score3);
-		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
 		scoreChart.add(score4);
-		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
 		scoreChart.add(score5);
-		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
 		scoreChart.add(score6);
-		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
 		scoreChart.add(score7);
-		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
 		scoreChart.add(score8);
-		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
 		scoreChart.add(score9);
-		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
 		scoreChart.add(score10);
-		scoreChart.add(box.createVerticalStrut(bottomMargin/2));	
+		resetScore.addActionListener(new resetScoreListener());
+		scoreChart.add(resetScore);
+		
+		frame.getContentPane().add(BorderLayout.WEST, scoreChart);
 		
 		//---------------------
 		//-- Main Content
@@ -184,14 +189,15 @@ public class QuizGui {
 		tryAgain.addActionListener(new tryAgainListener());
 		scorePanel.add(tryAgain);
 		scorePanel.setVisible(false); // Enabled at end of quiz
-		frame.getContentPane().add(BorderLayout.CENTER, scorePanel);
 		
 		// Attach sub-panes to content pane
 		content.add(userInput);
 		content.add(results);
-		//frame.getContentPane().add(BorderLayout.WEST, scoreChart);
 
-		frame.getContentPane().add(BorderLayout.WEST, content);
+		// nests scorePanel and content together because they both use the same layout
+		centerPanel.add(scorePanel);
+		centerPanel.add(content);
+		frame.getContentPane().add(BorderLayout.CENTER, centerPanel);
 		
 		//---------------------
 		//-- Window setup
@@ -203,6 +209,28 @@ public class QuizGui {
 		return this; // For chaining method calls
 	}
 	
+	/**
+	 * Helper function to add multiple JLabels to an ArrayList
+	 * @param list ArrayList where labels will be added to
+	 * @param labels JLabels to be added to list
+	 */
+	private void multiAdd(ArrayList<JLabel> list, JLabel ...labels){
+		for (JLabel label: labels){
+			list.add(label);
+		}
+	}
+	
+	/**
+	 * Updates the scoreboard
+	 */
+	private void updateScores(){
+		scores = quiz.getScores();
+		int i = 0;
+		for (JLabel score: scoreLabels){
+			score.setText((i+1) + ": " + scores.get(i) + "%");
+			i++;
+		}
+	}
 	/**
 	 * When the user clicks submit, send feedback on their answer
 	 * and update appropriate counters
@@ -310,6 +338,16 @@ public class QuizGui {
 	}
 	
 	/**
+	 * Resets then updates the scoreboard
+	 */
+	class resetScoreListener implements ActionListener {
+		public void actionPerformed (ActionEvent e) {
+			quiz.resetScores();
+			updateScores();
+		}
+	}
+	
+	/**
 	 * Update fields to ask the current question, and end the quiz if necessary
 	 */
 	public void ask() {
@@ -321,6 +359,9 @@ public class QuizGui {
 			userInput.setVisible(false);
 			scoreReadout.setText(quiz.getReadout());
 			scorePanel.setVisible(true);
+			// Update the scoreboard
+			quiz.writeScore(quiz.getPercentage());
+			updateScores();
 		} else {
 			// Else ask the current question			
 			String prompt = currentQuestion.generatePrompt(quiz.getMode());

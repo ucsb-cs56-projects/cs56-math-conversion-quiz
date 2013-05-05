@@ -8,8 +8,9 @@ import java.util.Scanner;
 /**
  * A command line interface for a binary/octal/hex conversion Quiz.
  * Original program by Erick Valle & George Barrios for Mantis 0000391
- * @author Andrew Berls
- * @version CS56, Spring 2012, Mantis 0000611
+ * Edited by Andrew Berls for Mantis 0000611
+ * @author Daniel Ly
+ * @version CS56, Spring 2013
  */
 
 public class Quiz {
@@ -18,8 +19,9 @@ public class Quiz {
     
     private ArrayList<Boolean> scores = new ArrayList<Boolean>();
     
-	private String filePath = "scores.txt";
+	private String filePath = "scores.txt"; // File path to the text file containing the scores
 	private ArrayList<Integer> savedScores; // Holds scores loaded from the save file
+	private ScoreLoader sl = new ScoreLoader(filePath);
 
     /*
      * mode is a magic number to represent the current quiz radix.
@@ -109,15 +111,28 @@ public class Quiz {
     }  
     
     /**
-     * Saves a score into the save file
-     * @param score Score to be saved
+     * Saves multiple scores into the save file
+     * @param scores Scores to be saved
      */
-	public void writeScore(int score) {
+	public void writeScore(int ...scores) {
 		try {
-			ScoreLoader stl = new ScoreLoader(filePath);
-			ArrayList<Integer> scores = stl.loadScores();
-			scores.add(score);
-			stl.saveScore(scores);
+			ArrayList<Integer> scoreList = sl.loadScores();
+			for (int score: scores)	scoreList.add(score);
+			sl.saveScore(scoreList);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+    /**
+     * Saves multiple scores into the save file
+     * @param scores Scores to be saved
+     */
+	public void resetScores() {
+		try {
+			sl.resetScores();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -132,8 +147,7 @@ public class Quiz {
 	public ArrayList<Integer> getScores(){
 		ArrayList<Integer> scores = new ArrayList<Integer>();
 		try {
-			ScoreLoader stl = new ScoreLoader(filePath);
-			scores = stl.loadScores();
+			scores = sl.loadScores();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
