@@ -46,16 +46,16 @@ public class QuizGui {
 	ArrayList<Integer> scores = quiz.getScores();
 	JPanel scoreChart = new JPanel();
 	JLabel scoreTitle = new JLabel("High Scores:");
-	JLabel score1 = new JLabel("1: " + scores.get(0) + "%");
-	JLabel score2 = new JLabel("2: " + scores.get(1) + "%");
-	JLabel score3 = new JLabel("3: " + scores.get(2) + "%");
-	JLabel score4 = new JLabel("4: " + scores.get(3) + "%");
-	JLabel score5 = new JLabel("5: " + scores.get(4) + "%");
-	JLabel score6 = new JLabel("6: " + scores.get(5) + "%");
-	JLabel score7 = new JLabel("7: " + scores.get(6) + "%");
-	JLabel score8 = new JLabel("8: " + scores.get(7) + "%");
-	JLabel score9 = new JLabel("9: " + scores.get(8) + "%");
-	JLabel score10 = new JLabel("10: " + scores.get(9) + "%");
+	JLabel score1 = new JLabel();
+	JLabel score2 = new JLabel();
+	JLabel score3 = new JLabel();
+	JLabel score4 = new JLabel();
+	JLabel score5 = new JLabel();
+	JLabel score6 = new JLabel();
+	JLabel score7 = new JLabel();
+	JLabel score8 = new JLabel();
+	JLabel score9 = new JLabel();
+	JLabel score10 = new JLabel();
 	ArrayList<JLabel> scoreLabels = new ArrayList<JLabel>();
 	JButton resetScore = new JButton("Reset scores");
 	
@@ -145,7 +145,8 @@ public class QuizGui {
 		multiAdd(scoreLabels, score1, score2, score3, score4, score5, score6, 
 				score7, score8, score9, score10);
 		scoreChart.setLayout(new BoxLayout(scoreChart, BoxLayout.Y_AXIS));
-		
+		quiz.writeScore(0);	// Used to initialize the list of scores in case txt file hasn't been initialized
+		updateScores();		//	which is necessary for the first start up
 		scoreChart.add(scoreTitle);
 		scoreChart.add(score1);
 		scoreChart.add(score2);
