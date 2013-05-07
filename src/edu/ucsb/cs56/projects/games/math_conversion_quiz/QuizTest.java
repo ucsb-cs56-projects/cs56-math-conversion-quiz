@@ -1,3 +1,5 @@
+package edu.ucsb.cs56.projects.games.math_conversion_quiz;
+
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 

@@ -1,15 +1,20 @@
 <project default="compile">
 
 	<!-- build.xml for 0000756, W12, CS56
-       	 name: Andrew Berls -->
+       	 name: Andrew Berls 
+		 
+		 Edited by: Daniel Ly
+		 Version: S13, CS56
+		 Refactored package name -->
 
 	<property environment="env" />
 	<property name="mainClassGui" value="QuizGui" />
 	<property name="mainClass" value="Quiz" />
 	<property name="webRoot" value="${env.HOME}/public_html/cs56/S12/issues" />
 	<property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56/S12/issues" />
-	<property name="projectPath" value="0000756" />
-	<property name="projectName" value="cs56_S12_0000756" />
+	<property name="packageName" value = "edu.ucsb.cs56.projects.games.math_conversion_quiz" />
+	<property name="projectPath" value="/edu/ucsb/cs56/projects/games/" />
+	<property name="projectName" value="math_conversion_quiz" />
 	<property name="javadocDest" value="${webRoot}/${projectPath}/javadoc" />
 	<property name="javadocURL" value="${webBaseURL}/${projectPath}/javadoc" />
 	<property name="jwsDest" value="${webRoot}/${projectPath}/jws" />
@@ -28,12 +33,12 @@
 
 
 	<target name="run" depends="compile" description="Run the Quiz command line interface">
-		<java classname="${mainClass}" classpath="build" />
+		<java classname="${packageName}.${mainClass}" classpath="build" />
 	</target>
 	
 	
 	<target name="runGui" depends="compile" description="Run the main Quiz GUI">
-		<java classname="${mainClassGui}" fork="true" classpath="build" />
+		<java classname="${packageName}.${mainClassGui}" fork="true" classpath="build" />
 	</target>
 
 
