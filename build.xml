@@ -11,7 +11,7 @@
 	<property name="mainClassGui" value="QuizGui" />
 	<property name="mainClass" value="Quiz" />
 	<property name="webRoot" value="${env.HOME}/public_html/cs56/13S/dly" />
-	<property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56/S12/13S/dly" />
+	<property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56/13S/dly" />
 	<property name="packageName" value = "edu.ucsb.cs56.projects.games.math_conversion_quiz" />
 	<property name="projectPath" value="/edu/ucsb/cs56/projects/games/" />
 	<property name="projectName" value="math_conversion_quiz" />
