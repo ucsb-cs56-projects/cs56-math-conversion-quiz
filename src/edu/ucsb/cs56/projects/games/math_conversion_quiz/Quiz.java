@@ -129,8 +129,7 @@ public class Quiz {
 	}
 	
     /**
-     * Saves multiple scores into the save file
-     * @param scores Scores to be saved
+     * Resets the scores in the save file
      */
 	public void resetScores() {
 		try {
