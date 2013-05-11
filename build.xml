@@ -6,14 +6,14 @@
 	<property environment="env" />
 	<property name="mainClassGui" value="QuizGui" />
 	<property name="mainClass" value="Quiz" />
-	<property name="webRoot" value="${env.HOME}/public_html/cs56/S12/issues" />
-	<property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56/S12/issues" />
+	<property name="webRoot" value="${env.HOME}/public_html/cs56/S13/ProtossJane" />
+	<property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56/S13/ProtossJane" />
 	<property name="projectPath" value="0000756" />
-	<property name="projectName" value="cs56_S12_0000756" />
-	<property name="javadocDest" value="${webRoot}/${projectPath}/javadoc" />
-	<property name="javadocURL" value="${webBaseURL}/${projectPath}/javadoc" />
-	<property name="jwsDest" value="${webRoot}/${projectPath}/jws" />
-	<property name="jwsURL" value="${webBaseUrl}/${projectPath}/jws" />
+	<property name="projectName" value="cs56_math_conversion_quiz" />
+	<property name="javadocDest" value="${webRoot}/${projectName}" />
+	<property name="javadocURL" value="${webBaseURL}/${projecName}" />
+	<property name="jwsDest" value="${webRoot}/${projectName}/jws" />
+	<property name="jwsURL" value="${webBaseUrl}/${projectName}/jws" />
 
 
 	<target name="compile" description="Compile all source files">
@@ -21,7 +21,7 @@
 		<javac srcdir="src" destdir="build" debug="true" debuglevel="lines,source" includeantruntime="false">
 			<classpath>
 				<pathelement location="build" />
-				<pathelement location="/cs/faculty/pconrad/public_html/cs56/lib/junit-4.8.2.jar" />
+				<pathelement location="lib/junit-4.8.2.jar" />
 			</classpath>
 		</javac>
 	</target>
