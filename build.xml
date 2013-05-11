@@ -12,8 +12,9 @@
 	<property name="projectName" value="cs56_math_conversion_quiz" />
 	<property name="javadocDest" value="${webRoot}/${projectName}" />
 	<property name="javadocURL" value="${webBaseURL}/${projecName}" />
-	<property name="jwsDest" value="${webRoot}/${projectName}/jws" />
-	<property name="jwsURL" value="${webBaseUrl}/${projectName}/jws" />
+	<property name="jwsDest" value="${webRoot}/${projectPath}/jws" />
+	<property name="jwsURL" value="${webBaseUrl}/${projectPath}/jws" />
+	<property name="libPath" value="lib/junit-4.8.2.jar" />
 
 
 	<target name="compile" description="Compile all source files">
@@ -21,7 +22,7 @@
 		<javac srcdir="src" destdir="build" debug="true" debuglevel="lines,source" includeantruntime="false">
 			<classpath>
 				<pathelement location="build" />
-				<pathelement location="lib/junit-4.8.2.jar" />
+				<pathelement location="${libPath}" />
 			</classpath>
 		</javac>
 	</target>
@@ -51,9 +52,9 @@
 	<target name="javadoc" depends="compile" description="Generate and publish Javadocs">
 		<delete dir="javadoc" quiet="true" />
 		<javadoc destdir="javadoc" author="true" version="true" use="true">
-			<fileset dir="src" includes="**/*.java" />
+			<fileset dir="src" includes="**/*.java" />"${libPath}" 
 			<classpath>
-				<pathelement location="/cs/faculty/pconrad/public_html/cs56/lib/junit-4.8.2.jar" />
+				<pathelement location="${libPath}"  />
 			</classpath>
 		</javadoc>
 
@@ -84,7 +85,7 @@
 	<target name="test" depends="compile" description="Run the JUnit test suite">
 		<junit haltonerror="no" haltonfailure="no">
 			<classpath>
-				<pathelement location="/cs/faculty/pconrad/public_html/cs56/lib/junit-4.8.2.jar" />
+				<pathelement location="${libPath}"  />
 				<pathelement location="build" />
 			</classpath>
 
