@@ -36,7 +36,7 @@
 	
 	
 	<target name="runGui" depends="compile" description="Run the main Quiz GUI">
-		<java classname="${fullDir}.${mainClassGui}" fork="true" classpath="build" />
+		<java classname="${mainClassGui}" fork="true" classpath="build/edu/ucsb/cs56/projects/math/cs56_math_conversion_quiz" />
 	</target>
 
 
