@@ -4,6 +4,9 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.*;
 import java.awt.event.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 
 /**
  * GUI for binary/octal/hex conversion Quiz
@@ -18,13 +21,15 @@ public class QuizGui {
 	JFrame frame = new JFrame("Binary/Octal/Hex Conversion Quiz");
 	// Used for creating/inserting vertical structs to act as spacer margins
 	Box box = new Box(BoxLayout.X_AXIS);
+	//Runnable scanHint = new Hint();
+	
 	
 	// Quiz-related variables
 	static QuizGui quizGui = new QuizGui();
 	private int numQuestions = 10;
 	Quiz quiz = new Quiz(numQuestions);	
-	
-	
+	private boolean refresh = false;
+	private int maxMatch =0 ;
 	// Sidebar references
 	JPanel sidebar                 = new JPanel();
 	JLabel currentQuestionNumLabel = new JLabel("Current Question: ");
@@ -45,7 +50,7 @@ public class QuizGui {
 	JPanel userInput = new JPanel();
 	JLabel questionLabel = new JLabel("");
 	JTextField userAnswer = new JTextField(25);
-
+	JLabel hintLable = new JLabel("Hint: ");
 	JButton submit = new JButton("Submit");
 	
 	JPanel results  = new JPanel();
@@ -125,11 +130,13 @@ public class QuizGui {
 		userInput.add(questionLabel);
 		userInput.add(box.createVerticalStrut(5));
 		
-
+		userAnswer.getDocument().addDocumentListener(new hintListener());
 		userInput.add(userAnswer); // ----------------------------------------------
 		
 		userInput.add(box.createVerticalStrut(5));
+		userInput.add(hintLable);
 		
+		userInput.add(box.createVerticalStrut(5));
 		submit.addActionListener(new submitListener());
 		userInput.add(feedback);
 		userInput.add(box.createVerticalStrut(5));
@@ -159,7 +166,8 @@ public class QuizGui {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(640, 480);
 		frame.setVisible(true);
-		
+		refreshHint();
+
 		return this; // For chaining method calls
 	}
 	
@@ -167,6 +175,18 @@ public class QuizGui {
 	 * When the user clicks submit, send feedback on their answer
 	 * and update appropriate counters
 	 */
+	 
+	 public void refreshHint()
+	 {
+		 String h = "";
+		 refresh = true;
+		 maxMatch = 0;
+		 for(int i=0; i<currentQuestion.getAnswer().length(); i++)
+			h+="_ ";
+		 hintLable.setText("Hint: "+h);
+	 }
+		 
+	 
 	class submitListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {			
 			String answer = userAnswer.getText();
@@ -184,7 +204,8 @@ public class QuizGui {
 			current++;
 			currentQuestionNum.setText(String.format("%d/%d", current+1, quiz.getNumQuestions()));
 			
-			currentQuestion = new Question();
+			currentQuestion = new Question(quiz.getMode());
+			refreshHint();
 			quizGui.ask();
 		}
 	}
@@ -206,6 +227,7 @@ public class QuizGui {
 			// Restart the quiz
 			current = 0;
 			currentQuestionNum.setText(String.format("%d/%d", current+1, quiz.getNumQuestions()));
+			refreshHint();
 			quizGui.ask();
 		}
 	}
@@ -217,7 +239,8 @@ public class QuizGui {
 		public void actionPerformed(ActionEvent e) {
 			feedback.setText("");
 			currentQuestion = new Question(currentQuestion.getRandomNum(), 2);
-			quiz.setMode(2);			
+			quiz.setMode(2);
+			refreshHint();			
 			quizGui.ask();
 		}
 	}
@@ -230,6 +253,7 @@ public class QuizGui {
 		  quiz.setMode(8);			
 			feedback.setText("");
 			currentQuestion = new Question(currentQuestion.getRandomNum(), 8);
+			refreshHint();
 			quizGui.ask();
 		}
 	}
@@ -241,7 +265,8 @@ public class QuizGui {
 		public void actionPerformed(ActionEvent e) {
 		  quiz.setMode(10);
 			feedback.setText("");
-			currentQuestion = new Question(currentQuestion.getRandomNum(), 10);				
+			currentQuestion = new Question(currentQuestion.getRandomNum(), 10);	
+			refreshHint();			
 			quizGui.ask();
 		}
 	}
@@ -253,7 +278,8 @@ public class QuizGui {
 		public void actionPerformed(ActionEvent e) {
   		quiz.setMode(16);
 			feedback.setText("");
-			currentQuestion = new Question(currentQuestion.getRandomNum(), 16);					
+			currentQuestion = new Question(currentQuestion.getRandomNum(), 16);	
+			refreshHint();				
 			quizGui.ask();	
 		}
 	}
@@ -264,7 +290,8 @@ public class QuizGui {
 	class randomModeListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
   		quiz.setMode(-1);			
-			currentQuestion = new Question();				
+			currentQuestion = new Question();	
+			refreshHint();			
 			quizGui.ask();
 		}
 	}
@@ -285,7 +312,65 @@ public class QuizGui {
 			// Else ask the current question			
 			String prompt = currentQuestion.generatePrompt(quiz.getMode());
 			questionLabel.setText(prompt);
+			
 		}
+	}
+	
+	/**
+	 * Listen to any change of user input and prompt hint to user according to the input
+	 */
+	
+	public class hintListener implements DocumentListener	{
+		 private String answer;
+		 
+		 public void insertUpdate(DocumentEvent e) {
+				go();
+			}
+		 public void removeUpdate(DocumentEvent e) {
+				
+				
+			}
+			public void changedUpdate(DocumentEvent e) {
+			
+       
+			}
+			
+			public void go()
+			{
+			answer = userAnswer.getText();
+			answer = answer.replaceAll("^0*", "").replaceAll(" ", "").toLowerCase();
+			String regex = "^" + answer +".*$";
+			String correctAnswer = currentQuestion.getAnswer();
+			String hint = "";
+			if(correctAnswer.matches(regex))	{
+				if(refresh)	{
+					refresh = false;
+					hint = answer;
+					maxMatch = answer.length();
+					for(int i=0; i<correctAnswer.length()-answer.length(); i++)
+						hint+="_ ";
+					hintLable.setText("Hint: "+hint);
+				}
+				
+				else
+				{
+					if(answer.length()>maxMatch)	{
+						hint = answer;
+						maxMatch = answer.length();
+						for(int i=0; i<correctAnswer.length()-answer.length(); i++)
+							hint+="_ ";
+						hintLable.setText("Hint: "+hint);
+					
+					}
+					
+				}
+	
+			}
+
+				
+			}
+		
+		
 	}
 	
 	/**
@@ -293,6 +378,7 @@ public class QuizGui {
 	 */
 	public static void main (String [] args) {		
 		quizGui.build().ask();
+		
   }
 	
 }
