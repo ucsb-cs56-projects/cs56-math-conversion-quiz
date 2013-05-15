@@ -183,7 +183,7 @@ public class QuizGui {
 		 maxMatch = 0;
 		 for(int i=0; i<currentQuestion.getAnswer().length(); i++)
 			h+="_ ";
-		 hintLable.setText("Hint: "+h);
+		 hintLable.setText("Hint: "+h+"  You hit: "+0+"/"+ currentQuestion.getAnswer().length());
 	 }
 		 
 	 
@@ -322,12 +322,13 @@ public class QuizGui {
 	
 	public class hintListener implements DocumentListener	{
 		 private String answer;
+		 private String hint;
 		 
 		 public void insertUpdate(DocumentEvent e) {
 				go();
 			}
 		 public void removeUpdate(DocumentEvent e) {
-				
+				go();
 				
 			}
 			public void changedUpdate(DocumentEvent e) {
@@ -341,7 +342,7 @@ public class QuizGui {
 			answer = answer.replaceAll("^0*", "").replaceAll(" ", "").toLowerCase();
 			String regex = "^" + answer +".*$";
 			String correctAnswer = currentQuestion.getAnswer();
-			String hint = "";
+			//String hint = "";
 			if(correctAnswer.matches(regex))	{
 				if(refresh)	{
 					refresh = false;
@@ -349,7 +350,7 @@ public class QuizGui {
 					maxMatch = answer.length();
 					for(int i=0; i<correctAnswer.length()-answer.length(); i++)
 						hint+="_ ";
-					hintLable.setText("Hint: "+hint);
+					hintLable.setText("Hint: "+hint+"  You hit: "+answer.length()+"/"+ currentQuestion.getAnswer().length());
 				}
 				
 				else
@@ -359,9 +360,10 @@ public class QuizGui {
 						maxMatch = answer.length();
 						for(int i=0; i<correctAnswer.length()-answer.length(); i++)
 							hint+="_ ";
-						hintLable.setText("Hint: "+hint);
+						//hintLable.setText("Hint: "+hint++"  You hit: "+answer.length()+"/"+ currentQuestion.getAnswer().length());
 					
 					}
+					hintLable.setText("Hint: "+hint+"  You hit: "+answer.length()+"/"+ currentQuestion.getAnswer().length());
 					
 				}
 	
