@@ -52,6 +52,7 @@ public class QuizGui {
 	JTextField userAnswer = new JTextField(25);
 	JLabel hintLable = new JLabel("Hint: ");
 	JButton submit = new JButton("Submit");
+	JButton switchHint = new JButton("Hide Hint");
 	
 	JPanel results  = new JPanel();
 	JLabel feedback = new JLabel("");
@@ -142,6 +143,9 @@ public class QuizGui {
 		userInput.add(box.createVerticalStrut(5));
 		userInput.add(submit);
 		
+		userInput.add(box.createVerticalStrut(5));
+		switchHint.addActionListener(new switchHintListener());
+		userInput.add(switchHint);
 		// Results sub-pane
 		results.setLayout(new BoxLayout(results, BoxLayout.Y_AXIS));
 		
@@ -316,6 +320,20 @@ public class QuizGui {
 		}
 	}
 	
+	public class switchHintListener implements ActionListener	{
+		public void actionPerformed(ActionEvent e)	{
+				if(hintLable.isVisible())	{
+					hintLable.setVisible(false);
+					switchHint.setText("Show Hint");
+				}
+				else
+				{
+					hintLable.setVisible(true);
+					switchHint.setText("Hide Hint");
+				}
+		}
+	}
+	
 	/**
 	 * Listen to any change of user input and prompt hint to user according to the input
 	 */
@@ -342,7 +360,6 @@ public class QuizGui {
 			answer = answer.replaceAll("^0*", "").replaceAll(" ", "").toLowerCase();
 			String regex = "^" + answer +".*$";
 			String correctAnswer = currentQuestion.getAnswer();
-			//String hint = "";
 			if(correctAnswer.matches(regex))	{
 				if(refresh)	{
 					refresh = false;
@@ -360,7 +377,6 @@ public class QuizGui {
 						maxMatch = answer.length();
 						for(int i=0; i<correctAnswer.length()-answer.length(); i++)
 							hint+="_ ";
-						//hintLable.setText("Hint: "+hint++"  You hit: "+answer.length()+"/"+ currentQuestion.getAnswer().length());
 					
 					}
 					hintLable.setText("Hint: "+hint+"  You hit: "+answer.length()+"/"+ currentQuestion.getAnswer().length());
