@@ -320,6 +320,10 @@ public class QuizGui {
 		}
 	}
 	
+	/**
+	 * Switch the hint on/off
+	 */
+	
 	public class switchHintListener implements ActionListener	{
 		public void actionPerformed(ActionEvent e)	{
 				if(hintLable.isVisible())	{
@@ -382,13 +386,10 @@ public class QuizGui {
 					hintLable.setText("Hint: "+hint+"  You hit: "+answer.length()+"/"+ currentQuestion.getAnswer().length());
 					
 				}
-	
 			}
-
 				
 			}
-		
-		
+
 	}
 	
 	/**
