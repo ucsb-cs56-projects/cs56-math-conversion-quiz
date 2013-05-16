@@ -52,6 +52,10 @@ public class QuizGui {
 	JPanel scorePanel   = new JPanel();
 	JLabel scoreReadout = new JLabel("");
 	JButton tryAgain    = new JButton("Try Again!");
+
+    ImageIcon image;
+    JPanel animationPanel;
+    JLabel animationLabel;
 	
 	// Specific question references
 	private static int current;
@@ -61,7 +65,8 @@ public class QuizGui {
 	 * Build the Quiz GUI window
 	 */
 	public QuizGui build() {
-		
+	    guiRemoveAll();		
+
 		questionLabel.setPreferredSize(new Dimension(200, 20));
 		
 		int bottomMargin = 15;
@@ -170,7 +175,8 @@ public class QuizGui {
 			String answer = userAnswer.getText();
 			
 			if (currentQuestion.checkAnswer(answer)) {
-				feedback.setText("Correct!");
+			    feedback.setText("Correct!");
+			    correctAnimation();
 				quiz.insertScore(true);
 			} else {
 				feedback.setText("Incorrect! Answer was: " + currentQuestion.getAnswer());
@@ -285,7 +291,58 @@ public class QuizGui {
 			questionLabel.setText(prompt);
 		}
 	}
-	
+    public void correctAnimation(){
+	guiRemoveAll();
+	JPanel correctPanel = new JPanel(new BorderLayout());
+	correctPanel.setSize(100,50);
+	JButton cancel = new JButton("Go to next question!");
+	cancel.setPreferredSize(new Dimension(50,50));
+	cancel.addActionListener(new cancelListener());
+	frame.setSize(500,500);
+	correctPanel.add(cancel);
+
+	//java.net.URL image_URL = getClass().getResource("/image1.jpg");
+	//animationLabel = new JLabel(new ImageIcon(image_URL));
+	//animationPanel.add(animationLabel);
+	//frame.getContentPane().add(BorderLayout.CENTER, animationPanel);
+
+	frame.getContentPane().add(BorderLayout.SOUTH, correctPanel);
+	frame.setVisible(true);
+	/*
+	int numPics = 11;
+	for(int i=0; i < numPics;i++){
+	    animationPanel.removeAll();
+	    //image = new ImageIcon(getClass().getResources("image" + Integer.toString(i=1) + ".jpg"));
+	    int pictureNumber = i+1;
+	    java.net.URL image_URL = getClass().getResource("image" + Integer.toString(pictureNumber) + ".jpg");
+	    animationLabel = new JLabel(new ImageIcon(image_URL));
+	    animationPanel.add(animationLabel);
+	    frame.getContentPane().add(BorderLayout.CENTER, animationPanel);
+	    try{
+		Thread.sleep(1000);
+	    }
+	    catch(Exception e){
+	    }
+	}
+	*/
+    }
+    class cancelListener implements ActionListener{
+	public void actionPerformed(ActionEvent event){
+	    guiRemoveAll();
+	    build();
+	}
+    }
+public void guiRemoveAll() {
+	sidebar.removeAll();
+	modePanel.removeAll();
+	content.removeAll();
+	userInput.removeAll();
+	results.removeAll();
+	scorePanel.removeAll();
+	frame.getContentPane().removeAll();
+	frame.validate();
+	frame.repaint();
+    }
 	/**
 	 * Build and run the GUI
 	 */
