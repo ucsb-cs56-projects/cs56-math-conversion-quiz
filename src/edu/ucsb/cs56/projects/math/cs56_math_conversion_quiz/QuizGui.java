@@ -208,7 +208,7 @@ public class QuizGui {
 			current++;
 			currentQuestionNum.setText(String.format("%d/%d", current+1, quiz.getNumQuestions()));
 			
-			currentQuestion = new Question(quiz.getMode());
+			currentQuestion = new Question(quiz.getMode());  //make change of the constructor
 			refreshHint();
 			quizGui.ask();
 		}
