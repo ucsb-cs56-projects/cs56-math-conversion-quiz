@@ -295,7 +295,7 @@ public class QuizGui {
     public class correctImages extends JPanel implements ActionListener{
         private javax.swing.Timer animator;
         private ImageIcon imageArray[];
-        private int delay = 300;
+        private int delay = 125;
         private int total = 12;
         private int currentImage = 0;
         public correctImages(){
