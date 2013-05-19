@@ -293,13 +293,14 @@ public class QuizGui {
     public class correctImages extends JPanel implements ActionListener{
         private javax.swing.Timer animator;
         private ImageIcon imageArray[];
-        private int delay = 50;
-        private int total = 11;
+        private int delay = 300;
+        private int total = 12;
         private int currentImage = 0;
         public correctImages(){
             imageArray = new ImageIcon[total];
             for(int i = 0; i < imageArray.length; i++){
-                imageArray[i] = new ImageIcon("image"+ i + ".jpg");
+		// imageArray[i] = new ImageIcon("C:\\Users\\Bohan Lin\\Desktop\\images\\image"+ i + ".jpg");
+		imageArray[i] = new ImageIcon("~/cs/student/bohan_lin/cs56/proj01/cs56-math-conversion-quiz/images/image" + i + ".jpg");
             }
             animator = new javax.swing.Timer(delay,this);
             animator.start();
@@ -325,32 +326,12 @@ public class QuizGui {
 	cancel.addActionListener(new cancelListener());
 	cancelPanel.add(cancel);
 
-	//One attempt
-        int numImages = 11;
-	for(int i = 0; i < numImages; i++){//I'm not sure why this code only shows the last image, and not every image in 100 ms intervals
-	    animationPanel.removeAll();
-	    JLabel animationLabel = new JLabel();
-	    //animationLabel.setIcon(new ImageIcon("/cs/student/student/bohan_lin/cs56/proj01/cs56-math-conversion-quiz/images/image"+ Integer.toString(i+1) + ",jpg"));
-	    animationLabel.setIcon(new ImageIcon("C:\\Users\\Bohan Lin\\Desktop\\images\\image" + i + ".jpg"));//I am currently testing it on windows. I don't know how to set the path for the image file on linux or whatever putty runs on.
-            animationPanel.add(animationLabel);
-	    frame.getContentPane().add(BorderLayout.CENTER, animationPanel);
-            frame.getContentPane().add(BorderLayout.SOUTH, cancelPanel);
-            frame.setBackground(Color.WHITE);
-            frame.setVisible(true);
-            frame.setSize(500,500);
-	    try{
-		Thread.sleep(100);
-	    }catch(Exception ex){}
-        }
-	/*
-	//The second attempt
-        correctImages cImages = new correctImages(); //Another chunk of code I learned. Not sure why it doesn't work either.
+        correctImages cImages = new correctImages(); 
         frame.getContentPane().add(BorderLayout.CENTER, cImages);
         frame.getContentPane().add(BorderLayout.SOUTH, cancelPanel);
 	frame.setBackground(Color.WHITE);
 	frame.setVisible(true);
-        frame.setSize(500,500);
-	*/
+        frame.setSize(714,400);
     }
     class cancelListener implements ActionListener{
 	public void actionPerformed(ActionEvent event){
