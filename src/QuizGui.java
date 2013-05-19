@@ -324,6 +324,8 @@ public class QuizGui {
 	cancel.setPreferredSize(new Dimension(50,50));
 	cancel.addActionListener(new cancelListener());
 	cancelPanel.add(cancel);
+
+	//One attempt
         int numImages = 11;
 	for(int i = 0; i < numImages; i++){//I'm not sure why this code only shows the last image, and not every image in 100 ms intervals
 	    animationPanel.removeAll();
@@ -340,14 +342,15 @@ public class QuizGui {
 		Thread.sleep(100);
 	    }catch(Exception ex){}
         }
-/*
+	/*
+	//The second attempt
         correctImages cImages = new correctImages(); //Another chunk of code I learned. Not sure why it doesn't work either.
         frame.getContentPane().add(BorderLayout.CENTER, cImages);
         frame.getContentPane().add(BorderLayout.SOUTH, cancelPanel);
 	frame.setBackground(Color.WHITE);
 	frame.setVisible(true);
         frame.setSize(500,500);
-        * */
+	*/
     }
     class cancelListener implements ActionListener{
 	public void actionPerformed(ActionEvent event){
