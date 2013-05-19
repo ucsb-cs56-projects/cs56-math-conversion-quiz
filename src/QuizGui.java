@@ -300,7 +300,7 @@ public class QuizGui {
             imageArray = new ImageIcon[total];
             for(int i = 0; i < imageArray.length; i++){
 		// imageArray[i] = new ImageIcon("C:\\Users\\Bohan Lin\\Desktop\\images\\image"+ i + ".jpg");
-		imageArray[i] = new ImageIcon("~/cs/student/bohan_lin/cs56/proj01/cs56-math-conversion-quiz/images/image" + i + ".jpg");
+		imageArray[i] = new ImageIcon("images/image" + i + ".jpg");
             }
             animator = new javax.swing.Timer(delay,this);
             animator.start();
