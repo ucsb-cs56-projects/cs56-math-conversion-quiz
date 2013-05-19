@@ -37,7 +37,7 @@
 	
 	
 	<target name="runGui" depends="compile" description="Run the main Quiz GUI">
-		<java classname="${packageName}${mainClassGui}" fork="true" classpath="build" />
+		<java classname="${packageName}.${mainClassGui}" fork="true" classpath="build" />
 	</target>
 
 
