@@ -292,13 +292,13 @@ public class QuizGui {
 	    questionLabel.setText(prompt);
 	}
     }
-    public class correctImages extends JPanel implements ActionListener{
-        private javax.swing.Timer animator;
+    public class correctImages extends JPanel implements ActionListener{//The correctImages class is a new JPanel instance that
+        private javax.swing.Timer animator;//creates an array of all 11 images from the images folder
         private ImageIcon imageArray[];
-        private int delay = 125;
-        private int total = 12;
-        private int currentImage = 0;
-        public correctImages(){
+        private int delay = 125;//the delay is 125 milliseconds in between frames
+        private int total = 12;//total of 12 so all 11 images show up
+        private int currentImage = 0;//Starts at the very first image
+        public correctImages(){//The correctImages constructor adds every image into the array
             imageArray = new ImageIcon[total];
             for(int i = 0; i < imageArray.length; i++){
                 //imageArray[i] = new ImageIcon("C:\\Users\\Bohan Lin\\Desktop\\images\\image"+ i + ".jpg");
@@ -307,10 +307,10 @@ public class QuizGui {
             animator = new javax.swing.Timer(delay,this);
             animator.start();
         }
-        public void paintComponent(Graphics g){
+        public void paintComponent(Graphics g){//paintComponent puts the images onto the correctImages JPanel
             super.paintComponent(g);
             if(currentImage >= imageArray.length){
-                currentImage = 0;
+                currentImage = 0;//resets the animation when it reaches the end of the array of images
             }
             currentImage++;
             imageArray[currentImage].paintIcon(this, g, 0, 0);
@@ -320,16 +320,16 @@ public class QuizGui {
         }
     }
     public void correctAnimation(){
-        guiRemoveAll();
-        JPanel cancelPanel = new JPanel(new BorderLayout());
-        cancelPanel.setSize(100,50);
+        guiRemoveAll();//removes the current GUI that has the quiz
+        JPanel cancelPanel = new JPanel(new BorderLayout());//creates a new panel with the cancel button to go back
+        cancelPanel.setSize(100,50);//to the original quiz gui
         JButton cancel = new JButton("Go to next question!");
 	cancel.setPreferredSize(new Dimension(50,50));
 	cancel.addActionListener(new cancelListener());
 	cancelPanel.add(cancel);
 
-        correctImages cImages = new correctImages(); 
-        frame.getContentPane().add(BorderLayout.CENTER, cImages);
+        correctImages cImages = new correctImages(); //create a new instance of correctImages
+        frame.getContentPane().add(BorderLayout.CENTER, cImages);//adds it to the center of a frame that is a borderlayout
         frame.getContentPane().add(BorderLayout.SOUTH, cancelPanel);
 	frame.setBackground(Color.WHITE);
 	frame.setVisible(true);
