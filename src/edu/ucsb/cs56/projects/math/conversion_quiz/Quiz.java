@@ -1,12 +1,18 @@
 package edu.ucsb.cs56.projects.math.conversion_quiz;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
+
 
 /**
  * A command line interface for a binary/octal/hex conversion Quiz.
  * Original program by Erick Valle & George Barrios for Mantis 0000391
- * @author Andrew Berls
- * @version CS56, Spring 2012, Mantis 0000611
+ * Edited by Andrew Berls for Mantis 0000611
+ * @author Daniel Ly
+ * @version CS56, Spring 2013
  */
 
 public class Quiz {
@@ -15,6 +21,10 @@ public class Quiz {
     
     private ArrayList<Boolean> scores = new ArrayList<Boolean>();
     
+	private String filePath = "scores.txt"; // File path to the text file containing the scores
+	private ArrayList<Integer> savedScores; // Holds scores loaded from the save file
+	private ScoreLoader sl = new ScoreLoader(filePath);
+
     /*
      * mode is a magic number to represent the current quiz radix.
      * For example, you can practice conversions to binary by setting it to 2
@@ -103,6 +113,53 @@ public class Quiz {
     }  
     
     /**
+     * Saves multiple scores into the save file
+     * @param scores Scores to be saved
+     */
+	public void writeScore(int ...scores) {
+		try {
+			ArrayList<Integer> scoreList = sl.loadScores();
+			for (int score: scores)	scoreList.add(score);
+			sl.saveScore(scoreList);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+    /**
+     * Resets the scores in the save file
+     */
+	public void resetScores() {
+		try {
+			sl.resetScores();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Loads the scores from the save file into an ArrayList
+	 * @return List of scores in the save file
+	 */
+	public ArrayList<Integer> getScores(){
+		ArrayList<Integer> scores = new ArrayList<Integer>();
+		try {
+			scores = sl.loadScores();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Collections.sort(scores); // sorts scores from least to greatest
+		Collections.reverse(scores); // reverses it to greatest to least
+		return scores;
+	}
+	
+    /**
      * Run the Quiz game on the command line
      * For each question, display its prompt and track the user's answer
      * At the end, display the percentage of correct answers.
@@ -121,7 +178,7 @@ public class Quiz {
     			this.insertScore(false);
     		}
     	}
-    	
+    	writeScore(this.getPercentage());
     	System.out.println("Your score was " + this.getPercentage() + "%!");
     }
 	
