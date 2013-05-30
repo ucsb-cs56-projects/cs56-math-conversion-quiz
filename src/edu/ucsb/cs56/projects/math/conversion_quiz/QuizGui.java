@@ -57,6 +57,7 @@ public class QuizGui {
 	JLabel score9 = new JLabel();
 	JLabel score10 = new JLabel();
 	ArrayList<JLabel> scoreLabels = new ArrayList<JLabel>();
+
 	JButton resetScore = new JButton("Reset scores");
 	
 	// Content references
@@ -75,7 +76,8 @@ public class QuizGui {
 	JButton tryAgain    = new JButton("Try Again!");
 	
 	JPanel animationPanel = new JPanel();
-	
+	JPanel cancelPanel = new JPanel(new BorderLayout());
+
 	// Center panel; will contain both scorePanel and content
 	JPanel centerPanel = new JPanel();
 	
@@ -83,11 +85,14 @@ public class QuizGui {
 	private static int current;
 	private Question currentQuestion = new Question();
 	
+	// Used to prevent method calls that are not meant to be 
+	//  run more than once
+	boolean firstRun = true;
+	
 	/**
 	 * Build the Quiz GUI window
 	 */
 	public QuizGui build() {
-		
 		questionLabel.setPreferredSize(new Dimension(200, 20));
 		
 		int bottomMargin = 15;
@@ -143,7 +148,8 @@ public class QuizGui {
 		//---------------------
 		//-- Score Chart
 		//---------------------
-		multiAdd(scoreLabels, score1, score2, score3, score4, score5, score6, 
+		if (firstRun)
+			Collections.addAll(scoreLabels, score1, score2, score3, score4, score5, score6, 
 				score7, score8, score9, score10);
 		scoreChart.setLayout(new BoxLayout(scoreChart, BoxLayout.Y_AXIS));
 		quiz.writeScore(0);	// Used to initialize the list of scores in case txt file hasn't been initialized
@@ -159,7 +165,7 @@ public class QuizGui {
 		scoreChart.add(score8);
 		scoreChart.add(score9);
 		scoreChart.add(score10);
-		resetScore.addActionListener(new resetScoreListener());
+		if (firstRun) resetScore.addActionListener(new resetScoreListener());
 		scoreChart.add(resetScore);
 		
 		frame.getContentPane().add(BorderLayout.WEST, scoreChart);
@@ -178,7 +184,7 @@ public class QuizGui {
 		
 		userInput.add(box.createVerticalStrut(5));
 		
-		submit.addActionListener(new submitListener());
+		if (firstRun) submit.addActionListener(new submitListener());
 		userInput.add(feedback);
 		userInput.add(box.createVerticalStrut(5));
 		userInput.add(submit);
@@ -190,7 +196,7 @@ public class QuizGui {
 		scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
 		scorePanel.add(scoreReadout);
 		scorePanel.add(box.createVerticalStrut(10));
-		tryAgain.addActionListener(new tryAgainListener());
+		if (firstRun) tryAgain.addActionListener(new tryAgainListener());
 		scorePanel.add(tryAgain);
 		scorePanel.setVisible(false); // Enabled at end of quiz
 		
@@ -210,18 +216,8 @@ public class QuizGui {
 		frame.setSize(640, 480);
 		frame.setVisible(true);
 		
+		firstRun = false;
 		return this; // For chaining method calls
-	}
-	
-	/**
-	 * Helper function to add multiple JLabels to an ArrayList
-	 * @param list ArrayList where labels will be added to
-	 * @param labels JLabels to be added to list
-	 */
-	private void multiAdd(ArrayList<JLabel> list, JLabel ...labels){
-		for (JLabel label: labels){
-			list.add(label);
-		}
 	}
 	
 	/**
@@ -383,7 +379,6 @@ public class QuizGui {
         public correctImages(){//The correctImages constructor adds every image into the array
             imageArray = new ImageIcon[total];
             for(int i = 0; i < imageArray.length; i++){
-                //imageArray[i] = new ImageIcon("C:\\Users\\Bohan Lin\\Desktop\\images\\image"+ i + ".jpg");
                 imageArray[i] = new ImageIcon("images/image" + i + ".jpg");
             }
             animator = new javax.swing.Timer(delay,this);
@@ -403,7 +398,7 @@ public class QuizGui {
     }
     public void correctAnimation(){
         guiRemoveAll();//removes the current GUI that has the quiz
-        JPanel cancelPanel = new JPanel(new BorderLayout());//creates a new panel with the cancel button to go back
+        cancelPanel = new JPanel(new BorderLayout());//creates a new panel with the cancel button to go back
         cancelPanel.setSize(100,50);//to the original quiz gui
         JButton cancel = new JButton("Go to next question!");
 		cancel.setPreferredSize(new Dimension(50,50));
@@ -430,8 +425,9 @@ public class QuizGui {
 		content.removeAll();
 		userInput.removeAll();
 		results.removeAll();
-		scorePanel.removeAll();
 		centerPanel.removeAll();
+		scoreChart.removeAll();
+		//cancelPanel.removeAll();
 		frame.getContentPane().removeAll();
 		frame.validate();
 		frame.repaint();
