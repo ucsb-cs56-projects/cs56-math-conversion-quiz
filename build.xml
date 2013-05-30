@@ -1,6 +1,7 @@
 <project default="compile">
 
 	<!-- build.xml for 0000756, W12, CS56
+<<<<<<< HEAD
        	 name: Andrew Berls 
 		 
 		 Edited by: Daniel Ly
@@ -16,7 +17,7 @@
 	<property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56/13S/dly" />
 	<property name="packageName" value = "edu.ucsb.cs56.projects.math.conversion_quiz" />
 	<property name="projectPath" value="/edu/ucsb/cs56/projects/math/" />
-	<property name="projectName" value="math_conversion_quiz" />
+	<property name="projectName" value="conversion_quiz" />
 	<property name="projectRepo" value="cs56-math-conversion-quiz" />
 	<property name="javadocDest" value="${webRoot}/${projectRepo}/javadoc" />
 	<property name="javadocURL" value="${webBaseURL}/${projectRepo}/javadoc" />
@@ -104,6 +105,5 @@
 			<formatter type="plain" usefile="false" />
 		</junit>
 	</target>
-  
 
 </project>
