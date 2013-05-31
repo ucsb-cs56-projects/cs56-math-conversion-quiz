@@ -6,7 +6,8 @@ import java.lang.Math;
  * A class to represent a Question in the conversion quiz
  * Original program by Erick Valle & George Barrios for Mantis 0000391
  * @author Andrew Berls
- * @version CS56, Spring 2012, Mantis 0000611
+ * @author Brian Wan, Fanny Kuang
+ * @version CS56, Spring 2013, GitHub
  */
 
 public class Question {
@@ -16,6 +17,8 @@ public class Question {
 	private String strRadix; // The radix represented as a string, e.g. "Binary"
 
 	private int intRadix;
+    
+        private int num2; //Masking 2nd number
 
 	/**
 	 * Construct a question with a random number and radix
@@ -98,7 +101,7 @@ public class Question {
 	 * @return a randomly selected radix
 	 */
 	public int getRandomRadix() {
-		int rand = (int) (Math.random() * 4); // 0-3
+		int rand = (int) (Math.random() * 5); // 0-4
 		int result = -1;
 		switch(rand) {
 		case 0:
@@ -113,6 +116,9 @@ public class Question {
 		case 3:
 			result = 16;
 			break;
+		case 4://to get a mask question
+		    result = 18;
+		    break;
 		}
 		return result;
 	}
@@ -136,6 +142,9 @@ public class Question {
 		case 16:
 			result = "Hexadecimal";
 			break;
+	        case 18: //mask question
+		    result = "mask";
+		    break;
 		}
 		return result;
 	}
@@ -152,7 +161,14 @@ public class Question {
 		
 		String num = Integer.toString(this.num, radix);
 		String srcRadix = getRadixString(radix);
-		
+		//MASK Question
+		if (radix == 18 || this.getStrRadix() == "mask"){
+		    intRadix = 18;
+		    String number = Integer.toString(this.num, 2);
+		    num2 = this.getRandomNum();
+		    String number2 = Integer.toString(num2, 2);
+		    return String.format("What is the binary output when applying the mask %s to %s?", number, number2);
+		}
 		return String.format("Convert %s from %s to %s:", num, srcRadix, this.getStrRadix()); 
 	}
 	
@@ -174,7 +190,7 @@ public class Question {
 			
 			String num = Integer.toString(this.num, srcRadix);
 			
-			return String.format("Convert %s from %s to %s:", num, getRadixString(srcRadix), this.getRadixString(destRadix));
+			return String.format("Converts %s from %s to %s:", num, getRadixString(srcRadix), this.getRadixString(destRadix));
 		}
 	}
 	
@@ -193,6 +209,11 @@ public class Question {
 	 * @return Number as a string
 	 */
 	public String convertTo(int radix) {
+	    if (radix == 18){
+		Integer mask = this.num & num2;
+		String answer = Integer.toString(mask,2);
+		return Integer.toString(mask, 2);
+	    }
 		return Integer.toString(this.getNum(),radix);
 	}
 	
@@ -202,9 +223,10 @@ public class Question {
 	 * @param userAnswer The string answer submitted by the user
 	 */
 	public boolean checkAnswer(String userAnswer) {
-		userAnswer = sanitize(userAnswer);
+	        userAnswer = sanitize(userAnswer);
 		String answer = this.convertTo(this.getIntRadix());
 		return (userAnswer.equals(answer)) ? true : false;
+		
 	}
 	
 	/**
@@ -212,6 +234,7 @@ public class Question {
 	 * @return The number converted to the radix (as a string)
 	 */
 	public String getAnswer() {
+	    if (this.getIntRadix() == 18){ return Integer.toString(this.num & num2, 2);}
 		return Integer.toString(this.num, this.intRadix);
 	}
 	
