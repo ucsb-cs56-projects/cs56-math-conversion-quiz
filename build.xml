@@ -1,21 +1,24 @@
 <project default="compile">
 
 	<!-- build.xml for 0000756, W12, CS56
-       	     name: Andrew Berls 
-
-	     Issue/project by Bohan Lin-->
-
-
+<<<<<<< HEAD
+       	 name: Andrew Berls 
+		 
+		 Edited by: Daniel Ly
+		 Version: S13, CS56
+		 Refactored package name -->
 
 	<property environment="env" />
 	<property name="mainClassGui" value="QuizGui" />
 	<property name="mainClass" value="Quiz" />
-	<property name="webRoot" value="${env.HOME}/public_html/cs56/13S/bohan_lin" />
-	<property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56/S13/bohan_lin" />
-	<property name="packageName" value="edu.ucsb.cs56.projects.math.conversion_quiz"/>
+	<!-- Remember to change webRoot and webBaseURL to link to your username
+		rather than dly -->
+	<property name="webRoot" value="${env.HOME}/public_html/cs56/13S/dly" />
+	<property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56/13S/dly" />
+	<property name="packageName" value = "edu.ucsb.cs56.projects.math.conversion_quiz" />
 	<property name="projectPath" value="/edu/ucsb/cs56/projects/math/" />
 	<property name="projectName" value="conversion_quiz" />
-	<property name="projectRepo" value="cs56-math-conversion-quiz"/>
+	<property name="projectRepo" value="cs56-math-conversion-quiz" />
 	<property name="javadocDest" value="${webRoot}/${projectRepo}/javadoc" />
 	<property name="javadocURL" value="${webBaseURL}/${projectRepo}/javadoc" />
 
