@@ -1,7 +1,6 @@
 <project default="compile">
 
 	<!-- build.xml for 0000756, W12, CS56
-<<<<<<< HEAD
        	 name: Andrew Berls 
 		 
 		 Edited by: Daniel Ly
@@ -9,18 +8,17 @@
 		 Refactored package name -->
 
 	<property environment="env" />
+	<property name="pkgDir" value="edu/ucsb/cs56/projects/math/cs56_math_conversion_quiz" />
+	<property name="fullDir" value="edu.ucsb.cs56.projects.math.cs56_math_conversion_quiz" />
 	<property name="mainClassGui" value="QuizGui" />
 	<property name="mainClass" value="Quiz" />
-	<!-- Remember to change webRoot and webBaseURL to link to your username
-		rather than dly -->
-	<property name="webRoot" value="${env.HOME}/public_html/cs56/13S/dly" />
-	<property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56/13S/dly" />
-	<property name="packageName" value = "edu.ucsb.cs56.projects.math.conversion_quiz" />
-	<property name="projectPath" value="/edu/ucsb/cs56/projects/math/" />
-	<property name="projectName" value="conversion_quiz" />
-	<property name="projectRepo" value="cs56-math-conversion-quiz" />
-	<property name="javadocDest" value="${webRoot}/${projectRepo}/javadoc" />
-	<property name="javadocURL" value="${webBaseURL}/${projectRepo}/javadoc" />
+	<property name="webRoot" value="${env.HOME}/public_html/cs56/S13/ProtossJane" />
+	<property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56/S13/ProtossJane" />
+	<property name="projectPath" value="0000756" />
+	<property name="projectName" value="cs56_math_conversion_quiz" />
+	<property name="javadocDest" value="${webRoot}/${projectName}" />
+	<property name="javadocURL" value="${webBaseURL}/${projectName}" />
+	<property name="libPath" value="lib/junit-4.8.2.jar" />
 
 
 	<target name="compile" description="Compile all source files">
@@ -35,18 +33,18 @@
 
 
 	<target name="run" depends="compile" description="Run the Quiz command line interface">
-		<java classname="${packageName}.${mainClass}" classpath="build" />
+		<java classname="${fullDir}.${mainClass}" classpath="build" />
 	</target>
 	
 	
 	<target name="runGui" depends="compile" description="Run the main Quiz GUI">
-		<java classname="${packageName}.${mainClassGui}" fork="true" classpath="build" />
+		<java classname="${fullDir}.${mainClassGui}" fork="true" classpath="build" />
 	</target>
 
 
 	<target name="clean" description="Delete non-source files">
 		<delete failonerror="false" verbose="true">
-			<fileset dir="build" includes="*.class"/>
+			<fileset dir="build" includes="**/*.class"/>
 		</delete>
 		<delete dir="javadoc" quiet="true"/>
 		<delete dir="dist" quiet="true"/>
@@ -105,5 +103,44 @@
 			<formatter type="plain" usefile="false" />
 		</junit>
 	</target>
+
+	
+	<target name="download" description="Publish compressed source bundle">
+		<delete quiet="true">
+			<fileset dir="temp" includes="**/*"/>
+			<fileset dir="download" includes="**/*"/>
+		</delete>
+		
+		<mkdir dir="download"/>
+		<mkdir dir="temp"/>
+		<mkdir dir="temp/${projectPath}"/>
+		
+		<copy todir="temp/${projectPath}">
+			<fileset dir="." excludes="build/**, javadoc/**, **/*~, temp/**, dist/**, download/**"/>
+		</copy>
+		
+		<tar destfile="temp/${projectName}.tar" basedir="temp" includes="${projectPath}/**"/>
+		<gzip zipfile="download/${projectName}.tgz" src="temp/${projectName}.tar"/>
+		<zip destfile="download/${projectName}.zip" basedir="temp" includes="${projectPath}/**"/>
+		
+		<delete quiet="true">
+			<fileset dir="temp" includes="**/*"/>
+		</delete>
+	</target>
+
+
+
+
+	
+	<target name="linenumbers" description="Creates a file containing all source files with line numbers">
+		<exec executable="bash">
+			<arg value="-c" />
+			<arg value='tree -ifQ src | grep \.java\"$ | xargs pr -n > numberedsource.txt' />                              
+	   </exec>                                                                                                         
+	</target>
+	
+	
+	
+  
 
 </project>
