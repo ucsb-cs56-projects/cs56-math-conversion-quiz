@@ -1,7 +1,11 @@
 <project default="compile">
 
 	<!-- build.xml for 0000756, W12, CS56
-       	 name: Andrew Berls -->
+       	 name: Andrew Berls 
+		 
+		 Edited by: Daniel Ly
+		 Version: S13, CS56
+		 Refactored package name -->
 
 	<property environment="env" />
 	<property name="pkgDir" value="edu/ucsb/cs56/projects/math/cs56_math_conversion_quiz" />
@@ -22,7 +26,7 @@
 		<javac srcdir="src" destdir="build" debug="true" debuglevel="lines,source" includeantruntime="false">
 			<classpath>
 				<pathelement location="build" />
-				<pathelement location="${libPath}" />
+				<pathelement location="lib/junit-4.8.2.jar" />
 			</classpath>
 		</javac>
 	</target>
@@ -54,7 +58,7 @@
 		<javadoc destdir="javadoc" author="true" version="true" use="true">
 			<fileset dir="src" includes="**/*.java" />
 			<classpath>
-				<pathelement location="${libPath}"  />
+				<pathelement location="lib/junit-4.8.2.jar" />
 			</classpath>
 		</javadoc>
 
@@ -85,7 +89,7 @@
 	<target name="test" depends="compile" description="Run the JUnit test suite">
 		<junit haltonerror="no" haltonfailure="no">
 			<classpath>
-				<pathelement location="${libPath}"  />
+				<pathelement location="lib/junit-4.8.2.jar" />
 				<pathelement location="build" />
 			</classpath>
 
