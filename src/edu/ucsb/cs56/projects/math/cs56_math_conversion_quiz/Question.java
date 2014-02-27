@@ -29,9 +29,16 @@ public class Question {
 	 * @param radix The radix to set as an integer
 	 */
 	public Question(int radix) {
+
+	    if(radix == -1){
 		int num = this.getRandomNum();
 		this.num = num;
+		this.setRadixes(this.getRandomRadix());
+	    }else{
+	       	int num = this.getRandomNum();
+		this.num = num;
 		this.setRadixes(radix);
+	    }	
 	}
 	
 	/**
@@ -112,6 +119,9 @@ public class Question {
 		case 3:
 			result = 16;
 			break;
+		default:
+		    result = "Error with random radix";
+		    break;
 		}
 		return result;
 	}
@@ -121,7 +131,7 @@ public class Question {
 	 * @return The radix string
 	 */
 	public String getRadixString(int radix) {
-		String result = "";
+	    String result = "";
 		switch (radix) {
 		case 2:
 			result = "Binary";
@@ -135,7 +145,11 @@ public class Question {
 		case 16:
 			result = "Hexadecimal";
 			break;
+		default:
+		    result = "Error with radix string";
+		    break;
 		}
+		System.out.println(result);
 		return result;
 	}
 
@@ -144,16 +158,18 @@ public class Question {
 	 * @return the complete question prompt
 	 */
 	public String generatePrompt() {
-		// Set a 'from' radix that is not equal to the 'to' radix,
-		// which is contained in this.intRadix
-		int radix = this.getRandomRadix();
-		while (radix == this.getIntRadix()) radix = this.getRandomRadix();		
-		
-		String num = Integer.toString(this.num, radix);
-		String srcRadix = getRadixString(radix);
-		
-		return String.format("Convert %s from %s to %s:", num, srcRadix, this.getStrRadix()); 
-	}
+
+	    // Set a 'from' radix that is not equal to the 'to' radix,
+	    // which is contained in this.intRadix
+
+	    int radix = this.getRandomRadix();
+	    while (radix == this.getIntRadix()) radix = this.getRandomRadix();
+
+	    String num = Integer.toString(this.num, radix);
+	    String srcRadix = getRadixString(radix);
+
+	    return String.format("Convert %s from %s to %s:", num, srcRadix, this.getStrRadix()); 
+       	}
 	
 	/**
 	 * Practice converting random radixes to a specific radix

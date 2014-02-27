@@ -104,6 +104,9 @@ public class Question {
 		int rand = (int) (Math.random() * 5); // 0-4
 		int result = -1;
 		switch(rand) {
+		case -1:
+		    result = 2;
+		    break;
 		case 0:
 			result = 2;
 			break;
