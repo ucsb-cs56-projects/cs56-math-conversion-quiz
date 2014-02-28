@@ -6,11 +6,15 @@ import java.lang.Math;
  * Original program by Erick Valle & George Barrios for Mantis 0000391
  * @author Andrew Berls
  * @version CS56, Spring 2012, Mantis 0000611
+ * @authors Allison Shedden & Logan Schmidt
+ * @version CS56, Winter 2014
  */
 
 public class Question {
 
 	private int num;
+
+        private int num2; // For masking
 
 	private String strRadix; // The radix represented as a string, e.g. "Binary"
 
@@ -47,8 +51,14 @@ public class Question {
 	 * @param radix the radix to convert to
 	 */
 	public Question(int num, int radix) {
+	    if(radix == 18){
+		this.num = num;
+		this.setIntRadix(18);
+		this.setStrRadix(2);
+	    }else{
 		this.num = num;
 		this.setRadixes(radix);
+	    }
 	}
 
 	public String getStrRadix() {		
@@ -120,7 +130,7 @@ public class Question {
 			result = 16;
 			break;
 		default:
-		    result = "Error with random radix";
+		    result = 42;
 		    break;
 		}
 		return result;
@@ -145,6 +155,9 @@ public class Question {
 		case 16:
 			result = "Hexadecimal";
 			break;
+		case 18:
+		    result = "Binary";
+		    break;
 		default:
 		    result = "Error with radix string";
 		    break;
@@ -163,8 +176,9 @@ public class Question {
 	    // which is contained in this.intRadix
 
 	    int radix = this.getRandomRadix();
-	    while (radix == this.getIntRadix()) radix = this.getRandomRadix();
-
+	    while (radix == this.getIntRadix())
+		radix = this.getRandomRadix();
+	    	    
 	    String num = Integer.toString(this.num, radix);
 	    String srcRadix = getRadixString(radix);
 
@@ -175,14 +189,22 @@ public class Question {
 	 * Practice converting random radixes to a specific radix
 	 * @param destRadix The radix to convert to
 	 */
-	public String generatePrompt(int destRadix) {
+    public String generatePrompt(int destRadix) {
 		
 		if (destRadix == -1) {
 			// In the GUI, quiz.mode is passed in which specifies a destination radix
 			// -1 indicates random mode, so we in that case we just generate a prompt from the
 			// non-overloaded method
 			return this.generatePrompt();
-		} else {
+		} 
+		    // Mask Question
+		    if (destRadix == 18){
+			String number = Integer.toString(this.num, 2);
+			this.num2 = this.getRandomNum();
+			String number2 = Integer.toString(num2, 2);
+			return String.format("What is the binary output when applying the mask %s to %s?", number, number2);
+		    }
+		else {
 			// Set a 'from' radix that is not equal to the 'to' radix
 			int srcRadix = this.getRandomRadix();
 			while (srcRadix == destRadix) srcRadix = this.getRandomRadix();
@@ -198,9 +220,15 @@ public class Question {
 	 * @param s - the string to sanitize
 	 * @return the sanitized string
 	 */
-	public String sanitize(String s) {
-	  return s.replaceAll("^0*", "").replaceAll(" ", "").toLowerCase();
+    public String sanitize(String s){
+	String sanString = "";
+	if(s.equals("0")){
+	    sanString = s;
+	}else{
+	    sanString = s.replaceAll("^0*", "").replaceAll(" ", "").toLowerCase();
 	}
+	return sanString;
+    }
 	
 	/**
 	 * Return a string representation of the number in the specified radix
@@ -208,6 +236,13 @@ public class Question {
 	 * @return Number as a string
 	 */
 	public String convertTo(int radix) {
+
+	    if (radix == 18){
+                Integer mask = this.num & this.num2;
+                String answer = Integer.toBinaryString(mask);
+                return answer;
+            }
+
 		return Integer.toString(this.getNum(),radix);
 	}
 	
@@ -217,9 +252,9 @@ public class Question {
 	 * @param userAnswer The string answer submitted by the user
 	 */
 	public boolean checkAnswer(String userAnswer) {
-		userAnswer = sanitize(userAnswer);
-		String answer = this.convertTo(this.getIntRadix());
-		return (userAnswer.equals(answer)) ? true : false;
+	    userAnswer = sanitize(userAnswer);
+	    String answer = this.convertTo(this.getIntRadix());
+	    return (userAnswer.equals(answer)) ? true : false;
 	}
 	
 	/**
@@ -227,7 +262,13 @@ public class Question {
 	 * @return The number converted to the radix (as a string)
 	 */
 	public String getAnswer() {
+	    if(this.intRadix == 18){
+		Integer mask = this.num & this.num2;
+		String answer = Integer.toBinaryString(mask);
+		return answer;
+	    }else{
 		return Integer.toString(this.num, this.intRadix);
+	    }
 	}
 	
 }

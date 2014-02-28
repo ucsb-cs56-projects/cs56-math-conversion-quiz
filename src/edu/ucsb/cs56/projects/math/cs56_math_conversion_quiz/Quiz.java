@@ -33,7 +33,7 @@ public class Quiz {
     	
 		for (int i=0; i<numQuestions; i++) {
 			// Generate a random Question and push it to the beginning of the list
-			Question q = new Question();
+			Question q = new Question(this.mode);
 			this.questions.add(0, q);
 		}
 	}

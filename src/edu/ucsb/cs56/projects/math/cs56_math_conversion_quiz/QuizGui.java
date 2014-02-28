@@ -46,6 +46,7 @@ public class QuizGui {
 	JButton decimalMode     = new JButton("Decimal Mode");
 	JButton hexadecimalMode = new JButton("Hexadecimal Mode");
 	JButton randomMode      = new JButton("Random Mode");
+        JButton maskMode        = new JButton("Masking Mode");
 	
 	// Content references
 	JPanel content = new JPanel();
@@ -72,7 +73,7 @@ public class QuizGui {
 	 */
 	public QuizGui build() {
 
-        	questionLabel.setPreferredSize(new Dimension(200, 20));
+	    questionLabel.setPreferredSize(new Dimension(400, 20));
 		
 		int bottomMargin = 15;
 		
@@ -152,10 +153,20 @@ public class QuizGui {
 		modePanel.add(randomMode);
 		
 		// Adding color
-		java.awt.Color rColor = new java.awt.Color(051,153,204);
+		java.awt.Color rColor = new java.awt.Color(051,153,204);   // R, G, B values.
 		randomMode.setBackground(rColor);
 		randomMode.setOpaque(true);
 
+		modePanel.add(box.createVerticalStrut(bottomMargin-10));
+
+		maskMode.addActionListener(new maskModeListener());
+		modePanel.add(maskMode);
+
+		// Adding color
+		java.awt.Color mColor = new java.awt.Color(102,102,204);   // R, G, B values.
+		maskMode.setBackground(mColor);
+		maskMode.setOpaque(true);
+		
 		sidebar.add(modePanel);
 		
 		frame.getContentPane().add(BorderLayout.WEST, sidebar);
@@ -243,7 +254,7 @@ public class QuizGui {
 		//-- Window setup
 		//---------------------
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(550,330);
+		frame.setSize(800,400);
 		frame.setVisible(true);
 		refreshHint();
 
@@ -271,26 +282,32 @@ public class QuizGui {
 	class submitListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {			
 			String answer = userAnswer.getText();
-			
-			if (currentQuestion.checkAnswer(answer)) {
+			if (testAnswer(answer)){
+			    
+			    if (currentQuestion.checkAnswer(answer)) {
 				feedback.setText("Correct!");
 				quiz.insertScore(true);
-			} else {
+			    } else {
 				feedback.setText("Incorrect! Answer was: " + currentQuestion.getAnswer());
 				quiz.insertScore(false);
+			    }
+			
+			    String numCorrectStr = String.format("            %d/%d", quiz.numCorrect(), quiz.getNumQuestions());
+			    numCorrect.setText(numCorrectStr);
+			    current++;
+			    currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
+			    
+			    currentQuestion = new Question(quiz.getMode()); 
+			    refreshHint();
+			    quizGui.ask();
 			}
-			
-			String numCorrectStr = String.format("            %d/%d", quiz.numCorrect(), quiz.getNumQuestions());
-			numCorrect.setText(numCorrectStr);
-			current++;
-			currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
-			
-			currentQuestion = new Question(quiz.getMode());  //make change of the constructor
-			refreshHint();
-			quizGui.ask();
+			else {
+			    feedback.setText("Answer was not in proper format, please try again.");
+			    refreshHint();
+			    quizGui.ask();
+			}
 		}
 	}
-	
 	/**
 	 * Try Again button - run a new Quiz on click
 	 */
@@ -371,11 +388,26 @@ public class QuizGui {
 	class randomModeListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
   		quiz.setMode(-1);			
-			currentQuestion = new Question();	
+		currentQuestion = new Question(quiz.getMode());
 			refreshHint();			
 			quizGui.ask();
 		}
 	}
+
+    /**
+     * Set the quiz to masking conversions
+     */
+    class maskModeListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+
+	    quiz.setMode(18);
+	    feedback.setText("");
+	    currentQuestion = new Question(currentQuestion.getRandomNum(), 18);
+	    refreshHint();
+	    quizGui.ask();
+	}
+    }
+
 	
 	/**
 	 * Update fields to ask the current question, and end the quiz if necessary
@@ -393,6 +425,7 @@ public class QuizGui {
 			// Else ask the current question			
 			String prompt = currentQuestion.generatePrompt(quiz.getMode());
 			questionLabel.setText(prompt);
+			refreshHint();
 			
 		}
 	}
@@ -438,10 +471,13 @@ public class QuizGui {
 			public void go()
 			{
 			answer = userAnswer.getText();
-			answer = answer.replaceAll("^0*", "").replaceAll(" ", "").toLowerCase();
+			if(answer.equals("0")){
+			}else{
+			    answer = answer.replaceAll("^0*", "").replaceAll(" ", "").toLowerCase();
+			}
 			String regex = "^" + answer +".*$";
 			String correctAnswer = currentQuestion.getAnswer();
-			if(correctAnswer.matches(regex))	{
+			if(correctAnswer.matches(regex) || answer == correctAnswer)	{
 				if(refresh)	{
 					refresh = false;
 					hint = answer;
@@ -485,7 +521,67 @@ public class QuizGui {
 
 	frame.setLocation(x, y);
     }
-	
+
+    // Test format of user answer
+    public boolean testAnswer(String answer){
+	char[] ansArray = answer.toCharArray();
+	int curRadix = this.currentQuestion.getIntRadix();
+	switch(curRadix){
+	    
+	case 2:
+	    for(int i = 0; i < ansArray.length; i++){
+		try{
+		    int test = Character.getNumericValue(ansArray[i]);
+		    if(test != 0 || test != 1){
+			return false;
+		    }
+		    else{
+			return true;
+		    }
+		}catch(Exception ex){
+		    return false;
+		}
+	    }
+	case 8:
+	    for(int i = 0; i < ansArray.length; i++){
+		try{
+		    int test = Character.getNumericValue(ansArray[i]);
+		}catch(Exception ex){
+		    return false;
+		}
+	    }
+	    return true;
+	case 10:
+	    for(int i = 0; i < ansArray.length; i++){
+		try{
+		    int test = Character.getNumericValue(ansArray[i]);
+		}catch(Exception ex){
+		    return false;
+		}
+	    }
+	    return true;
+	case 16:
+	    for(int i = 0; i < ansArray.length; i++){
+		try{
+		    int test = Character.getNumericValue(ansArray[i]);
+		}catch(Exception ex){
+		    char newTest = ansArray[i];
+		    if(newTest != 'a' || newTest != 'b' || newTest != 'c' ||
+		       newTest != 'd' || newTest != 'e' || newTest != 'f'){
+			return false;
+		    }
+		    else{
+			continue;
+		    }
+		}
+	    }
+	    return true;
+	default:
+	    return false;
+	}
+    }
+
+
 	/**
 	 * Build and run the GUI
 	 */
