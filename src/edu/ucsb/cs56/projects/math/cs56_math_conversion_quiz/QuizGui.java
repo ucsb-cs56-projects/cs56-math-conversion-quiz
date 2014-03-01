@@ -12,8 +12,9 @@ import javax.swing.text.Document;
  * GUI for binary/octal/hex conversion Quiz
  * Original program by Erick Valle & George Barrios for Mantis 0000391
  * @author Andrew Berls
- * @authors Allison Shedden & Logan Schmidt
  * @version CS56, Spring 2012, Mantis 0000611 
+ * @authors Allison Shedden & Logan Schmidt
+ * @version CS56, Winter 2014
  */
 
 public class QuizGui {
@@ -282,8 +283,9 @@ public class QuizGui {
 	class submitListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {			
 			String answer = userAnswer.getText();
-			if (testAnswer(answer)){
-			    
+			//System.out.println(answer);
+			//if (testAnswer(answer)){
+			 
 			    if (currentQuestion.checkAnswer(answer)) {
 				feedback.setText("Correct!");
 				quiz.insertScore(true);
@@ -291,7 +293,7 @@ public class QuizGui {
 				feedback.setText("Incorrect! Answer was: " + currentQuestion.getAnswer());
 				quiz.insertScore(false);
 			    }
-			
+			    
 			    String numCorrectStr = String.format("            %d/%d", quiz.numCorrect(), quiz.getNumQuestions());
 			    numCorrect.setText(numCorrectStr);
 			    current++;
@@ -300,12 +302,11 @@ public class QuizGui {
 			    currentQuestion = new Question(quiz.getMode()); 
 			    refreshHint();
 			    quizGui.ask();
-			}
-			else {
-			    feedback.setText("Answer was not in proper format, please try again.");
-			    refreshHint();
-			    quizGui.ask();
-			}
+			    //}
+			    //else {
+			    //feedback.setText("Answer was not in proper format, please try again.");
+			    //quizGui.ask();
+			    //}
 		}
 	}
 	/**
@@ -523,65 +524,77 @@ public class QuizGui {
     }
 
     // Test format of user answer
-    public boolean testAnswer(String answer){
-	char[] ansArray = answer.toCharArray();
-	int curRadix = this.currentQuestion.getIntRadix();
-	switch(curRadix){
-	    
-	case 2:
-	    for(int i = 0; i < ansArray.length; i++){
-		try{
-		    int test = Character.getNumericValue(ansArray[i]);
-		    if(test != 0 || test != 1){
-			return false;
-		    }
-		    else{
-			return true;
-		    }
-		}catch(Exception ex){
-		    return false;
-		}
-	    }
-	case 8:
-	    for(int i = 0; i < ansArray.length; i++){
-		try{
-		    int test = Character.getNumericValue(ansArray[i]);
-		}catch(Exception ex){
-		    return false;
-		}
-	    }
-	    return true;
-	case 10:
-	    for(int i = 0; i < ansArray.length; i++){
-		try{
-		    int test = Character.getNumericValue(ansArray[i]);
-		}catch(Exception ex){
-		    return false;
-		}
-	    }
-	    return true;
-	case 16:
-	    for(int i = 0; i < ansArray.length; i++){
-		try{
-		    int test = Character.getNumericValue(ansArray[i]);
-		}catch(Exception ex){
-		    char newTest = ansArray[i];
-		    if(newTest != 'a' || newTest != 'b' || newTest != 'c' ||
-		       newTest != 'd' || newTest != 'e' || newTest != 'f'){
-			return false;
-		    }
-		    else{
-			continue;
-		    }
-		}
-	    }
-	    return true;
-	default:
-	    return false;
+
+    /*    public boolean testFormattingBinary(String answer){
+	System.out.print("Answer length is " + answer.length());
+	for(int i = 0; i < answer.length(); i++){
+	    char test = answer.charAt(i);
+	    System.out.println(test);
+	    if( test != '0' || test != '1'){
+		return false;
+	    }else{continue;}
 	}
+	return true;
+    }
+    
+    public boolean testFormattingOctalAndDecimal(String answer){
+	for(int i = 0; i < answer.length(); i++){
+            char test = answer.charAt(i);
+            System.out.println(test);
+            if(test != '0' || test != '1' || test != '2' || test != '3' || test != '4' ||
+               test != '5' || test != '6' || test != '7' || test != '8' || test != '9'){
+                return false;
+            }else{continue;}
+        }
+	return true;
     }
 
+    public boolean testFormattingHex(String answer){
+	for(int i = 0; i < answer.length(); i++){
+	    char test = answer.charAt(i);
+	    System.out.println(test);
+	    if(test != 'a' || test != 'b' || test != 'c' || test != 'd' || test != 'e' || test != 'f' || test != '0' || test != '1' ||
+	       test != '2' || test != '3' || test != '4' || test != '5' || test != '6' || test != '7' || test != '8' || test != '9'){
+		return false;
+	    }else{continue;}
+	}
+	return true;
+    }
 
+    public boolean testAnswer(String answer){
+	int curRadix = this.currentQuestion.getIntRadix();
+        switch(curRadix){
+
+        case 2:
+	    if(testFormattingBinary(answer)){
+		return true;
+	    }else{return false;}
+	    
+	case 8:
+	    if(testFormattingOctalAndDecimal(answer)){
+		return true;
+	    }else{return false;}
+
+	case 10:
+	    if(testFormattingOctalAndDecimal(answer)){
+		return true;
+	    }else{return false;}
+
+	case 16:
+	    if(testFormattingHex(answer)){
+		return true;
+	    }else{return false;}
+
+	case 18:
+	    if(testFormattingBinary(answer)){
+		return true;
+	    }else{return false;}
+
+	default: 
+	    return true;
+	}
+    }
+    */
 	/**
 	 * Build and run the GUI
 	 */

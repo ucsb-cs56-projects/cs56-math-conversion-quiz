@@ -43,7 +43,7 @@ public class Quiz {
     }
     
     /**
-     * Set the mode to a specific radix, e.g., 2, 8, 10, 16
+     * Set the mode to a specific radix, e.g., 2, 8, 10, 16, 18
      * in order to practice conversions to that radix
      */
     public void setMode(int mode) {
@@ -117,7 +117,7 @@ public class Quiz {
     		if (q.checkAnswer(userAnswer)) {
     			System.out.println("Correct!");
     			this.insertScore(true);
-    		} else {    			
+    		} else {
     			System.out.println("Incorrect! Actual answer was: " + q.convertTo(q.getIntRadix()));
     			this.insertScore(false);
     		}

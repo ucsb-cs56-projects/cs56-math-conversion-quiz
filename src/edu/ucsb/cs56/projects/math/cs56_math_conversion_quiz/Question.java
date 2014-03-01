@@ -162,7 +162,7 @@ public class Question {
 		    result = "Error with radix string";
 		    break;
 		}
-		System.out.println(result);
+		//System.out.println(result);
 		return result;
 	}
 
