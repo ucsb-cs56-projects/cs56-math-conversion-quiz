@@ -8,7 +8,9 @@ Running the Quiz:
 
 To run the command-line version of the game, use "ant run". To run the GUI version of the game, use "ant runGUI".
 
+
 ![](http://i.imgur.com/PaGacFJ.png)
+
 
 Important Information for Future Developers:
 
@@ -18,7 +20,4 @@ Important Information for Future Developers:
 
 * Current issues include not being able to check the user's input and print a line explaining that the format of the submission was incorrect in the GUI version, and after playing a full 10 question quiz in random mode of the GUI version, the first question when beginning a new quiz always has the answer an incorrect answer of "0".
  
-
-* [Archive link](https://foo.cs.ucsb.edu/cs56/issues/0000756/)
-* [Mantis link](https://foo.cs.ucsb.edu/56mantis/view.php?id=756)
 
