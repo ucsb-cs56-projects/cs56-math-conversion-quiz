@@ -11,8 +11,6 @@ To run the command-line version of the game, use "ant run". To run the GUI versi
 
 ![](http://imgur.com/oEDviAw.png)
 
-(http://i.imgur.com/PaGacFJ.png)
-
 
 Important Information for Future Developers:
 
