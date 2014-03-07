@@ -18,6 +18,6 @@ Important Information for Future Developers:
 
 * The QuizGUI files depend on the Quiz files. The QuizGui.java mainly contain window presentaion of the data produced by Quiz.java. QuizGui.java has very little funcitionality besides accepting and displaying user feedback.
 
-* Current issues include not being able to check the user's input and print a line explaining that the format of the submission was incorrect in the GUI version, and after playing a full 10 question quiz in random mode of the GUI version, the first question when beginning a new quiz always has the answer an incorrect answer of "0".
+* Current issues include not being able to check the user's input and print a line explaining that the format of the submission was incorrect in the GUI version, and after playing a full 10 question quiz in masking mode of the GUI version, the first question when beginning a new quiz always has the answer an incorrect answer of "0".
  
 
