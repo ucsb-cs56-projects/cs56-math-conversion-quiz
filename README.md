@@ -9,7 +9,7 @@ Running the Quiz:
 To run the command-line version of the game, use "ant run". To run the GUI version of the game, use "ant runGUI".
 
 
-![]http://imgur.com/oEDviAw
+![](http://imgur.com/oEDviAw.png)
 
 (http://i.imgur.com/PaGacFJ.png)
 
