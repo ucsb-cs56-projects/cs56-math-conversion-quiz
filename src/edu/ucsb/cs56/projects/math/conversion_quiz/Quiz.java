@@ -181,17 +181,17 @@ public class Quiz {
     	writeScore(this.getPercentage());
     	System.out.println("Your score was " + this.getPercentage() + "%!");
     }
-	
+ 
     /**
      * main prompts the user for a number of questions and runs a new Quiz
      * @param args Unused
      */
     public static void main (String [] args) {
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Enter number of questions:");
-	    String s = scanner.next();
-		int numQuestions = Integer.parseInt(s);
-		Quiz quiz = new Quiz(numQuestions);
-		quiz.run();		
+	Scanner scanner = new Scanner(System.in);
+	System.out.println("Enter number of questions:");
+	String s = scanner.next();
+	int numQuestions = Integer.parseInt(s);
+	Quiz quiz = new Quiz(numQuestions);
+	quiz.run();
     }
 }

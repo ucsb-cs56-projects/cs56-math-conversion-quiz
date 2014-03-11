@@ -5,15 +5,19 @@
 		 
 		 Edited by: Daniel Ly
 		 Version: S13, CS56
-		 Refactored package name -->
+		 Refactored package name 
+
+	         Edited by: Allison Shedden and Logan Schmidt
+	         Version: W14, CS56
+	         Refactored package name-->
 
 	<property environment="env" />
 	<property name="pkgDir" value="edu/ucsb/cs56/projects/math/cs56_math_conversion_quiz" />
 	<property name="fullDir" value="edu.ucsb.cs56.projects.math.cs56_math_conversion_quiz" />
 	<property name="mainClassGui" value="QuizGui" />
 	<property name="mainClass" value="Quiz" />
-	<property name="webRoot" value="${env.HOME}/public_html/cs56/S13/ProtossJane" />
-	<property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56/S13/ProtossJane" />
+	<property name="webRoot" value="${env.HOME}/public_html/cs56/cs56_math_conversion_quiz" />
+	<property name="webBaseURL" value="http://www.cs.ucsb.edu/~${env.USER}/cs56/" />
 	<property name="projectPath" value="0000756" />
 	<property name="projectName" value="cs56_math_conversion_quiz" />
 	<property name="javadocDest" value="${webRoot}/${projectName}" />
