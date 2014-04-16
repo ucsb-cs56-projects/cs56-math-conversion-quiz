@@ -4,6 +4,13 @@ Project Description:
 
 The cs56 Math Conversin Quiz contains both a command-line version, and a GUI in which a user can practice number conversions between binary (including masking), decimal, octal, and hexadecimal. The command-line allows the user to request a certain amount of questions which will be asked in a random conversion (from any radix to any radix). The GUI has several modes including: binary conversion (from any radix to binary), decimal conversion (from any radix to decimal), octal conversion (from any radix to octal), hexadecimal conversion (from any radix to hexadecimal), random conversion (the default mode, from any radix to any radix), and a masking conversion (only with binary).
 
+
+project history
+===============
+```
+ W14 | bronhuston 5pm | ashedden,l-y-s | GUI for binary/octal/hex/decimal conversion quiz
+```
+
 Running the Quiz:
 
 To run the command-line version of the game, use "ant run". To run the GUI version of the game, use "ant runGUI".
