@@ -8,6 +8,7 @@ The cs56 Math Conversin Quiz contains both a command-line version, and a GUI in 
 project history
 ===============
 ```
+YES | bronhuston | ashedden,l-y-s | GUI for binary/octal/hex/decimal conversion quiz 
  W14 | bronhuston 5pm | ashedden,l-y-s | GUI for binary/octal/hex/decimal conversion quiz
 ```
 
