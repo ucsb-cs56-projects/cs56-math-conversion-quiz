@@ -14,7 +14,7 @@ YES | bronhuston | ashedden,l-y-s | GUI for binary/octal/hex/decimal conversion 
 
 Running the Quiz:
 
-To run the command-line version of the game, use "ant run". To run the GUI version of the game, use "ant runGUI".
+To run the command-line version of the game, use "ant run". To run the GUI version of the game, use "ant runGui".
 
 
 ![](http://imgur.com/oEDviAw.png)

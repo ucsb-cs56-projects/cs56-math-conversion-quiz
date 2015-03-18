@@ -181,17 +181,39 @@ public class Quiz {
     	writeScore(this.getPercentage());
     	System.out.println("Your score was " + this.getPercentage() + "%!");
     }
- 
     /**
-     * main prompts the user for a number of questions and runs a new Quiz
+     * main prompts the user for a number of questions and runs a new Quiz and allows you to retake the quiz with new or the same parameters, when taken with the same parameters the program will tell you how you did compared to last time you took the quiz
+     *
      * @param args Unused
      */
     public static void main (String [] args) {
-	Scanner scanner = new Scanner(System.in);
-	System.out.println("Enter number of questions:");
-	String s = scanner.next();
-	int numQuestions = Integer.parseInt(s);
-	Quiz quiz = new Quiz(numQuestions);
-	quiz.run();
-    }
+        Scanner scanner = new Scanner(System.in);
+        String s = "y";
+        int numQuestions = 0;
+        Quiz quiz = new Quiz(1);
+        int x;
+        String redue;
+        while(s.equals("y") || s.equals("s"))
+        {
+                if(s.equals("y"))
+                {
+                        System.out.println("Enter number of questions:");
+                        s = scanner.next();
+                        numQuestions = Integer.parseInt(s);
+                        quiz = new Quiz(numQuestions);
+                        quiz.run();
+                        System.out.println("would you like to play again?\ny for yes (with different parameters)\nn for no (this will terminate the program)\ns for same parameters(same parameters will compare your score with the previous score)");
+                        s = scanner.next();
+                }
+                else
+                {
+                        x = quiz.getPercentage();
+                        quiz = new Quiz(numQuestions);
+                        quiz.run();
+                        System.out.println("This time you got a " + quiz.getPercentage() + "% and last time you got a " + x + "%");
+                        System.out.println("would you like to play again?\ny for yes (with different parameters)\nn for no (this will terminate the program)\ns for same parameters(same parameters will compare your score with the previous score)");
+                        s = scanner.next();
+                }
+         }
+}
 }
