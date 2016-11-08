@@ -8,6 +8,8 @@ import java.util.Scanner;
  * Original program by Erick Valle & George Barrios for Mantis 0000391
  * @author Andrew Berls
  * @version CS56, Spring 2012, Mantis 0000611
+ * @authors Nikhil Patil & Aryaman Das
+ * @version CS56, Fall 2016
  */
 
 public class Quiz {
@@ -118,8 +120,10 @@ public class Quiz {
     			System.out.println("Correct!");
     			this.insertScore(true);
     		} else {
-    			System.out.println("Incorrect! Actual answer was: " + q.convertTo(q.getIntRadix()));
-    			this.insertScore(false);
+		    System.out.println("Incorrect!");
+		    System.out.print(q.generatePrompt() + " ... ");
+		    System.out.println("Actual answer was: " + q.convertTo(q.getIntRadix()));
+		    this.insertScore(false);
     		}
     	}
     	

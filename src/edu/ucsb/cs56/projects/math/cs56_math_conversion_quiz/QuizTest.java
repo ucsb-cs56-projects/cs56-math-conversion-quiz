@@ -7,6 +7,8 @@ import static org.junit.Assert.assertEquals;
  * 
  * @author Andrew Berls
  * @version CS56, Spring 2012, Mantis 0000611
+ * @author Nikhil Patil & Aryaman Das
+ * @version CS56, Fall 2016 
  * @see Quiz
  *
  */
