@@ -284,7 +284,6 @@ public class QuizGui {
 		public void actionPerformed(ActionEvent e) {			
 			String answer = userAnswer.getText();
 			//System.out.println(answer);
-			//if (testAnswer(answer)){
 
 			if(!(answer.matches("^[a-fA-F0-9]+$")))
 			    {
@@ -309,11 +308,6 @@ public class QuizGui {
 			    currentQuestion = new Question(quiz.getMode()); 
 			    refreshHint();
 			    quizGui.ask();
-			    //}
-			    //else {
-			    //feedback.setText("Answer was not in proper format, please try again.");
-			    //quizGui.ask();
-			    //}
 		}
 	}
 	/**

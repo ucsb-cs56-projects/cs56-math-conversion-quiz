@@ -29,7 +29,7 @@ public class Quiz {
      * @param numQuestions The number of questions to initialize
      */
     public Quiz(int numQuestions, int type) {
-    	this.mode = type; // Random mode by default
+    	this.mode = type; // selects type of game to play
     	
 		for (int i=0; i<numQuestions; i++) {
 			// Generate a random Question and push it to the beginning of the list
