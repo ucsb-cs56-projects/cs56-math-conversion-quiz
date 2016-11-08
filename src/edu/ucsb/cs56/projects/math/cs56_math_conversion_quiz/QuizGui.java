@@ -286,12 +286,10 @@ public class QuizGui {
 			//System.out.println(answer);
 			//if (testAnswer(answer)){
 
-			//while(!(answer.matches("^[a-fA-F0-9]+$")))
 			if(!(answer.matches("^[a-fA-F0-9]+$")))
 			    {
 				feedback.setText("Invalid input. Please only use characters A-F and/or digits 0-9");
 				userAnswer.setText("");
-				//quizGui.ask();
 				return;
 			    }
 			 
@@ -433,7 +431,6 @@ public class QuizGui {
 			scorePanel.setVisible(true);
 		} else {
 			// Else ask the current question
-		    System.out.println("it happened again!");
 		    String prompt = currentQuestion.generatePrompt(quiz.getMode());
 			questionLabel.setText(prompt);
 			refreshHint();
