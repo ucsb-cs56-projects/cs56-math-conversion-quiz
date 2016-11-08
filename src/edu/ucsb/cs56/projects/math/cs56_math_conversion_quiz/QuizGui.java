@@ -285,6 +285,15 @@ public class QuizGui {
 			String answer = userAnswer.getText();
 			//System.out.println(answer);
 			//if (testAnswer(answer)){
+
+			//while(!(answer.matches("^[a-fA-F0-9]+$")))
+			if(!(answer.matches("^[a-fA-F0-9]+$")))
+			    {
+				feedback.setText("Invalid input. Please only use characters A-F and/or digits 0-9");
+				userAnswer.setText("");
+				//quizGui.ask();
+				return;
+			    }
 			 
 			    if (currentQuestion.checkAnswer(answer)) {
 				feedback.setText("Correct!");
@@ -293,7 +302,7 @@ public class QuizGui {
 				feedback.setText("Incorrect! Answer was: " + currentQuestion.getAnswer());
 				quiz.insertScore(false);
 			    }
-			    
+		
 			    String numCorrectStr = String.format("            %d/%d", quiz.numCorrect(), quiz.getNumQuestions());
 			    numCorrect.setText(numCorrectStr);
 			    current++;
@@ -423,8 +432,9 @@ public class QuizGui {
 			scoreReadout.setText(quiz.getReadout());
 			scorePanel.setVisible(true);
 		} else {
-			// Else ask the current question			
-			String prompt = currentQuestion.generatePrompt(quiz.getMode());
+			// Else ask the current question
+		    System.out.println("it happened again!");
+		    String prompt = currentQuestion.generatePrompt(quiz.getMode());
 			questionLabel.setText(prompt);
 			refreshHint();
 			

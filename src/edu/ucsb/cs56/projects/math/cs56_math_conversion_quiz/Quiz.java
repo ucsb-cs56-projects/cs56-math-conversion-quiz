@@ -28,8 +28,8 @@ public class Quiz {
      * Constructor initializes a fixed number of random questions
      * @param numQuestions The number of questions to initialize
      */
-    public Quiz(int numQuestions) {
-    	this.mode = -1; // Random mode by default
+    public Quiz(int numQuestions, int type) {
+    	this.mode = type; // Random mode by default
     	
 		for (int i=0; i<numQuestions; i++) {
 			// Generate a random Question and push it to the beginning of the list
@@ -37,6 +37,17 @@ public class Quiz {
 			this.questions.add(0, q);
 		}
 	}
+
+    public Quiz(int numQuestions) {
+	this.mode = -1; // Random mode by default
+
+	for (int i=0; i<numQuestions; i++) {
+	    // Generate a random Question and push it to the beginning of the list
+		Question q = new Question(this.mode);
+	    this.questions.add(0, q);
+	}
+    }
+    
     
     public int getMode() {
     	return this.mode;
@@ -113,7 +124,13 @@ public class Quiz {
     	for (Question q : this.questions) {
     		System.out.println(q.generatePrompt());
     		String userAnswer = scanner.next();
-    		
+	     
+		while(!(userAnswer.matches("^[a-fA-F0-9]+$")))
+		    {
+			System.out.println("Invalid input. Please only use characters A-F and/or digits 0-9");
+			userAnswer = scanner.next();
+		    }
+		
     		if (q.checkAnswer(userAnswer)) {
     			System.out.println("Correct!");
     			this.insertScore(true);
@@ -135,7 +152,11 @@ public class Quiz {
 		System.out.println("Enter number of questions:");
 	    String s = scanner.next();
 		int numQuestions = Integer.parseInt(s);
-		Quiz quiz = new Quiz(numQuestions);
+		System.out.println("Select which mode you would like to test. Press 2 for binary, 8 for octal, 10 for decimal, 16 for hexadecimal, or -1 for random");
+		s = scanner.next();
+		int qtype = Integer.parseInt(s);
+		Quiz quiz = new Quiz(numQuestions, qtype);
+		quiz.setMode(qtype);
 		quiz.run();		
     }
 }
