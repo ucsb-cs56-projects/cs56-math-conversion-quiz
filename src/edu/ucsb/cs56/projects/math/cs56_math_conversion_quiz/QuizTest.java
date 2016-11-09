@@ -83,5 +83,11 @@ public class QuizTest {
 		q.insertScore(false);
 		assertEquals(50, q.getPercentage());
 	}
+    /**
+     * test tryAgain button
+     * See if quiz stats reset between quizzes
+     */
+    
+  
 	
 }

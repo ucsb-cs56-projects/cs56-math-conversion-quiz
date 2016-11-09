@@ -62,11 +62,17 @@ public class Question {
 		this.setRadixes(radix);
 	    }
 	}
-
+    /**
+     * Retrieves the string representation of the question's radix
+     * @return String representation of radix
+     */
 	public String getStrRadix() {		
 		return getRadixString(this.intRadix);
 	}
-
+    /**
+     * Sets the string representation of question's radix
+     * @param radix String representation of radix
+     */
 	public void setStrRadix(String radix) {
 		this.strRadix = radix;
 	}
@@ -78,23 +84,35 @@ public class Question {
 	public void setStrRadix(int radix) {
 		this.strRadix = getRadixString(radix);
 	}
-
+    /**
+     * Retrieves question's number to convert
+     * @return the number
+     */
 	public int getNum() {
 		return this.num;
 	}
-
+    /**
+     * Sets the question's number to convert
+     * @param x number assigned to question
+     */
 	public void setNum(int x) {
 		this.num = x;
 	}
-
-	public int getIntRadix() {
-		return this.intRadix;
-	}
-
-	public void setIntRadix(int x) {
-		this.intRadix = x;
-	}
-	
+    /**
+     * Retrieves the index representation of radix
+     * @return integer representation of radix
+     */
+    public int getIntRadix() {
+	    return this.intRadix;
+    }
+    /**
+     * Sets the integer representation of radix 
+     * @param x integer representation of radix
+     */
+    public void setIntRadix(int x) {
+	this.intRadix = x;
+    }
+    
 	/**
 	 * Set both the int and string radixes
 	 * @param radix the radix to set(as an int)

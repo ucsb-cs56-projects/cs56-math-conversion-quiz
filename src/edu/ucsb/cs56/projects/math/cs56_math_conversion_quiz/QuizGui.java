@@ -34,6 +34,8 @@ public class QuizGui {
     private int numQuestions = 10;
     Quiz quiz = new Quiz(numQuestions);	
     private boolean refresh = false;
+    private String lastAnswer = ""; // capture answer to last question
+    private boolean correct = false;
     private int maxMatch =0 ;
     // Sidebar references
     JPanel sidebar                 = new JPanel();
@@ -293,9 +295,8 @@ public class QuizGui {
 	     * @param e ActionEvent object that gives information about the event and its source
 	     */
 		public void actionPerformed(ActionEvent e) {			
-			String answer = userAnswer.getText();
-			//System.out.println(answer);
-
+		    String answer = userAnswer.getText();
+		    //System.out.println(answer);
 			if(!(answer.matches("^[a-fA-F0-9]+$")))
 			    {
 				feedback.setText("Invalid input. Please only use characters A-F and/or digits 0-9");
@@ -306,11 +307,13 @@ public class QuizGui {
 			    if (currentQuestion.checkAnswer(answer)) {
 				feedback.setText("Correct!");
 				quiz.insertScore(true);
+				correct = true;
 			    } else {
-				//feedback.setText("Incorrect! Previous Question: " + currentQuestion.generatePrompt());
-				feedback.setText("<html>Incorrect!<br> Previous Question: " + currentQuestion.generatePrompt() + "<br> Answer was: " + currentQuestion.getAnswer());
+				feedback.setText("<html>Incorrect!<br> Previous Question: " + questionLabel.getText() + "<br> Answer was: " + currentQuestion.getAnswer());
 				quiz.insertScore(false);
 			    }
+
+			    lastAnswer = currentQuestion.getAnswer(); //Arvan
 		
 			    String numCorrectStr = String.format("            %d/%d", quiz.numCorrect(), quiz.getNumQuestions());
 			    numCorrect.setText(numCorrectStr);
@@ -320,6 +323,7 @@ public class QuizGui {
 			    currentQuestion = new Question(quiz.getMode()); 
 			    refreshHint();
 			    quizGui.ask();
+			    correct = false;
 		}
 	}
 	/**
@@ -462,29 +466,50 @@ public class QuizGui {
 	    quizGui.ask();
 	}
     }
-
+    
+    /**
+     * guiQuestions class
+     * Creates a quiz based of the number of questions requested by user 
+     * Overrides actionPerformed() method of ActionListener interface
+     
+    class guiQuestions implements ActionListener {
+	/**
+	 * Called when the user clicks "begin" after entering number of questions
+	 * @param e ActionEvent object that gives info about source
+	 
+	public void actionPerformed(ActionEvent e) {}
+    */   
 	
 	/**
 	 * Update fields to ask the current question, and end the quiz if necessary
 	 */
 	public void ask() {
-	  userAnswer.setText(""); // Clear the text field
+	    userAnswer.setText(""); // Clear the text field
 		
-		if (current >= quiz.getNumQuestions()) {
-			// If we're through with the questions, hide the inputs and show the final readout			
-			sidebar.setVisible(false);
-			userInput.setVisible(false);
-			scoreReadout.setText(quiz.getReadout());
-			scorePanel.setVisible(true);
-		} else {
-			// Else ask the current question
-		    String prompt = currentQuestion.generatePrompt(quiz.getMode());
-			questionLabel.setText(prompt);
-			refreshHint();
-			
+	    if (current >= quiz.getNumQuestions()) {
+		    // If we're through with the questions, hide the inputs and show the final readout			
+		sidebar.setVisible(false);
+		userInput.setVisible(false);
+		String result = "";
+		if (correct){
+		    result = "<html>Correct! <br>";
+		    scoreReadout.setText(result + quiz.getReadout());
 		}
+		else {
+		    result = "<html>Incorrect!<br> Previous Question: " + questionLabel.getText() + "<br>Correct answer was: " + lastAnswer + "<br>";
+		    scoreReadout.setText(result + quiz.getReadout());
+		}
+					   
+		scorePanel.setVisible(true);
+	    } else {
+		    // Else ask the current question
+		String prompt = currentQuestion.generatePrompt(quiz.getMode());
+		questionLabel.setText(prompt);
+		refreshHint();
+			
+	    }
 	}
-	
+		
 	/**
 	 * switchHintListener class
 	 * Switch the hint on/off

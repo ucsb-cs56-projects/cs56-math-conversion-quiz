@@ -29,6 +29,7 @@ public class Quiz {
     /**
      * Constructor initializes a fixed number of random questions
      * @param numQuestions The number of questions to initialize
+     * @param type The type of quiz questions to encounter
      */
     public Quiz(int numQuestions, int type) {
     	this.mode = type; // selects type of game to play
@@ -39,7 +40,10 @@ public class Quiz {
 			this.questions.add(0, q);
 		}
 	}
-
+    /**
+     * Constructor intializes a quiz for a fixed number of random questions
+     * @param numQuestions The number of questions to initialize
+     */
     public Quiz(int numQuestions) {
 	this.mode = -1; // Random mode by default
 
@@ -50,7 +54,9 @@ public class Quiz {
 	}
     }
     
-    
+    /**
+     * @return The mode/type of questions in the quiz
+     */
     public int getMode() {
     	return this.mode;
     }
@@ -58,15 +64,23 @@ public class Quiz {
     /**
      * Set the mode to a specific radix, e.g., 2, 8, 10, 16, 18
      * in order to practice conversions to that radix
+     * @param mode The type of questions to be asked
      */
     public void setMode(int mode) {
     	this.mode = mode;
     }
-    
+    /**
+     * @return the number of questions in the quiz
+     */
     public int getNumQuestions() {    	
     	return this.questions.size();
     }
     
+    /**
+     * Retrieve a particular question from the questions ArrayList
+     * @param idx index of question in ArrayList
+     * @return Question located at index idx
+     */
     public Question getQuestion(int idx) {
     	return this.questions.get(idx);
     }
@@ -113,9 +127,11 @@ public class Quiz {
      * @return A string readout
      */
     public String getReadout() {
-    	return "Your score was " + this.getPercentage() + "%!";
-    }  
-    
+	String readout = "";
+	readout = "Your score was " + this.getPercentage() + "%!";
+	return readout;
+    }
+  
     /**
      * Run the Quiz game on the command line
      * For each question, display its prompt and track the user's answer
@@ -123,8 +139,10 @@ public class Quiz {
      */
     public void run() {
     	Scanner scanner = new Scanner(System.in);
-    	for (Question q : this.questions) {
-    		System.out.println(q.generatePrompt());
+	
+	for (Question q : this.questions) {
+	    String Q = q.generatePrompt();
+	    System.out.println(Q);
     		String userAnswer = scanner.next();
 	     
 		while(!(userAnswer.matches("^[a-fA-F0-9]+$")))
@@ -135,15 +153,15 @@ public class Quiz {
 		
     		if (q.checkAnswer(userAnswer)) {
     			System.out.println("Correct!");
+			System.out.println(Q);
     			this.insertScore(true);
     		} else {
 		    System.out.println("Incorrect!");
-		    System.out.print(q.generatePrompt() + " ... ");
+		    System.out.print(Q + " ... ");
 		    System.out.println("Actual answer was: " + q.convertTo(q.getIntRadix()));
 		    this.insertScore(false);
     		}
     	}
-    	
     	System.out.println("Your score was " + this.getPercentage() + "%!");
     }
 	
