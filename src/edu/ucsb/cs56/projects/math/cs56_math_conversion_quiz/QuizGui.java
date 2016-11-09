@@ -64,6 +64,23 @@ public class QuizGui {
 	JPanel scorePanel   = new JPanel();
 	JLabel scoreReadout = new JLabel("");
 	JButton tryAgain    = new JButton("Try Again!");
+
+    JFrame startWindow = new JFrame("Test");
+    JPanel startPanel = new JPanel();
+    JButton startButton = new JButton("Start!");
+    JButton quitButton = new JButton("Quit");
+    
+	public QuizGui start() {
+	startWindow.setSize(400,200);
+	startWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	startWindow.add(startPanel);
+	startPanel.add(startButton);
+	startPanel.add(quitButton);
+	startButton.addActionListener(new startListener());
+	quitButton.addActionListener(new quitListener());
+	startWindow.setVisible(true);
+	return this;
+	}
 	
 	// Specific question references
 	private static int current;
@@ -278,8 +295,21 @@ public class QuizGui {
 			h+="_ ";
 		 hintLable.setText("Hint: "+h+"  You hit: "+0+"/"+ currentQuestion.getAnswer().length());
 	 }
+
+	 class startListener implements ActionListener {
+	     public void actionPerformed(ActionEvent e) {
 		 
-	 
+		 startWindow.setVisible(false);
+		 quizGui.build().ask();
+	     }
+	 }
+
+    class quitListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+
+	    System.exit(0); }
+    }
+	     
 	class submitListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {			
 			String answer = userAnswer.getText();
@@ -435,6 +465,7 @@ public class QuizGui {
 	/**
 	 * Switch the hint on/off
 	 */
+	
 	
 	public class switchHintListener implements ActionListener	{
 		public void actionPerformed(ActionEvent e)	{
@@ -600,7 +631,8 @@ public class QuizGui {
 	 * Build and run the GUI
 	 */
 	public static void main (String [] args) {		
-		quizGui.build().ask();
+	    quizGui.start();
+	    //quizGui.build().ask();
 		
   }
 	
