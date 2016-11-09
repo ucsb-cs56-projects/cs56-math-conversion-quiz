@@ -7,6 +7,8 @@ import static org.junit.Assert.assertEquals;
  * 
  * @author Andrew Berls
  * @version CS56, Spring 2012, Mantis 0000611
+ * @author Nikhil Patil & Aryaman Das
+ * @version CS56, Fall 2016 
  * @see Quiz
  *
  */
@@ -81,5 +83,11 @@ public class QuizTest {
 		q.insertScore(false);
 		assertEquals(50, q.getPercentage());
 	}
+    /**
+     * test tryAgain button
+     * See if quiz stats reset between quizzes
+     */
+    
+  
 	
 }

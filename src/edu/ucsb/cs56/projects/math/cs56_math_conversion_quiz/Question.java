@@ -8,6 +8,8 @@ import java.lang.Math;
  * @version CS56, Spring 2012, Mantis 0000611
  * @authors Allison Shedden & Logan Schmidt
  * @version CS56, Winter 2014
+ * @authors Aryaman Das & Nikhil Patil
+ * @version CS56, Fall 2016
  */
 
 public class Question {
@@ -60,11 +62,17 @@ public class Question {
 		this.setRadixes(radix);
 	    }
 	}
-
+    /**
+     * Retrieves the string representation of the question's radix
+     * @return String representation of radix
+     */
 	public String getStrRadix() {		
 		return getRadixString(this.intRadix);
 	}
-
+    /**
+     * Sets the string representation of question's radix
+     * @param radix String representation of radix
+     */
 	public void setStrRadix(String radix) {
 		this.strRadix = radix;
 	}
@@ -76,23 +84,35 @@ public class Question {
 	public void setStrRadix(int radix) {
 		this.strRadix = getRadixString(radix);
 	}
-
+    /**
+     * Retrieves question's number to convert
+     * @return the number
+     */
 	public int getNum() {
 		return this.num;
 	}
-
+    /**
+     * Sets the question's number to convert
+     * @param x number assigned to question
+     */
 	public void setNum(int x) {
 		this.num = x;
 	}
-
-	public int getIntRadix() {
-		return this.intRadix;
-	}
-
-	public void setIntRadix(int x) {
-		this.intRadix = x;
-	}
-	
+    /**
+     * Retrieves the index representation of radix
+     * @return integer representation of radix
+     */
+    public int getIntRadix() {
+	    return this.intRadix;
+    }
+    /**
+     * Sets the integer representation of radix 
+     * @param x integer representation of radix
+     */
+    public void setIntRadix(int x) {
+	this.intRadix = x;
+    }
+    
 	/**
 	 * Set both the int and string radixes
 	 * @param radix the radix to set(as an int)
@@ -104,6 +124,7 @@ public class Question {
 
 	/**
 	 * Return a random integer between 0 and 99
+	 @return random integer between 0 and 99
 	 */
 	public int getRandomNum() {		
 		return (int) (Math.random() * 100);
@@ -138,6 +159,7 @@ public class Question {
 	
 	/**
 	 * Take an integer radix and return its corresponding String representation
+	 * @param an integer radix
 	 * @return The radix string
 	 */
 	public String getRadixString(int radix) {
@@ -188,6 +210,7 @@ public class Question {
 	/**
 	 * Practice converting random radixes to a specific radix
 	 * @param destRadix The radix to convert to
+	 * @return 
 	 */
     public String generatePrompt(int destRadix) {
 		
@@ -233,7 +256,7 @@ public class Question {
 	/**
 	 * Return a string representation of the number in the specified radix
 	 * @param radix The radix to convert to
-	 * @return Number as a string
+	 * @return number in string representation
 	 */
 	public String convertTo(int radix) {
 
@@ -250,6 +273,7 @@ public class Question {
 	 * Test if a user submitted answer matches the correct conversion
 	 * Leading zeroes are stripped for flexibility
 	 * @param userAnswer The string answer submitted by the user
+	 * @return true if answer correct, false if answer incorrect
 	 */
 	public boolean checkAnswer(String userAnswer) {
 	    userAnswer = sanitize(userAnswer);
