@@ -34,6 +34,8 @@ public class QuizGui {
 	private int numQuestions = 10;
 	Quiz quiz = new Quiz(numQuestions);	
 	private boolean refresh = false;
+    private String lastAnswer = "";
+    private boolean correct = false;
 	private int maxMatch =0 ;
 	// Sidebar references
 	JPanel sidebar                 = new JPanel();
