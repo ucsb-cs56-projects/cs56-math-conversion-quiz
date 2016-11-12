@@ -20,8 +20,7 @@ import javax.swing.text.Document;
  */
 
 public class QuizGui {
-	
-<<<<<<< HEAD
+       
 	// Window components
         JFrame frame = new JFrame("Binary/Decimal/Octal/Hex Conversion Quiz");
 
@@ -195,165 +194,99 @@ public class QuizGui {
 		//---------------------
 		//-- Main Content
 		//---------------------
-=======
-    // Window components
-    JFrame frame = new JFrame("Binary/Decimal/Octal/Hex Conversion Quiz");
-    
-    // Used for creating/inserting vertical structs to act as spacer margins
-    Box box = new Box(BoxLayout.X_AXIS);
-    //Runnable scanHint = new Hint();
-    
-    
-    // Quiz-related variables
-    static QuizGui quizGui = new QuizGui();
-    private int numQuestions = 10;
-    Quiz quiz = new Quiz(numQuestions);	
-    private boolean refresh = false;
-    private String lastAnswer = ""; // capture answer to last question
-    private boolean correct = false;
-    private int maxMatch =0 ;
-    // Sidebar references
-    JPanel sidebar                 = new JPanel();
-    JLabel currentQuestionNumLabel = new JLabel("  Current Question: ");
-    JLabel currentQuestionNum      = new JLabel(String.format("            %d/%d", current+1, quiz.getNumQuestions())); 
-    JLabel numCorrectLabel         = new JLabel("  Number Correct: ");
-    JLabel numCorrect              = new JLabel(String.format("            0/%d", quiz.getNumQuestions()));
-    
-    JPanel modePanel        = new JPanel();
-    JLabel practiceLabel    = new JLabel("  I want to practice: ");
-    JButton binaryMode      = new JButton("Binary Mode");
-    JButton octalMode       = new JButton("Octal Mode");
-    JButton decimalMode     = new JButton("Decimal Mode");
-    JButton hexadecimalMode = new JButton("Hexadecimal Mode");
-    JButton randomMode      = new JButton("Random Mode");
-    JButton maskMode        = new JButton("Masking Mode");
-    
-    // Content references
-    
-    JPanel content = new JPanel();
-    JPanel userInput = new JPanel();
-    JLabel questionLabel = new JLabel("");
-    JTextField userAnswer = new JTextField(25);
-    JLabel hintLable = new JLabel("Hint: ");
-    JButton submit = new JButton("Submit");
-    JButton switchHint = new JButton("Show Hint");
-    
-    JPanel results  = new JPanel();
-    JLabel feedback = new JLabel("");
-    
-    JPanel scorePanel   = new JPanel();
-    JLabel scoreReadout = new JLabel("");
-    JButton tryAgain    = new JButton("Try Again!");
-    
-    // Specific question references
-    private static int current;
-    private Question currentQuestion = new Question();
-    
-    /**
-     * Build the Quiz GUI window
-     */
-    public QuizGui build() {
->>>>>>> 34ceb0a2bff5c2803796b978b6f412970192c8ba
-	
-	questionLabel.setPreferredSize(new Dimension(400, 20));
-	
-	int bottomMargin = 15;
-	
-	//---------------------
-	//-- Sidebar
-	//---------------------
-	sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
-	
-	// Adding color
-	java.awt.Color bgColor = new java.awt.Color(245,222,179);  // R, G, B values.
-	sidebar.setBackground(bgColor);
-	
-	sidebar.add(box.createVerticalStrut(bottomMargin-7));
-	
-	sidebar.add(currentQuestionNumLabel);
-	sidebar.add(currentQuestionNum);
-	
-	sidebar.add(box.createVerticalStrut(bottomMargin));
-	
-	sidebar.add(numCorrectLabel);
-	sidebar.add(numCorrect);
-	
-	modePanel.add(box.createVerticalStrut(bottomMargin));
-	
-	modePanel.setLayout(new BoxLayout(modePanel, BoxLayout.Y_AXIS));
-	
-	// Adding color
-	modePanel.setBackground(bgColor);
-	
-	sidebar.add(box.createVerticalStrut(bottomMargin*2+10));
-	
-	modePanel.add(practiceLabel);
-	
-	modePanel.add(box.createVerticalStrut(bottomMargin));
-	
-	binaryMode.addActionListener(new binaryModeListener());
-	modePanel.add(binaryMode);
-	
-	// Adding color
-	java.awt.Color bColor = new java.awt.Color(102,255,153);  // R, G, B values.
-	binaryMode.setBackground(bColor);
-	binaryMode.setOpaque(true);
-	
-	modePanel.add(box.createVerticalStrut(bottomMargin-10));
-	
-	octalMode.addActionListener(new octalModeListener());
-	modePanel.add(octalMode);
-	
-	// Adding color
-	java.awt.Color oColor = new java.awt.Color(000,204,102);   // R, G, B values.
-	octalMode.setBackground(oColor);
-	octalMode.setOpaque(true);
-	
-	modePanel.add(box.createVerticalStrut(bottomMargin-10));
-	
-	decimalMode.addActionListener(new decimalModeListener());
-	modePanel.add(decimalMode);
-	
-	// Adding color
-	java.awt.Color dColor = new java.awt.Color(000,204,153);   // R, G, B values.
-	decimalMode.setBackground(dColor);
-	decimalMode.setOpaque(true);
-	
-	modePanel.add(box.createVerticalStrut(bottomMargin-10));
-	
-	hexadecimalMode.addActionListener(new hexadecimalModeListener());
-	modePanel.add(hexadecimalMode);
-	
-	// Adding color
-	java.awt.Color hColor = new java.awt.Color(102,204,204);   // R, G, B values.
-	hexadecimalMode.setBackground(hColor);
-	hexadecimalMode.setOpaque(true);
-	
-	modePanel.add(box.createVerticalStrut(bottomMargin-10));
-	
-	randomMode.addActionListener(new randomModeListener());
-	modePanel.add(randomMode);
-	
-	// Adding color
-	java.awt.Color rColor = new java.awt.Color(051,153,204);   // R, G, B values.
-	randomMode.setBackground(rColor);
-	randomMode.setOpaque(true);
-	
-	modePanel.add(box.createVerticalStrut(bottomMargin-10));
-	
-	maskMode.addActionListener(new maskModeListener());
-	modePanel.add(maskMode);
 
-	// Adding color
-	java.awt.Color mColor = new java.awt.Color(102,102,204);   // R, G, B values.
-	maskMode.setBackground(mColor);
-	maskMode.setOpaque(true);
-	
-<<<<<<< HEAD
-	/**
-	 * When the user clicks submit, send feedback on their answer
-	 * and update appropriate counters
-	 */
+		// userInput sub-pane
+		userInput.setLayout(new BoxLayout(userInput, BoxLayout.Y_AXIS));
+
+		// Adding color
+		userInput.setBackground(bgColor);
+
+		userInput.add(questionLabel);
+		userInput.add(box.createVerticalStrut(5));
+
+		userAnswer.getDocument().addDocumentListener(new hintListener());
+		userInput.add(userAnswer); // ----------------------------------------------
+
+		userInput.add(box.createVerticalStrut(5));
+		userInput.add(hintLable);
+
+		hintLable.setVisible(false);
+
+		userInput.add(box.createVerticalStrut(5));
+		submit.addActionListener(new submitListener());
+		userInput.add(feedback);
+		userInput.add(box.createVerticalStrut(5));
+		userInput.add(submit);
+
+		// Adding color
+		java.awt.Color sColor = new java.awt.Color(255,255,000);   // R, G, B values.
+		submit.setBackground(sColor);
+		submit.setOpaque(true);
+
+		userInput.add(box.createVerticalStrut(5));
+		switchHint.addActionListener(new switchHintListener());
+		userInput.add(switchHint);
+
+		// Adding color
+		java.awt.Color hintColor = new java.awt.Color(255,255,255);   // R, G, B values.
+		switchHint.setBackground(hintColor);
+		switchHint.setOpaque(true);
+
+		// Results sub-pane
+		results.setLayout(new BoxLayout(results, BoxLayout.Y_AXIS));
+
+		// Adding color
+		results.setBackground(bgColor);
+
+		// Score readout sub-pane (Visible at end)
+		scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
+
+		// Adding color
+		scorePanel.setBackground(bgColor);
+
+		scorePanel.add(scoreReadout);
+		scorePanel.add(box.createVerticalStrut(10));
+		tryAgain.addActionListener(new tryAgainListener());
+		scorePanel.add(tryAgain);
+
+		// Adding color
+		java.awt.Color tColor = new java.awt.Color(255,255,255);   // R, G, B values.
+		tryAgain.setBackground(tColor);
+		tryAgain.setOpaque(true);
+
+		scorePanel.setVisible(false); // Enabled at end of quiz
+		frame.getContentPane().add(BorderLayout.CENTER, scorePanel);
+
+		// Adding color
+		frame.getContentPane().setBackground(bgColor);
+
+		// Attach sub-panes to content pane
+		content.add(userInput);
+		content.add(results);
+
+		// Adding color
+		content.setBackground(bgColor);
+
+		frame.getContentPane().add(BorderLayout.EAST, content);
+
+
+		//---------------------
+		//-- Window setup
+		//---------------------
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(800,400);
+		frame.setVisible(true);
+		refreshHint();
+
+		center(frame);
+
+		return this; // For chaining method calls
+	}
+
+    /**
+     * When the user clicks submit, send feedback on their answer
+     * and update appropriate counters
+     */
 	 
 	 public void refreshHint()
 	 {
@@ -380,130 +313,7 @@ public class QuizGui {
     }
 	     
 	class submitListener implements ActionListener {
-=======
-	sidebar.add(modePanel);
-	
-	frame.getContentPane().add(BorderLayout.WEST, sidebar);
-	
-	//---------------------
-	//-- Main Content
-	//---------------------
-	
-	// userInput sub-pane
-	userInput.setLayout(new BoxLayout(userInput, BoxLayout.Y_AXIS));
-	
-	// Adding color
-	userInput.setBackground(bgColor);
-	
-	userInput.add(questionLabel);
-	userInput.add(box.createVerticalStrut(5));
-	
-	userAnswer.getDocument().addDocumentListener(new hintListener());
-	userInput.add(userAnswer); // ----------------------------------------------
-	
-	userInput.add(box.createVerticalStrut(5));
-	userInput.add(hintLable);
-	
-	hintLable.setVisible(false);
-	
-	userInput.add(box.createVerticalStrut(5));
-	submit.addActionListener(new submitListener());
-	userInput.add(feedback);
-	userInput.add(box.createVerticalStrut(5));
-	userInput.add(submit);
-	
-	// Adding color
-	java.awt.Color sColor = new java.awt.Color(255,255,000);   // R, G, B values.
-	submit.setBackground(sColor);
-	submit.setOpaque(true);
-	
-	userInput.add(box.createVerticalStrut(5));
-	switchHint.addActionListener(new switchHintListener());
-	userInput.add(switchHint);
-	
-	// Adding color
-	java.awt.Color hintColor = new java.awt.Color(255,255,255);   // R, G, B values.
-	switchHint.setBackground(hintColor);
-	switchHint.setOpaque(true);
-	
-	// Results sub-pane
-	results.setLayout(new BoxLayout(results, BoxLayout.Y_AXIS));
-	
-	// Adding color
-	results.setBackground(bgColor);
-	
-	// Score readout sub-pane (Visible at end)
-	scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
-	
-	// Adding color
-	scorePanel.setBackground(bgColor);
-	
-	scorePanel.add(scoreReadout);
-	scorePanel.add(box.createVerticalStrut(10));
-	tryAgain.addActionListener(new tryAgainListener());
-	scorePanel.add(tryAgain);
-	
-	// Adding color
-	java.awt.Color tColor = new java.awt.Color(255,255,255);   // R, G, B values.
-	tryAgain.setBackground(tColor);
-	tryAgain.setOpaque(true);
-	
-	scorePanel.setVisible(false); // Enabled at end of quiz
-	frame.getContentPane().add(BorderLayout.CENTER, scorePanel);
-	
-	// Adding color
-	frame.getContentPane().setBackground(bgColor);
-	
-	// Attach sub-panes to content pane
-	content.add(userInput);
-	content.add(results);
-	
-	// Adding color
-	content.setBackground(bgColor);
-	
-	frame.getContentPane().add(BorderLayout.EAST, content);
-	
-	
-	//---------------------
-	//-- Window setup
-	//---------------------
-	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	frame.setSize(800,400);
-	frame.setVisible(true);
-	refreshHint();
-	
-	center(frame);
-	
-	return this; // For chaining method calls
-    }
-    
-    /**
-     * When the user clicks submit, send feedback on their answer
-     * and update appropriate counters
-     */
-    
-    public void refreshHint()
-    {
-	String h = "";
-	refresh = true;
-	maxMatch = 0;
-	for(int i=0; i<currentQuestion.getAnswer().length(); i++)
-	    h+="_ ";
-	hintLable.setText("Hint: "+h+"  You hit: "+0+"/"+ currentQuestion.getAnswer().length());
-    }
-    
-    /**
-     * submitListener class
-     * User enters their answer to current quiz question
-     * Overrides actionPerformed() method of ActionListener interface
-     */
-    class submitListener implements ActionListener {
-	    /**
-	     * Called when the user clicks the "Submit" button
-	     * @param e ActionEvent object that gives information about the event and its source
-	     */
->>>>>>> 34ceb0a2bff5c2803796b978b6f412970192c8ba
-		public void actionPerformed(ActionEvent e) {			
+    public void actionPerformed(ActionEvent e) {			
 		    String answer = userAnswer.getText();
 		    //System.out.println(answer);
 			if(!(answer.matches("^[a-fA-F0-9]+$")))
@@ -725,17 +535,13 @@ public class QuizGui {
 	 * Overrides the actionPerformed() method of the ActionListener interface
 	 */
 	
-<<<<<<< HEAD
-	
-	public class switchHintListener implements ActionListener	{
-=======
     public class switchHintListener implements ActionListener	{
 	/**
 	 * Called when the user clicks the "Show Hint / Hide Hint" button
 	 * Alters label on the button on each click
 	 * @param e ActionEvent object that gives info about source and event
-	 */
->>>>>>> 34ceb0a2bff5c2803796b978b6f412970192c8ba
+	 **/
+	
 		public void actionPerformed(ActionEvent e)	{
 				if(hintLable.isVisible())	{
 				    hintLable.setVisible(false);
