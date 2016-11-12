@@ -8,6 +8,8 @@ import java.util.Scanner;
  * Original program by Erick Valle & George Barrios for Mantis 0000391
  * @author Andrew Berls
  * @version CS56, Spring 2012, Mantis 0000611
+ * @authors Nikhil Patil & Aryaman Das
+ * @version CS56, Fall 2016
  */
 
 public class Quiz {
@@ -27,9 +29,10 @@ public class Quiz {
     /**
      * Constructor initializes a fixed number of random questions
      * @param numQuestions The number of questions to initialize
+     * @param type The type of quiz questions to encounter
      */
-    public Quiz(int numQuestions) {
-    	this.mode = -1; // Random mode by default
+    public Quiz(int numQuestions, int type) {
+    	this.mode = type; // selects type of game to play
     	
 		for (int i=0; i<numQuestions; i++) {
 			// Generate a random Question and push it to the beginning of the list
@@ -37,7 +40,23 @@ public class Quiz {
 			this.questions.add(0, q);
 		}
 	}
+    /**
+     * Constructor intializes a quiz for a fixed number of random questions
+     * @param numQuestions The number of questions to initialize
+     */
+    public Quiz(int numQuestions) {
+	this.mode = -1; // Random mode by default
+
+	for (int i=0; i<numQuestions; i++) {
+	    // Generate a random Question and push it to the beginning of the list
+		Question q = new Question(this.mode);
+	    this.questions.add(0, q);
+	}
+    }
     
+    /**
+     * @return The mode/type of questions in the quiz
+     */
     public int getMode() {
     	return this.mode;
     }
@@ -45,15 +64,23 @@ public class Quiz {
     /**
      * Set the mode to a specific radix, e.g., 2, 8, 10, 16, 18
      * in order to practice conversions to that radix
+     * @param mode The type of questions to be asked
      */
     public void setMode(int mode) {
     	this.mode = mode;
     }
-    
+    /**
+     * @return the number of questions in the quiz
+     */
     public int getNumQuestions() {    	
     	return this.questions.size();
     }
     
+    /**
+     * Retrieve a particular question from the questions ArrayList
+     * @param idx index of question in ArrayList
+     * @return Question located at index idx
+     */
     public Question getQuestion(int idx) {
     	return this.questions.get(idx);
     }
@@ -100,9 +127,11 @@ public class Quiz {
      * @return A string readout
      */
     public String getReadout() {
-    	return "Your score was " + this.getPercentage() + "%!";
-    }  
-    
+	String readout = "";
+	readout = "Your score was " + this.getPercentage() + "%!";
+	return readout;
+    }
+  
     /**
      * Run the Quiz game on the command line
      * For each question, display its prompt and track the user's answer
@@ -110,19 +139,29 @@ public class Quiz {
      */
     public void run() {
     	Scanner scanner = new Scanner(System.in);
-    	for (Question q : this.questions) {
-    		System.out.println(q.generatePrompt());
+	
+	for (Question q : this.questions) {
+	    String Q = q.generatePrompt();
+	    System.out.println(Q);
     		String userAnswer = scanner.next();
-    		
+	     
+		while(!(userAnswer.matches("^[a-fA-F0-9]+$")))
+		    {
+			System.out.println("Invalid input. Please only use characters A-F and/or digits 0-9");
+			userAnswer = scanner.next();
+		    }
+		
     		if (q.checkAnswer(userAnswer)) {
     			System.out.println("Correct!");
+			System.out.println(Q);
     			this.insertScore(true);
     		} else {
-    			System.out.println("Incorrect! Actual answer was: " + q.convertTo(q.getIntRadix()));
-    			this.insertScore(false);
+		    System.out.println("Incorrect!");
+		    System.out.print(Q + " ... ");
+		    System.out.println("Actual answer was: " + q.convertTo(q.getIntRadix()));
+		    this.insertScore(false);
     		}
     	}
-    	
     	System.out.println("Your score was " + this.getPercentage() + "%!");
     }
 	
@@ -135,7 +174,11 @@ public class Quiz {
 		System.out.println("Enter number of questions:");
 	    String s = scanner.next();
 		int numQuestions = Integer.parseInt(s);
-		Quiz quiz = new Quiz(numQuestions);
+		System.out.println("Select which mode you would like to test. Press 2 for binary, 8 for octal, 10 for decimal, 16 for hexadecimal, or -1 for random");
+		s = scanner.next();
+		int qtype = Integer.parseInt(s);
+		Quiz quiz = new Quiz(numQuestions, qtype);
+		quiz.setMode(qtype);
 		quiz.run();		
     }
 }

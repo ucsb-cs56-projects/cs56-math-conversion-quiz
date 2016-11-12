@@ -15,10 +15,12 @@ import javax.swing.text.Document;
  * @version CS56, Spring 2012, Mantis 0000611 
  * @authors Allison Shedden & Logan Schmidt
  * @version CS56, Winter 2014
+ * @authors Nikhil Patil & Aryaman Das
+ * @version CS56, Fall 2016
  */
 
 public class QuizGui {
-	
+       
 	// Window components
         JFrame frame = new JFrame("Binary/Decimal/Octal/Hex Conversion Quiz");
 
@@ -32,6 +34,8 @@ public class QuizGui {
 	private int numQuestions = 10;
 	Quiz quiz = new Quiz(numQuestions);	
 	private boolean refresh = false;
+    private String lastAnswer = "";
+    private boolean correct = false;
 	private int maxMatch =0 ;
 	// Sidebar references
 	JPanel sidebar                 = new JPanel();
@@ -64,6 +68,23 @@ public class QuizGui {
 	JPanel scorePanel   = new JPanel();
 	JLabel scoreReadout = new JLabel("");
 	JButton tryAgain    = new JButton("Try Again!");
+
+    JFrame startWindow = new JFrame("Test");
+    JPanel startPanel = new JPanel();
+    JButton startButton = new JButton("Start!");
+    JButton quitButton = new JButton("Quit");
+    
+	public QuizGui start() {
+	startWindow.setSize(400,200);
+	startWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	startWindow.add(startPanel);
+	startPanel.add(startButton);
+	startPanel.add(quitButton);
+	startButton.addActionListener(new startListener());
+	quitButton.addActionListener(new quitListener());
+	startWindow.setVisible(true);
+	return this;
+	}
 	
 	// Specific question references
 	private static int current;
@@ -175,24 +196,24 @@ public class QuizGui {
 		//---------------------
 		//-- Main Content
 		//---------------------
-	
+
 		// userInput sub-pane
 		userInput.setLayout(new BoxLayout(userInput, BoxLayout.Y_AXIS));
-		
+
 		// Adding color
 		userInput.setBackground(bgColor);
 
 		userInput.add(questionLabel);
 		userInput.add(box.createVerticalStrut(5));
-		
+
 		userAnswer.getDocument().addDocumentListener(new hintListener());
 		userInput.add(userAnswer); // ----------------------------------------------
-		
+
 		userInput.add(box.createVerticalStrut(5));
 		userInput.add(hintLable);
 
 		hintLable.setVisible(false);
-		
+
 		userInput.add(box.createVerticalStrut(5));
 		submit.addActionListener(new submitListener());
 		userInput.add(feedback);
@@ -215,13 +236,13 @@ public class QuizGui {
 
 		// Results sub-pane
 		results.setLayout(new BoxLayout(results, BoxLayout.Y_AXIS));
-		
+
 		// Adding color
 		results.setBackground(bgColor);
 
 		// Score readout sub-pane (Visible at end)
 		scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
-		
+
 		// Adding color
 		scorePanel.setBackground(bgColor);
 
@@ -237,20 +258,20 @@ public class QuizGui {
 
 		scorePanel.setVisible(false); // Enabled at end of quiz
 		frame.getContentPane().add(BorderLayout.CENTER, scorePanel);
-		
+
 		// Adding color
 		frame.getContentPane().setBackground(bgColor);
-	      
+
 		// Attach sub-panes to content pane
 		content.add(userInput);
 		content.add(results);
 
 		// Adding color
 		content.setBackground(bgColor);
-		
+
 		frame.getContentPane().add(BorderLayout.EAST, content);
-		
-		
+
+
 		//---------------------
 		//-- Window setup
 		//---------------------
@@ -263,11 +284,11 @@ public class QuizGui {
 
 		return this; // For chaining method calls
 	}
-	
-	/**
-	 * When the user clicks submit, send feedback on their answer
-	 * and update appropriate counters
-	 */
+
+    /**
+     * When the user clicks submit, send feedback on their answer
+     * and update appropriate counters
+     */
 	 
 	 public void refreshHint()
 	 {
@@ -278,22 +299,43 @@ public class QuizGui {
 			h+="_ ";
 		 hintLable.setText("Hint: "+h+"  You hit: "+0+"/"+ currentQuestion.getAnswer().length());
 	 }
+
+	 class startListener implements ActionListener {
+	     public void actionPerformed(ActionEvent e) {
 		 
-	 
+		 startWindow.setVisible(false);
+		 quizGui.build().ask();
+	     }
+	 }
+
+    class quitListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+
+	    System.exit(0); }
+    }
+	     
 	class submitListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {			
-			String answer = userAnswer.getText();
-			//System.out.println(answer);
-			//if (testAnswer(answer)){
+    public void actionPerformed(ActionEvent e) {			
+		    String answer = userAnswer.getText();
+		    //System.out.println(answer);
+			if(!(answer.matches("^[a-fA-F0-9]+$")))
+			    {
+				feedback.setText("Invalid input. Please only use characters A-F and/or digits 0-9");
+				userAnswer.setText("");
+				return;
+			    }
 			 
 			    if (currentQuestion.checkAnswer(answer)) {
 				feedback.setText("Correct!");
 				quiz.insertScore(true);
+				correct = true;
 			    } else {
-				feedback.setText("Incorrect! Answer was: " + currentQuestion.getAnswer());
+				feedback.setText("<html>Incorrect!<br> Previous Question: " + questionLabel.getText() + "<br> Answer was: " + currentQuestion.getAnswer());
 				quiz.insertScore(false);
 			    }
-			    
+
+			    lastAnswer = currentQuestion.getAnswer(); //Arvan
+		
 			    String numCorrectStr = String.format("            %d/%d", quiz.numCorrect(), quiz.getNumQuestions());
 			    numCorrect.setText(numCorrectStr);
 			    current++;
@@ -302,17 +344,19 @@ public class QuizGui {
 			    currentQuestion = new Question(quiz.getMode()); 
 			    refreshHint();
 			    quizGui.ask();
-			    //}
-			    //else {
-			    //feedback.setText("Answer was not in proper format, please try again.");
-			    //quizGui.ask();
-			    //}
+			    correct = false;
 		}
 	}
 	/**
-	 * Try Again button - run a new Quiz on click
+	 * tryAgainListener class
+	 * Allow user to restart and run new Quiz
+	 * Overrides actionPerformed() method of ActionListener interface
 	 */
 	class tryAgainListener implements ActionListener {
+	    /**
+	     * Called when the user clicks the "Try Again" button at end of current quiz.
+	     * @param e ActionEvent object that gives information about the event and its source.
+	     */
 		public void actionPerformed (ActionEvent e) {
 			quiz = new Quiz(numQuestions);
 			
@@ -332,9 +376,15 @@ public class QuizGui {
 	}
 	
 	/**
-	 * Set the quiz to practice converting only to binary
+	 * binaryModeListener class
+	 * Sets the quiz to practice questions  converting only to binary
+	 * Overrides actionPerformed() method of ActionListener interface
 	 */
 	class binaryModeListener implements ActionListener {
+	    /**
+	     * Called when user clicks the "Binary Mode" button
+	     * @param e ActionEvent object that gives info about source
+	     */
 		public void actionPerformed(ActionEvent e) {
 			feedback.setText("");
 			currentQuestion = new Question(currentQuestion.getRandomNum(), 2);
@@ -345,9 +395,15 @@ public class QuizGui {
 	}
 	
 	/**
+	 * octalModeListener class
 	 * Set the quiz to practice converting only to octal
+	 * Overrides actionPerformed() method of ActionListener interface
 	 */
 	class octalModeListener implements ActionListener {
+	    /**
+	     * Called when the user clicks "Octal Mode" button
+	     * @param e ActionEvent object that gives info about source
+	     */
 		public void actionPerformed(ActionEvent e) {
 		  quiz.setMode(8);			
 			feedback.setText("");
@@ -358,9 +414,15 @@ public class QuizGui {
 	}
 	
 	/**
+	 * decimalModeListener class
 	 * Set the quiz to practice converting only to decimal
+	 * Overrides actionPerformed() method of ActionListener interface
 	 */
 	class decimalModeListener implements ActionListener {
+	    /**
+	     * Called when the user clicks the "Decimal Mode" button
+	     * @param e ActionEvent object that gives info about source
+	     */
 		public void actionPerformed(ActionEvent e) {
 		  quiz.setMode(10);
 			feedback.setText("");
@@ -371,9 +433,15 @@ public class QuizGui {
 	}
 	
 	/**
+	 * hexadecimalModeListener class
 	 * Set the quiz to practice converting only to hexadecimal
+	 * Overrides actionPerformed() method of ActionListener interface
 	 */
 	class hexadecimalModeListener implements ActionListener {
+	    /**
+	     * Called when the user clicks the "Hexadecimal Mode" button
+	     * @param e ActionEvent object that gives info about source
+	     */
 		public void actionPerformed(ActionEvent e) {
   		quiz.setMode(16);
 			feedback.setText("");
@@ -384,9 +452,15 @@ public class QuizGui {
 	}
 	
 	/**
+	 * randomModeListener class
 	 * Set the quiz back to random conversions
+	 * Overrides actionPerformed() method of ActionListener interface
 	 */
 	class randomModeListener implements ActionListener {
+	    /**
+	     * Called when the user clicks the "Random Mode" button
+	     * @param e ActionEvent object that gives info about source
+	     */
 		public void actionPerformed(ActionEvent e) {
   		quiz.setMode(-1);			
 		currentQuestion = new Question(quiz.getMode());
@@ -396,11 +470,16 @@ public class QuizGui {
 	}
 
     /**
+     * maskModeListener class
      * Set the quiz to masking conversions
+     * Overrides actionPerformed() method of ActionListener interface
      */
     class maskModeListener implements ActionListener {
+	/**
+	 * Called when the user clicks the "Masking Mode" button
+	 * @param e ActionEvent object that gives info about source
+	 */
 	public void actionPerformed(ActionEvent e) {
-
 	    quiz.setMode(18);
 	    feedback.setText("");
 	    currentQuestion = new Question(currentQuestion.getRandomNum(), 18);
@@ -408,34 +487,63 @@ public class QuizGui {
 	    quizGui.ask();
 	}
     }
-
+    
+    /**
+     * guiQuestions class
+     * Creates a quiz based of the number of questions requested by user 
+     * Overrides actionPerformed() method of ActionListener interface
+     
+    class guiQuestions implements ActionListener {
+	/**
+	 * Called when the user clicks "begin" after entering number of questions
+	 * @param e ActionEvent object that gives info about source
+	 
+	public void actionPerformed(ActionEvent e) {}
+    */   
 	
 	/**
 	 * Update fields to ask the current question, and end the quiz if necessary
 	 */
 	public void ask() {
-	  userAnswer.setText(""); // Clear the text field
+	    userAnswer.setText(""); // Clear the text field
 		
-		if (current >= quiz.getNumQuestions()) {
-			// If we're through with the questions, hide the inputs and show the final readout			
-			sidebar.setVisible(false);
-			userInput.setVisible(false);
-			scoreReadout.setText(quiz.getReadout());
-			scorePanel.setVisible(true);
-		} else {
-			// Else ask the current question			
-			String prompt = currentQuestion.generatePrompt(quiz.getMode());
-			questionLabel.setText(prompt);
-			refreshHint();
-			
+	    if (current >= quiz.getNumQuestions()) {
+		    // If we're through with the questions, hide the inputs and show the final readout			
+		sidebar.setVisible(false);
+		userInput.setVisible(false);
+		String result = "";
+		if (correct){
+		    result = "<html>Correct! <br>";
+		    scoreReadout.setText(result + quiz.getReadout());
 		}
+		else {
+		    result = "<html>Incorrect!<br> Previous Question: " + questionLabel.getText() + "<br>Correct answer was: " + lastAnswer + "<br>";
+		    scoreReadout.setText(result + quiz.getReadout());
+		}
+					   
+		scorePanel.setVisible(true);
+	    } else {
+		    // Else ask the current question
+		String prompt = currentQuestion.generatePrompt(quiz.getMode());
+		questionLabel.setText(prompt);
+		refreshHint();
+			
+	    }
 	}
-	
+		
 	/**
+	 * switchHintListener class
 	 * Switch the hint on/off
+	 * Overrides the actionPerformed() method of the ActionListener interface
 	 */
 	
-	public class switchHintListener implements ActionListener	{
+    public class switchHintListener implements ActionListener	{
+	/**
+	 * Called when the user clicks the "Show Hint / Hide Hint" button
+	 * Alters label on the button on each click
+	 * @param e ActionEvent object that gives info about source and event
+	 **/
+	
 		public void actionPerformed(ActionEvent e)	{
 				if(hintLable.isVisible())	{
 				    hintLable.setVisible(false);
@@ -450,7 +558,10 @@ public class QuizGui {
 	}
 	
 	/**
+	 * hintListener class
 	 * Listen to any change of user input and prompt hint to user according to the input
+	 * Overrides insertUpdate(), removeUpdate(), and changedUpdate() so that notifications are sent
+	 * if an attribute or attributes have been modified, inserted, or removed. 
 	 */
 	
 	public class hintListener implements DocumentListener	{
@@ -506,6 +617,10 @@ public class QuizGui {
 
 	}
 
+    /**
+     * Creates the GUI window for quiz to execute on
+     * @param frame Jframe object which has dimensions set
+     */
     public static void center(JFrame frame) {
 
 	// Gets the size of the screen
@@ -599,7 +714,8 @@ public class QuizGui {
 	 * Build and run the GUI
 	 */
 	public static void main (String [] args) {		
-		quizGui.build().ask();
+	    quizGui.start();
+	    //quizGui.build().ask();
 		
   }
 	
