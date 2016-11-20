@@ -30,8 +30,10 @@ public class QuizGui {
 	
 	
 	// Quiz-related variables
+    
 	static QuizGui quizGui = new QuizGui();
 	private int numQuestions = 10;
+    boolean AskAgain = true;
 	Quiz quiz = new Quiz(numQuestions);	
 	private boolean refresh = false;
     private String lastAnswer = "";
@@ -72,15 +74,22 @@ public class QuizGui {
     JFrame startWindow = new JFrame("Test");
     JPanel startPanel = new JPanel();
     JButton startButton = new JButton("Start!");
+    JButton easyButton = new JButton("Easy");
+    JButton regularButton = new JButton("Regular");
+    JButton hardButton = new JButton("Hard");
     JButton quitButton = new JButton("Quit");
     
 	public QuizGui start() {
 	startWindow.setSize(400,200);
 	startWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	startWindow.add(startPanel);
-	startPanel.add(startButton);
+	startPanel.add(easyButton);
+	startPanel.add(regularButton);
+	startPanel.add(hardButton);
 	startPanel.add(quitButton);
-	startButton.addActionListener(new startListener());
+	easyButton.addActionListener(new easyListener());
+	regularButton.addActionListener(new regularListener());
+	hardButton.addActionListener(new hardListener());
 	quitButton.addActionListener(new quitListener());
 	startWindow.setVisible(true);
 	return this;
@@ -93,8 +102,8 @@ public class QuizGui {
         /**
 	 * Build the Quiz GUI window
 	 */
-	public QuizGui build() {
-
+	public QuizGui build(int mode) {
+	    System.out.println(mode);
 	    questionLabel.setPreferredSize(new Dimension(400, 20));
 		
 		int bottomMargin = 15;
@@ -233,6 +242,8 @@ public class QuizGui {
 		java.awt.Color hintColor = new java.awt.Color(255,255,255);   // R, G, B values.
 		switchHint.setBackground(hintColor);
 		switchHint.setOpaque(true);
+		if(mode == 3)
+		    switchHint.setVisible(false);
 
 		// Results sub-pane
 		results.setLayout(new BoxLayout(results, BoxLayout.Y_AXIS));
@@ -300,14 +311,30 @@ public class QuizGui {
 		 hintLable.setText("Hint: "+h+"  You hit: "+0+"/"+ currentQuestion.getAnswer().length());
 	 }
 
-	 class startListener implements ActionListener {
+	 class easyListener implements ActionListener {
 	     public void actionPerformed(ActionEvent e) {
 		 
 		 startWindow.setVisible(false);
-		 quizGui.build().ask();
+		 quizGui.build(1).ask();
 	     }
 	 }
+    
+    class regularListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
 
+	    startWindow.setVisible(false);
+	    quizGui.build(2).ask();
+	}
+    }
+
+    class hardListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+
+	    startWindow.setVisible(false);
+	    quizGui.build(3).ask();
+	}
+    }
+    
     class quitListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
@@ -317,7 +344,6 @@ public class QuizGui {
 	class submitListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {			
 		    String answer = userAnswer.getText();
-		    //System.out.println(answer);
 			if(!(answer.matches("^[a-fA-F0-9]+$")))
 			    {
 				feedback.setText("Invalid input. Please only use characters A-F and/or digits 0-9");
@@ -329,9 +355,20 @@ public class QuizGui {
 				feedback.setText("Correct!");
 				quiz.insertScore(true);
 				correct = true;
+				AskAgain = true;
 			    } else {
-				feedback.setText("<html>Incorrect!<br> Previous Question: " + questionLabel.getText() + "<br> Answer was: " + currentQuestion.getAnswer());
-				quiz.insertScore(false);
+				if(AskAgain == true)
+				    {
+					feedback.setText("Incorrect, please try again");
+					AskAgain = false;
+					return;
+				    }
+				else
+				    {
+					feedback.setText("<html>Incorrect!<br> Previous Question: " + questionLabel.getText() + "<br> Answer was: " + currentQuestion.getAnswer());
+					quiz.insertScore(false);
+					AskAgain = true;
+				    }
 			    }
 
 			    lastAnswer = currentQuestion.getAnswer(); //Arvan
@@ -506,8 +543,8 @@ public class QuizGui {
 	 */
 	public void ask() {
 	    userAnswer.setText(""); // Clear the text field
-		
 	    if (current >= quiz.getNumQuestions()) {
+		    
 		    // If we're through with the questions, hide the inputs and show the final readout			
 		sidebar.setVisible(false);
 		userInput.setVisible(false);
