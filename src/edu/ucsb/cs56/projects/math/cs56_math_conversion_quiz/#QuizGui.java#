@@ -310,7 +310,7 @@ public class QuizGui {
 		 for(int i=0; i<currentQuestion.getAnswer().length(); i++)
 			h+="_ ";
 		 hintLable.setText("Hint: "+h+"  You hit: "+0+"/"+ currentQuestion.getAnswer().length());
-		 //hintLable.setText("Your answer was too highhhhhhhhhhh");
+		 
 	 }
 
 	 class easyListener implements ActionListener {
