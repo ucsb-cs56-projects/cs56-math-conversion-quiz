@@ -38,12 +38,13 @@ public class QuizGui {
     int hexa = 0;
     int lowest = -1;
     
-	// Quiz-related variables
+    // Quiz-related variables
     
     static QuizGui quizGui = new QuizGui();
     private int numQuestions = 10;
     boolean AskAgain = true;
     int lvl; //global variable for mode
+    int mode = 0;
     Quiz quiz = new Quiz(numQuestions);	
     private boolean refresh = false;
     private String lastAnswer = "";
@@ -64,7 +65,7 @@ public class QuizGui {
     JButton hexadecimalMode = new JButton("Hexadecimal Mode");
     JButton randomMode      = new JButton("Random Mode");
     JButton maskMode        = new JButton("Masking Mode");
-	
+
     // Content references
     JPanel content = new JPanel();
     JPanel userInput = new JPanel();
@@ -89,13 +90,20 @@ public class QuizGui {
     JButton hardButton = new JButton("Hard");
     JButton quitButton = new JButton("Quit");
     
+    JFrame questionsWindow = new JFrame("Choose Number of Questions");
+    JPanel questionsPanel = new JPanel();
+    JLabel chooseQuestionsLabel = new JLabel("<html>How many questions would you like? <br> Select a number from 1 to 20");
+    JTextField chooseQuestionsInput = new JTextField(7);
+    
 	public QuizGui start() {
 	startWindow.setSize(400,200);
 	startWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	startWindow.add(startPanel);
+	
 	startPanel.add(easyButton);
 	startPanel.add(regularButton);
 	startPanel.add(hardButton);
+
 	startPanel.add(quitButton);
 	easyButton.addActionListener(new easyListener());
 	regularButton.addActionListener(new regularListener());
@@ -104,6 +112,19 @@ public class QuizGui {
 	startWindow.setVisible(true);
 	return this;
 	}
+
+    public QuizGui questions() {
+	questionsWindow.setSize(400,200);
+	questionsWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	questionsWindow.add(questionsPanel);
+
+	questionsPanel.add(chooseQuestionsLabel);
+	questionsPanel.add(chooseQuestionsInput);
+	questionsPanel.add(startButton);
+	startButton.addActionListener(new questionsListener());
+	questionsWindow.setVisible(true);
+	return this;
+    }
 	
 	// Specific question references
 	private static int current;
@@ -115,9 +136,9 @@ public class QuizGui {
 	public QuizGui build(int mode) {
 	    lvl = mode;
 	    questionLabel.setPreferredSize(new Dimension(400, 20));
-		
-		int bottomMargin = 15;
-		
+	    
+	    int bottomMargin = 15;
+	    
 		//---------------------
 		//-- Sidebar
 		//---------------------
@@ -128,7 +149,10 @@ public class QuizGui {
 		sidebar.setBackground(bgColor);
 		
 		sidebar.add(box.createVerticalStrut(bottomMargin-7));
-
+		    
+		currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
+		numCorrect.setText(String.format("            0/%d", quiz.getNumQuestions()));
+		
 		sidebar.add(currentQuestionNumLabel);
 		sidebar.add(currentQuestionNum);
 		
@@ -321,19 +345,23 @@ public class QuizGui {
 		 hintLable.setText("Hint: "+h+"  You hit: "+0+"/"+ currentQuestion.getAnswer().length());
 	 }
 
-	 class easyListener implements ActionListener {
-	     public void actionPerformed(ActionEvent e) {
-		 
-		 startWindow.setVisible(false);
-		 quizGui.build(1).ask();
-	     }
-	 }
+    class easyListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    
+	    startWindow.setVisible(false);
+	    mode = 1;
+	    quizGui.questions();
+	    //quizGui.build(1).ask();
+	}
+    }
     
     class regularListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 	    startWindow.setVisible(false);
-	    quizGui.build(2).ask();
+	    mode = 2;
+	    quizGui.questions();
+	    //quizGui.build(2).ask();
 	}
     }
 
@@ -341,7 +369,9 @@ public class QuizGui {
 	public void actionPerformed(ActionEvent e) {
 
 	    startWindow.setVisible(false);
-	    quizGui.build(3).ask();
+	    mode = 3;
+	    quizGui.questions();
+	    //quizGui.build(3).ask();
 	}
     }
     
@@ -350,6 +380,22 @@ public class QuizGui {
 
 	    System.exit(0); }
     }
+
+    class questionsListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    String response = chooseQuestionsInput.getText();
+	    numQuestions = Integer.parseInt(response);
+	    if (numQuestions < 1 || numQuestions > 20) {
+		chooseQuestionsLabel.setText("<html>Invalid input!<br>Please select a number from 1 to 20");
+		chooseQuestionsInput.setText("");
+		return;
+	    }
+	    quiz = new Quiz(numQuestions);
+	    questionsWindow.setVisible(false);
+	    quizGui.build(mode).ask();
+	}
+    }
+	    
 	     
 	class submitListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {			
@@ -616,35 +662,55 @@ public class QuizGui {
 			int octPercent = 0;
 			int decPercent = 0;
 			int hexPercent = 0;
+
+			ArrayList<Integer> percentages = new ArrayList<Integer>();
+			
 			if(binq != 0)
 			    {
 				binPercent = getPercentage(bina, binq);
+				percentages.add(binPercent);
 				String bin = "<html>You scored " + binPercent + "% on binary questions. <br>";
 				result = result + bin;
 			    }
 			if(octq != 0)
 			    {
 				octPercent = getPercentage(octa, octq);
+				percentages.add(octPercent);
 				String oct = "<html>You scored " + octPercent + "% on octal questions. <br>";
 				result = result + oct;
 			    }
 			if(decq != 0)
 			    {
 				decPercent = getPercentage(deca, decq);
+				percentages.add(decPercent);
 				String dec = "<html>You scored " + decPercent + "% on decimal questions. <br>";
 				result = result + dec;
 			    }
 			if(hexq != 0)
 			    {
 				hexPercent = getPercentage(hexa, hexq);
+				percentages.add(hexPercent);
 				String hex = "<html>You scored " + hexPercent + "% on hexadecimal questions. <br>";
 				result = result + hex;
 			    }
+			
+			int lowestPercent = percentages.get(0);
+			for (int i = 1; i < percentages.size(); i++) {
+			    if (percentages.get(i) < lowestPercent)
+				lowestPercent = percentages.get(i);
+			}
+		    
+		       
+			
+			
+			    /*    
 			int lowestPercent = Math.min(binPercent, octPercent);
 			lowestPercent = Math.min(lowestPercent, decPercent);
 			lowestPercent = Math.min(lowestPercent, hexPercent);
+			    */
+			// Issue: Find a way that lowestPercent is a nonzero value...
 
-			if(lowestPercent == binPercent)
+			if(lowestPercent == binPercent && binq != 0)
 			    {
 				worst = "<HTML>Your worst score was in binary. Click the binary button to practice. <br>";
 				JButton binButton = new JButton("Binary");
@@ -652,7 +718,7 @@ public class QuizGui {
 				binButton.addActionListener(new practiceListener());
 				scorePanel.add(binButton);
 			    }
-			else if(lowestPercent == octPercent)
+			else if(lowestPercent == octPercent && octq != 0)
 			    {
 				worst ="<HTML>Your worst score was in octal. Click the octal button to practice. <br>";
 				JButton octButton = new JButton("Octal");
@@ -660,7 +726,7 @@ public class QuizGui {
 				octButton.addActionListener(new practiceListener());
 				scorePanel.add(octButton);
 			    }
-			else if(lowestPercent == decPercent)
+			else if(lowestPercent == decPercent && decq != 0)
 			    {
 				worst ="<HTML>Your worst score was in decimal. Click the decimal button to practice. <br>";
 				JButton decButton = new JButton("Decimal");
@@ -668,7 +734,7 @@ public class QuizGui {
 				decButton.addActionListener(new practiceListener());
 				scorePanel.add(decButton);
 			    }
-			else if(lowestPercent == hexPercent)
+			else if(lowestPercent == hexPercent && hexq != 0)
 			    {
 				worst ="<HTML>Your worst score was in hexadecimal. Click the hexadecimal button to practice. <br>";
 				JButton hexButton = new JButton("Hexadecimal");
