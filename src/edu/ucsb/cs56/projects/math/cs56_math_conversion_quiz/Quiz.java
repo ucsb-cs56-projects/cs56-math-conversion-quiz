@@ -153,7 +153,6 @@ public class Quiz {
 		
     		if (q.checkAnswer(userAnswer)) {
     			System.out.println("Correct!");
-			System.out.println(Q);
     			this.insertScore(true);
     		} else {
 		    System.out.println("Incorrect!");
