@@ -28,63 +28,103 @@ public class QuizGui {
 	Box box = new Box(BoxLayout.X_AXIS);
 	//Runnable scanHint = new Hint();
 	
-	
-	// Quiz-related variables
-	static QuizGui quizGui = new QuizGui();
-	private int numQuestions = 10;
-	Quiz quiz = new Quiz(numQuestions);	
-	private boolean refresh = false;
+    int binq = 0;
+    int octq = 0;
+    int decq = 0;
+    int hexq = 0;
+    int bina = 0;
+    int octa = 0;
+    int deca = 0;
+    int hexa = 0;
+    int lowest = -1;
+    
+    // Quiz-related variables
+    
+    static QuizGui quizGui = new QuizGui();
+    private int numQuestions = 10;
+    boolean AskAgain = true;
+    int lvl; //global variable for mode
+    int mode = 0;
+    Quiz quiz = new Quiz(numQuestions);	
+    private boolean refresh = false;
     private String lastAnswer = "";
     private boolean correct = false;
-	private int maxMatch =0 ;
-	// Sidebar references
-	JPanel sidebar                 = new JPanel();
-	JLabel currentQuestionNumLabel = new JLabel("  Current Question: ");
-	JLabel currentQuestionNum      = new JLabel(String.format("            %d/%d", current+1, quiz.getNumQuestions())); 
-	JLabel numCorrectLabel         = new JLabel("  Number Correct: ");
-	JLabel numCorrect              = new JLabel(String.format("            0/%d", quiz.getNumQuestions()));
-	
-	JPanel modePanel        = new JPanel();
-	JLabel practiceLabel    = new JLabel("  I want to practice: ");
-	JButton binaryMode      = new JButton("Binary Mode");
-	JButton octalMode       = new JButton("Octal Mode");
-	JButton decimalMode     = new JButton("Decimal Mode");
-	JButton hexadecimalMode = new JButton("Hexadecimal Mode");
-	JButton randomMode      = new JButton("Random Mode");
-        JButton maskMode        = new JButton("Masking Mode");
-	
-	// Content references
-	JPanel content = new JPanel();
-	JPanel userInput = new JPanel();
-	JLabel questionLabel = new JLabel("");
-	JTextField userAnswer = new JTextField(25);
-	JLabel hintLable = new JLabel("Hint: ");
-	JButton submit = new JButton("Submit");
-	JButton switchHint = new JButton("Show Hint");
-	
-	JPanel results  = new JPanel();
-	JLabel feedback = new JLabel("");
-	
-	JPanel scorePanel   = new JPanel();
-	JLabel scoreReadout = new JLabel("");
-	JButton tryAgain    = new JButton("Try Again!");
+    private int maxMatch =0 ;
+    // Sidebar references
+    JPanel sidebar                 = new JPanel();
+    JLabel currentQuestionNumLabel = new JLabel("  Current Question: ");
+    JLabel currentQuestionNum      = new JLabel(String.format("            %d/%d", current+1, quiz.getNumQuestions())); 
+    JLabel numCorrectLabel         = new JLabel("  Number Correct: ");
+    JLabel numCorrect              = new JLabel(String.format("            0/%d", quiz.getNumQuestions()));
+    
+    JPanel modePanel        = new JPanel();
+    JLabel practiceLabel    = new JLabel("  I want to practice: ");
+    JButton binaryMode      = new JButton("Binary Mode");
+    JButton octalMode       = new JButton("Octal Mode");
+    JButton decimalMode     = new JButton("Decimal Mode");
+    JButton hexadecimalMode = new JButton("Hexadecimal Mode");
+    JButton randomMode      = new JButton("Random Mode");
+    JButton maskMode        = new JButton("Masking Mode");
 
+    // Content references
+    JPanel content = new JPanel();
+    JPanel userInput = new JPanel();
+    JLabel questionLabel = new JLabel("");
+    JTextField userAnswer = new JTextField(25);
+    JLabel hintLable = new JLabel("Hint: ");
+    JButton submit = new JButton("Submit");
+    JButton switchHint = new JButton("Show Hint");
+    
+    JPanel results  = new JPanel();
+    JLabel feedback = new JLabel("");
+    
+    JPanel scorePanel   = new JPanel();
+    JLabel scoreReadout = new JLabel("");
+    JButton tryAgain    = new JButton("Try Again!");
+    
     JFrame startWindow = new JFrame("Test");
     JPanel startPanel = new JPanel();
     JButton startButton = new JButton("Start!");
+    JButton easyButton = new JButton("Easy");
+    JButton regularButton = new JButton("Regular");
+    JButton hardButton = new JButton("Hard");
     JButton quitButton = new JButton("Quit");
+    
+    JFrame questionsWindow = new JFrame("Choose Number of Questions");
+    JPanel questionsPanel = new JPanel();
+    JLabel chooseQuestionsLabel = new JLabel("<html>How many questions would you like? <br> Select a number from 1 to 20");
+    JTextField chooseQuestionsInput = new JTextField(7);
     
 	public QuizGui start() {
 	startWindow.setSize(400,200);
 	startWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	startWindow.add(startPanel);
-	startPanel.add(startButton);
+	
+	startPanel.add(easyButton);
+	startPanel.add(regularButton);
+	startPanel.add(hardButton);
+
 	startPanel.add(quitButton);
-	startButton.addActionListener(new startListener());
+	easyButton.addActionListener(new easyListener());
+	regularButton.addActionListener(new regularListener());
+	hardButton.addActionListener(new hardListener());
 	quitButton.addActionListener(new quitListener());
 	startWindow.setVisible(true);
 	return this;
 	}
+
+    public QuizGui questions() {
+	questionsWindow.setSize(400,200);
+	questionsWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	questionsWindow.add(questionsPanel);
+
+	questionsPanel.add(chooseQuestionsLabel);
+	questionsPanel.add(chooseQuestionsInput);
+	questionsPanel.add(startButton);
+	startButton.addActionListener(new questionsListener());
+	questionsWindow.setVisible(true);
+	return this;
+    }
 	
 	// Specific question references
 	private static int current;
@@ -93,12 +133,12 @@ public class QuizGui {
         /**
 	 * Build the Quiz GUI window
 	 */
-	public QuizGui build() {
-
+	public QuizGui build(int mode) {
+	    lvl = mode;
 	    questionLabel.setPreferredSize(new Dimension(400, 20));
-		
-		int bottomMargin = 15;
-		
+	    
+	    int bottomMargin = 15;
+	    
 		//---------------------
 		//-- Sidebar
 		//---------------------
@@ -109,7 +149,10 @@ public class QuizGui {
 		sidebar.setBackground(bgColor);
 		
 		sidebar.add(box.createVerticalStrut(bottomMargin-7));
-
+		    
+		currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
+		numCorrect.setText(String.format("            0/%d", quiz.getNumQuestions()));
+		
 		sidebar.add(currentQuestionNumLabel);
 		sidebar.add(currentQuestionNum);
 		
@@ -233,6 +276,8 @@ public class QuizGui {
 		java.awt.Color hintColor = new java.awt.Color(255,255,255);   // R, G, B values.
 		switchHint.setBackground(hintColor);
 		switchHint.setOpaque(true);
+		if(mode == 3)
+		    switchHint.setVisible(false);
 
 		// Results sub-pane
 		results.setLayout(new BoxLayout(results, BoxLayout.Y_AXIS));
@@ -300,24 +345,72 @@ public class QuizGui {
 		 hintLable.setText("Hint: "+h+"  You hit: "+0+"/"+ currentQuestion.getAnswer().length());
 	 }
 
-	 class startListener implements ActionListener {
-	     public void actionPerformed(ActionEvent e) {
-		 
-		 startWindow.setVisible(false);
-		 quizGui.build().ask();
-	     }
-	 }
+    class easyListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    
+	    startWindow.setVisible(false);
+	    mode = 1;
+	    quizGui.questions();
+	    //quizGui.build(1).ask();
+	}
+    }
+    
+    class regularListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
 
+	    startWindow.setVisible(false);
+	    mode = 2;
+	    quizGui.questions();
+	    //quizGui.build(2).ask();
+	}
+    }
+
+    class hardListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+
+	    startWindow.setVisible(false);
+	    mode = 3;
+	    quizGui.questions();
+	    //quizGui.build(3).ask();
+	}
+    }
+    
     class quitListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 	    System.exit(0); }
     }
+
+    class questionsListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    String response = chooseQuestionsInput.getText();
+	    numQuestions = Integer.parseInt(response);
+	    if (numQuestions < 1 || numQuestions > 20) {
+		chooseQuestionsLabel.setText("<html>Invalid input!<br>Please select a number from 1 to 20");
+		chooseQuestionsInput.setText("");
+		return;
+	    }
+	    quiz = new Quiz(numQuestions);
+	    questionsWindow.setVisible(false);
+	    quizGui.build(mode).ask();
+	}
+    }
+	    
 	     
 	class submitListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {			
 		    String answer = userAnswer.getText();
-		    //System.out.println(answer);
+		    if(quiz.getMode() == -1)
+			{
+			    if(currentQuestion.getIntRadix() == 2)
+				binq++;
+			    else if(currentQuestion.getIntRadix() == 8)
+				octq++;
+			    else if(currentQuestion.getIntRadix() == 10)
+				decq++;
+			    else if(currentQuestion.getIntRadix() == 16)
+				hexq++;
+			}
 			if(!(answer.matches("^[a-fA-F0-9]+$")))
 			    {
 				feedback.setText("Invalid input. Please only use characters A-F and/or digits 0-9");
@@ -327,21 +420,41 @@ public class QuizGui {
 			 
 			    if (currentQuestion.checkAnswer(answer)) {
 				feedback.setText("Correct!");
+				
+				if(currentQuestion.getIntRadix() == 2)
+				    bina++;
+				else if(currentQuestion.getIntRadix() == 8)
+				    octa++;
+				else if(currentQuestion.getIntRadix() == 10)
+				    deca++;
+				else if(currentQuestion.getIntRadix() == 16)
+				    hexa++;
 				quiz.insertScore(true);
 				correct = true;
+				AskAgain = true;
 			    } else {
-				feedback.setText("<html>Incorrect!<br> Previous Question: " + questionLabel.getText() + "<br> Answer was: " + currentQuestion.getAnswer());
-				quiz.insertScore(false);
+				if(AskAgain == true && lvl == 1)
+				    {
+					feedback.setText("Incorrect, please try again");
+					AskAgain = false;
+					return;
+				    }
+				else
+				    {
+					feedback.setText("<html>Incorrect!<br> Previous Question: " + questionLabel.getText() + "<br> Answer was: " + currentQuestion.getAnswer());
+					quiz.insertScore(false);
+					AskAgain = true;
+				    }
 			    }
 
-			    lastAnswer = currentQuestion.getAnswer(); //Arvan
+			    lastAnswer = currentQuestion.getAnswer();
 		
 			    String numCorrectStr = String.format("            %d/%d", quiz.numCorrect(), quiz.getNumQuestions());
 			    numCorrect.setText(numCorrectStr);
 			    current++;
 			    currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
 			    
-			    currentQuestion = new Question(quiz.getMode()); 
+			    currentQuestion = new Question(quiz.getMode());
 			    refreshHint();
 			    quizGui.ask();
 			    correct = false;
@@ -487,7 +600,31 @@ public class QuizGui {
 	    quizGui.ask();
 	}
     }
-    
+
+    class practiceListener implements ActionListener {
+	/**                                                                                                                                                       
+	 * Called when the user clicks the "Try Again" button at end of current quiz.                                                                             
+	 * @param e ActionEvent object that gives information about the event and its source.                                                                     
+	 */
+	public void actionPerformed (ActionEvent e) {
+	    quiz = new Quiz(numQuestions);
+	    quiz.setMode(lowest);
+	    
+	    // Re-enable quiz inputs
+	    numCorrect.setText((String.format("            0/%d", quiz.getNumQuestions())));
+	    sidebar.setVisible(true);
+	    userInput.setVisible(true);
+	    scorePanel.setVisible(false);
+	    feedback.setText("");
+
+	    // Restart the quiz
+	    current = 0;
+	    currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
+	    refreshHint();
+	    quizGui.ask();
+	}
+    }
+
     /**
      * guiQuestions class
      * Creates a quiz based of the number of questions requested by user 
@@ -506,21 +643,109 @@ public class QuizGui {
 	 */
 	public void ask() {
 	    userAnswer.setText(""); // Clear the text field
-		
 	    if (current >= quiz.getNumQuestions()) {
+		    
 		    // If we're through with the questions, hide the inputs and show the final readout			
 		sidebar.setVisible(false);
 		userInput.setVisible(false);
 		String result = "";
+		String worst = "";
 		if (correct){
 		    result = "<html>Correct! <br>";
-		    scoreReadout.setText(result + quiz.getReadout());
 		}
 		else {
 		    result = "<html>Incorrect!<br> Previous Question: " + questionLabel.getText() + "<br>Correct answer was: " + lastAnswer + "<br>";
-		    scoreReadout.setText(result + quiz.getReadout());
 		}
-					   
+		if(quiz.getMode() == -1)
+		    {
+			int binPercent  = 0;
+			int octPercent = 0;
+			int decPercent = 0;
+			int hexPercent = 0;
+
+			ArrayList<Integer> percentages = new ArrayList<Integer>();
+			
+			if(binq != 0)
+			    {
+				binPercent = getPercentage(bina, binq);
+				percentages.add(binPercent);
+				String bin = "<html>You scored " + binPercent + "% on binary questions. <br>";
+				result = result + bin;
+			    }
+			if(octq != 0)
+			    {
+				octPercent = getPercentage(octa, octq);
+				percentages.add(octPercent);
+				String oct = "<html>You scored " + octPercent + "% on octal questions. <br>";
+				result = result + oct;
+			    }
+			if(decq != 0)
+			    {
+				decPercent = getPercentage(deca, decq);
+				percentages.add(decPercent);
+				String dec = "<html>You scored " + decPercent + "% on decimal questions. <br>";
+				result = result + dec;
+			    }
+			if(hexq != 0)
+			    {
+				hexPercent = getPercentage(hexa, hexq);
+				percentages.add(hexPercent);
+				String hex = "<html>You scored " + hexPercent + "% on hexadecimal questions. <br>";
+				result = result + hex;
+			    }
+			
+			int lowestPercent = percentages.get(0);
+			for (int i = 1; i < percentages.size(); i++) {
+			    if (percentages.get(i) < lowestPercent)
+				lowestPercent = percentages.get(i);
+			}
+		    
+		       
+			
+			
+			    /*    
+			int lowestPercent = Math.min(binPercent, octPercent);
+			lowestPercent = Math.min(lowestPercent, decPercent);
+			lowestPercent = Math.min(lowestPercent, hexPercent);
+			    */
+			// Issue: Find a way that lowestPercent is a nonzero value...
+
+			if(lowestPercent == binPercent && binq != 0)
+			    {
+				worst = "<HTML>Your worst score was in binary. Click the binary button to practice. <br>";
+				JButton binButton = new JButton("Binary");
+				lowest = 2;
+				binButton.addActionListener(new practiceListener());
+				scorePanel.add(binButton);
+			    }
+			else if(lowestPercent == octPercent && octq != 0)
+			    {
+				worst ="<HTML>Your worst score was in octal. Click the octal button to practice. <br>";
+				JButton octButton = new JButton("Octal");
+				lowest = 8;
+				octButton.addActionListener(new practiceListener());
+				scorePanel.add(octButton);
+			    }
+			else if(lowestPercent == decPercent && decq != 0)
+			    {
+				worst ="<HTML>Your worst score was in decimal. Click the decimal button to practice. <br>";
+				JButton decButton = new JButton("Decimal");
+				lowest = 10;
+				decButton.addActionListener(new practiceListener());
+				scorePanel.add(decButton);
+			    }
+			else if(lowestPercent == hexPercent && hexq != 0)
+			    {
+				worst ="<HTML>Your worst score was in hexadecimal. Click the hexadecimal button to practice. <br>";
+				JButton hexButton = new JButton("Hexadecimal");
+				lowest = 16;
+				hexButton.addActionListener(new practiceListener());
+				scorePanel.add(hexButton);
+			    }
+			
+		    }
+				    
+		scoreReadout.setText(result + worst + quiz.getReadout());
 		scorePanel.setVisible(true);
 	    } else {
 		    // Else ask the current question
@@ -636,6 +861,15 @@ public class QuizGui {
 	// Moves this component to a new location
 
 	frame.setLocation(x, y);
+    }
+
+    public int getPercentage(int num, int denom) {
+	// numCorrect returns an integer, but must be coerced to a double
+	// so that (numCorrect/size) works correctly
+
+	double numCorrect = (double) num;
+	double result = Math.round((numCorrect / denom)*100);
+	return (int) result;
     }
 
     // Test format of user answer
