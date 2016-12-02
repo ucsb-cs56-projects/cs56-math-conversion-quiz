@@ -1,0 +1,7 @@
+- The GUI version is ran by "ant runGui" and the README said that it is "ant runGUI" so I fixed that
+-There needs to be more error checks and explanations when an error occurs in the GUI version
+- Masking Mode needs to be fixed for the first question
+- I think it would be cool to allow a different number of questions in the GUI version (instead of only 10)
+- I would like to put a restart option on the GUI version on the main page, as well as on the end page (rather than exiting out)
+- allow the save file to contain more than 10 scores, and allow all of the quizes to be ran with a larger number of questions\
+- implement a version that allows a second chance (for instance if you get it wrong print ("incorrect, try again") for people that are having trouble but dont want to be givin the answers right away
