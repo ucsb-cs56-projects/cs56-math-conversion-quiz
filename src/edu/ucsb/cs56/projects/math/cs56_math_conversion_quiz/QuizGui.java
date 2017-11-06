@@ -45,6 +45,7 @@ public class QuizGui {
     boolean difficultySelected = false;
     boolean readyForQuiz = true;
     boolean AskAgain = true;
+    String difficulty;
     int lvl; //global variable for mode
     int mode = 0;
     Quiz quiz = new Quiz(numQuestions);	
@@ -58,6 +59,13 @@ public class QuizGui {
     JLabel currentQuestionNum      = new JLabel(String.format("            %d/%d", current+1, quiz.getNumQuestions())); 
     JLabel numCorrectLabel         = new JLabel("  Number Correct: ");
     JLabel numCorrect              = new JLabel(String.format("            0/%d", quiz.getNumQuestions()));
+
+    JLabel currentDifficultyLabel = new JLabel("  Current Difficulty: ");
+    JLabel currentDifficulty = new JLabel("");
+    JLabel changeDifficulty = new JLabel("  Change Difficulty: ");
+    JButton easyButton = new JButton("Easy");
+    JButton regularButton = new JButton("Regular");
+    JButton hardButton = new JButton("Hard");
     
     JPanel modePanel        = new JPanel();
     JLabel practiceLabel    = new JLabel("  I want to practice: ");
@@ -159,8 +167,55 @@ public class QuizGui {
 	
 	sidebar.add(numCorrectLabel);
 	sidebar.add(numCorrect);
+
+	// MY WORK
+	sidebar.add(box.createVerticalStrut(bottomMargin));
 	
-	modePanel.add(box.createVerticalStrut(bottomMargin));
+       	if (mode == 1)
+	    difficulty = "           Easy";
+	else if (mode == 2)
+	    difficulty = "        Regular";
+	else if (mode == 3)
+	    difficulty = "           Hard";
+	
+	currentDifficulty.setText(difficulty);
+
+	sidebar.add(currentDifficultyLabel);
+	sidebar.add(currentDifficulty);
+	sidebar.add(box.createVerticalStrut(bottomMargin));
+	sidebar.add(changeDifficulty);
+	sidebar.add(box.createVerticalStrut(bottomMargin));
+	easyButton.addActionListener(new easyClickListener());
+
+	// Adding color
+	java.awt.Color easyColor = new java.awt.Color(255,204,000);  // R, G, B values.
+	easyButton.setBackground(easyColor);
+	easyButton.setOpaque(true);
+
+	sidebar.add(easyButton);
+	sidebar.add(box.createVerticalStrut(bottomMargin-10));
+	regularButton.addActionListener(new regularClickListener());
+
+	// Adding color
+	java.awt.Color regColor = new java.awt.Color(255,153,000);  // R, G, B values.
+	regularButton.setBackground(regColor);
+	regularButton.setOpaque(true);
+	
+	sidebar.add(regularButton);
+	sidebar.add(box.createVerticalStrut(bottomMargin-10));
+	hardButton.addActionListener(new hardClickListener());
+
+	// Adding color
+	java.awt.Color hardColor = new java.awt.Color(255,000,000);  // R, G, B values.
+	hardButton.setBackground(hardColor);
+	hardButton.setOpaque(true);
+	
+	sidebar.add(hardButton);
+	
+	// Need to add ActionListener for easy, regular, and hard buttons that toggles the Show Hint button being visible or not and changes
+	// the text on the currentDifficulty label & change the color of the buttons
+
+	// END MY WORK 
 	
 	modePanel.setLayout(new BoxLayout(modePanel, BoxLayout.Y_AXIS));
 	
@@ -320,7 +375,7 @@ public class QuizGui {
 	//-- Window setup
 	//---------------------
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	frame.setSize(800,400);
+	frame.setSize(800,600);
 	frame.setVisible(true);
 	refreshHint();
 	
@@ -426,11 +481,39 @@ public class QuizGui {
 	    }
 	    
 	    if (!readyForQuiz) return;
-       
+	    
 	    quiz = new Quiz(numQuestions);
 	    startWindow.setVisible(false);
 	    
 	    quizGui.build(mode).ask();
+	}
+    }
+
+    class easyClickListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    switchHint.setVisible(true);
+	    currentDifficulty.setText("           Easy");
+	    mode = 1;
+	    lvl = 1;
+	}
+    }
+
+    class regularClickListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    switchHint.setVisible(true);
+	    currentDifficulty.setText("        Regular");
+	    mode = 2;
+	    lvl = 2;
+	}
+    }
+
+    class hardClickListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    switchHint.setVisible(false);
+	    hintLable.setVisible(false);
+	    currentDifficulty.setText("           Hard");
+	    mode = 3;
+	    lvl = 3;
 	}
     }
 	    
