@@ -92,8 +92,9 @@ public class QuizGui {
     JLabel scoreReadout = new JLabel("");
     JButton tryAgain    = new JButton("Try Again!");
     
-    JFrame startWindow = new JFrame("Choose Difficulty and Number of Questions");
+    JFrame startWindow = new JFrame("Welcome to the Math Conversion Quiz!");
     JPanel startPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,10,30));
+    JLabel welcomeTitle = new JLabel("Welcome to the Math Conversion Quiz!");
    
     JButton startButton = new JButton("Start!");
 
@@ -108,21 +109,36 @@ public class QuizGui {
     JTextField chooseQuestionsInput = new JTextField(7);
     
     public QuizGui start() {
-	startWindow.setSize(400,200);
+	startWindow.setSize(400,250);
 	startWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	
+	java.awt.Color startPanelColor = new java.awt.Color(245,222,179);  // R, G, B values.
+	startPanel.setBackground(startPanelColor);
 	startWindow.add(startPanel);
+	startPanel.add(welcomeTitle);
 	startPanel.add(chooseDifficultyLabel);
 	startPanel.add(easyCheckBox);
 	startPanel.add(regularCheckBox);
 	startPanel.add(hardCheckBox);
 
+	java.awt.Color easyColor = new java.awt.Color(255,204,000);  // R, G, B values.
+	easyCheckBox.setBackground(easyColor);
+	java.awt.Color regColor = new java.awt.Color(255,153,000);  // R, G, B values.
+	regularCheckBox.setBackground(regColor);
+	java.awt.Color hardColor = new java.awt.Color(255,000,000);  // R, G, B values.
+	hardCheckBox.setBackground(hardColor);
+
+	
+	
 	easyCheckBox.addActionListener(new easyListener());
 	regularCheckBox.addActionListener(new regularListener());
 	hardCheckBox.addActionListener(new hardListener());
 	
 	startPanel.add(chooseQuestionsLabel);
 	startPanel.add(chooseQuestionsInput);
+	java.awt.Color startColor = new java.awt.Color(255,255,000);   // R, G, B values.
+	java.awt.Color quitColor = new java.awt.Color(255,255,255);   // R, G, B values.
+	startButton.setBackground(startColor);
+	quitButton.setBackground(quitColor);
 	startPanel.add(startButton);
 	startPanel.add(quitButton);
 	
@@ -168,7 +184,7 @@ public class QuizGui {
 	sidebar.add(numCorrectLabel);
 	sidebar.add(numCorrect);
 
-	// MY WORK
+	// WORK FOR ISSUE #46
 	sidebar.add(box.createVerticalStrut(bottomMargin));
 	
        	if (mode == 1)
@@ -211,11 +227,7 @@ public class QuizGui {
 	hardButton.setOpaque(true);
 	
 	sidebar.add(hardButton);
-	
-	// Need to add ActionListener for easy, regular, and hard buttons that toggles the Show Hint button being visible or not and changes
-	// the text on the currentDifficulty label & change the color of the buttons
-
-	// END MY WORK 
+	// END WORK 
 	
 	modePanel.setLayout(new BoxLayout(modePanel, BoxLayout.Y_AXIS));
 	
@@ -375,7 +387,7 @@ public class QuizGui {
 	//-- Window setup
 	//---------------------
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	frame.setSize(800,600);
+	frame.setSize(800,515);
 	frame.setVisible(true);
 	refreshHint();
 	
