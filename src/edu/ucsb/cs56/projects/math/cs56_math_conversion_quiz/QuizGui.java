@@ -90,6 +90,12 @@ public class QuizGui {
     
     JPanel scorePanel   = new JPanel();
     JLabel scoreReadout = new JLabel("");
+
+    // ISSUE 47 WORK
+    JLabel newNumQuestionsLabel = new JLabel("<html>How many questions would you like for the new quiz? Select a number from 1 to 20");
+    JTextField newNumQuestions = new JTextField(7);
+    // END ISSUE 47 WORK
+    
     JButton tryAgain    = new JButton("Try Again!");
     
     JFrame startWindow = new JFrame("Welcome to the Math Conversion Quiz!");
@@ -352,14 +358,24 @@ public class QuizGui {
 	results.setBackground(bgColor);
 	
 	// Score readout sub-pane (Visible at end)
+
 	scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
 	
 	// Adding color
 	scorePanel.setBackground(bgColor);
 	
 	scorePanel.add(scoreReadout);
-	scorePanel.add(box.createVerticalStrut(10));
+	scorePanel.add(box.createVerticalStrut(20));
 	tryAgain.addActionListener(new tryAgainListener());
+
+	// WORK FOR ISSUE 47
+	newNumQuestions.setMaximumSize( newNumQuestions.getPreferredSize() );
+	scorePanel.add(newNumQuestionsLabel);
+	scorePanel.add(newNumQuestions);
+	scorePanel.add(box.createVerticalStrut(10));
+	// END WORK FOR ISSUE 47
+
+
 	scorePanel.add(tryAgain);
 	
 	// Adding color
@@ -604,7 +620,25 @@ public class QuizGui {
 	     * @param e ActionEvent object that gives information about the event and its source.
 	     */
 		public void actionPerformed (ActionEvent e) {
-			quiz = new Quiz(numQuestions);
+
+		    // WORK FOR ISSUE 47 
+		    String response = newNumQuestions.getText();
+
+		    try { 
+			numQuestions = Integer.parseInt(response);
+		    } catch (NumberFormatException ex) {
+			newNumQuestionsLabel.setText("<html>Invalid input! Please select a number from 1 to 20</html>");
+			newNumQuestions.setText("");
+			return;
+		    }
+		    
+		    if (numQuestions < 1 || numQuestions > 20 || response.length() == 0) {
+			newNumQuestionsLabel.setText("<html>Invalid input! Please select a number from 1 to 20</html>");
+			newNumQuestions.setText("");
+			return;
+		    }   
+		    // END WORK FOR ISSUE 47 
+		    quiz = new Quiz(numQuestions);
 			
 			// Re-enable quiz inputs		
 			numCorrect.setText((String.format("            0/%d", quiz.getNumQuestions())));
@@ -880,6 +914,12 @@ public class QuizGui {
 				    
 		scoreReadout.setText(result + worst + quiz.getReadout());
 		scorePanel.setVisible(true);
+
+		// WORK FOR ISSUE 47
+		
+		// END WORK FOR ISSUE 47
+		
+
 	    } else {
 		    // Else ask the current question
 		String prompt = currentQuestion.generatePrompt(quiz.getMode());
