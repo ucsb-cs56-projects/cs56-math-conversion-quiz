@@ -422,6 +422,7 @@ public class QuizGui {
 		 String h = "";
 		 refresh = true;
 		 maxMatch = 0;
+		 // currentQuestion might be the issue for #16; may need to reference a new question when tryAgain button is pressed or something is wrong with the getAnswer method for question
 		 for(int i=0; i<currentQuestion.getAnswer().length(); i++)
 			h+="_ ";
 		 hintLable.setText("Hint: "+h+"  You hit: "+0+"/"+ currentQuestion.getAnswer().length());
@@ -604,6 +605,7 @@ public class QuizGui {
 			    currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
 			    
 			    currentQuestion = new Question(quiz.getMode());
+
 			    refreshHint();
 			    quizGui.ask();
 			    correct = false;
@@ -639,6 +641,10 @@ public class QuizGui {
 		    }   
 		    // END WORK FOR ISSUE 47 
 		    quiz = new Quiz(numQuestions);
+
+		    // THINK THIS WILL SOLVE ISSUE 16
+		    currentQuestion = new Question();
+		    // THINK THIS WILL SOLVE ISSUE 16 
 			
 			// Re-enable quiz inputs		
 			numCorrect.setText((String.format("            0/%d", quiz.getNumQuestions())));
@@ -650,7 +656,7 @@ public class QuizGui {
 			// Restart the quiz
 			current = 0;
 			currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
-			refreshHint();
+			refreshHint(); // currentQuestion might be the issue #16; may need to reference new question object
 			quizGui.ask();
 		}
 	}
