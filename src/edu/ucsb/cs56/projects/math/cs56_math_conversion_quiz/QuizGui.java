@@ -62,6 +62,8 @@ public class QuizGui {
 
     JLabel currentDifficultyLabel = new JLabel("  Current Difficulty: ");
     JLabel currentDifficulty = new JLabel("");
+
+    JPanel difficulties = new JPanel();
     JLabel changeDifficulty = new JLabel("  Change Difficulty: ");
     JButton easyButton = new JButton("Easy");
     JButton regularButton = new JButton("Regular");
@@ -84,6 +86,10 @@ public class QuizGui {
     JLabel hintLable = new JLabel("Hint: ");
     JButton submit = new JButton("Submit");
     JButton switchHint = new JButton("Show Hint");
+
+    // ISSUE 30 
+    JLabel welcomeLabel = new JLabel("<html><font color='white'>Welcome to the Math Conversion Quiz!",SwingConstants.CENTER);
+    // ISSUE 30 
     
     JPanel results  = new JPanel();
     JLabel feedback = new JLabel("");
@@ -100,7 +106,8 @@ public class QuizGui {
     
     JFrame startWindow = new JFrame("Welcome to the Math Conversion Quiz!");
     JPanel startPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,10,30));
-    JLabel welcomeTitle = new JLabel("Welcome to the Math Conversion Quiz!");
+    JLabel welcomeTitle = new JLabel("<html><font color='white'>Start a new Quiz!",SwingConstants.CENTER);
+
    
     JButton startButton = new JButton("Start!");
 
@@ -125,6 +132,13 @@ public class QuizGui {
 	startPanel.add(easyCheckBox);
 	startPanel.add(regularCheckBox);
 	startPanel.add(hardCheckBox);
+
+	startWindow.getContentPane().add(BorderLayout.NORTH,welcomeTitle);
+	java.awt.Color welcomeColor = new java.awt.Color(000,204,255);  // R, G, B values.
+	welcomeTitle.setBackground(welcomeColor);
+	welcomeTitle.setOpaque(true);
+	welcomeTitle.setFont(welcomeLabel.getFont().deriveFont(25.0f));
+
 
 	java.awt.Color easyColor = new java.awt.Color(255,204,000);  // R, G, B values.
 	easyCheckBox.setBackground(easyColor);
@@ -164,7 +178,7 @@ public class QuizGui {
      */
     public QuizGui build(int mode) {
 	lvl = mode;
-	questionLabel.setPreferredSize(new Dimension(400, 20));
+	//	questionLabel.setPreferredSize(new Dimension(400, 20));
 	
 	int bottomMargin = 15;
 	
@@ -205,6 +219,7 @@ public class QuizGui {
 	sidebar.add(currentDifficultyLabel);
 	sidebar.add(currentDifficulty);
 	sidebar.add(box.createVerticalStrut(bottomMargin));
+
 	sidebar.add(changeDifficulty);
 	sidebar.add(box.createVerticalStrut(bottomMargin));
 	easyButton.addActionListener(new easyClickListener());
@@ -235,16 +250,18 @@ public class QuizGui {
 	sidebar.add(hardButton);
 	// END WORK 
 	
-	modePanel.setLayout(new BoxLayout(modePanel, BoxLayout.Y_AXIS));
-	
+	// START ISSUE 30
+	//	modePanel.setLayout(new BoxLayout(modePanel, BoxLayout.Y_AXIS));
+
+
 	// Adding color
 	modePanel.setBackground(bgColor);
 	
-	sidebar.add(box.createVerticalStrut(bottomMargin*2+10));
+	//	sidebar.add(box.createVerticalStrut(bottomMargin*2+10));
 	
-	modePanel.add(practiceLabel);
+	//	modePanel.add(practiceLabel);
 	
-	modePanel.add(box.createVerticalStrut(bottomMargin));
+	//	modePanel.add(box.createVerticalStrut(bottomMargin));
 	
 	binaryMode.addActionListener(new binaryModeListener());
 	modePanel.add(binaryMode);
@@ -254,7 +271,7 @@ public class QuizGui {
 	binaryMode.setBackground(bColor);
 	binaryMode.setOpaque(true);
 	
-	modePanel.add(box.createVerticalStrut(bottomMargin-10));
+	//modePanel.add(box.createVerticalStrut(bottomMargin-10));
 	
 	octalMode.addActionListener(new octalModeListener());
 	modePanel.add(octalMode);
@@ -264,7 +281,7 @@ public class QuizGui {
 	octalMode.setBackground(oColor);
 	octalMode.setOpaque(true);
 	
-	modePanel.add(box.createVerticalStrut(bottomMargin-10));
+	//modePanel.add(box.createVerticalStrut(bottomMargin-10));
 	
 	decimalMode.addActionListener(new decimalModeListener());
 	modePanel.add(decimalMode);
@@ -274,7 +291,7 @@ public class QuizGui {
 	decimalMode.setBackground(dColor);
 	decimalMode.setOpaque(true);
 	
-	modePanel.add(box.createVerticalStrut(bottomMargin-10));
+	//modePanel.add(box.createVerticalStrut(bottomMargin-10));
 	
 	hexadecimalMode.addActionListener(new hexadecimalModeListener());
 	modePanel.add(hexadecimalMode);
@@ -284,7 +301,7 @@ public class QuizGui {
 	hexadecimalMode.setBackground(hColor);
 	hexadecimalMode.setOpaque(true);
 	
-	modePanel.add(box.createVerticalStrut(bottomMargin-10));
+	//modePanel.add(box.createVerticalStrut(bottomMargin-10));
 	
 	randomMode.addActionListener(new randomModeListener());
 	modePanel.add(randomMode);
@@ -294,7 +311,7 @@ public class QuizGui {
 	randomMode.setBackground(rColor);
 	randomMode.setOpaque(true);
 	
-	modePanel.add(box.createVerticalStrut(bottomMargin-10));
+	//modePanel.add(box.createVerticalStrut(bottomMargin-10));
 	
 	maskMode.addActionListener(new maskModeListener());
 	modePanel.add(maskMode);
@@ -304,10 +321,13 @@ public class QuizGui {
 	maskMode.setBackground(mColor);
 	maskMode.setOpaque(true);
 	
-	sidebar.add(modePanel);
+	//sidebar.add(modePanel);
 	
 	frame.getContentPane().add(BorderLayout.WEST, sidebar);
-	
+
+	// ADDING THIS
+	frame.getContentPane().add(BorderLayout.SOUTH,modePanel);
+	// END ISSUE 30 
 	//---------------------
 	//-- Main Content
 	//---------------------
@@ -343,6 +363,7 @@ public class QuizGui {
 	userInput.add(box.createVerticalStrut(5));
 	switchHint.addActionListener(new switchHintListener());
 	userInput.add(switchHint);
+
 	
 	// Adding color
 	java.awt.Color hintColor = new java.awt.Color(255,255,255);   // R, G, B values.
@@ -350,6 +371,7 @@ public class QuizGui {
 	switchHint.setOpaque(true);
 	if(mode == 3)
 	    switchHint.setVisible(false);
+ 
 	
 	// Results sub-pane
 	results.setLayout(new BoxLayout(results, BoxLayout.Y_AXIS));
@@ -397,13 +419,24 @@ public class QuizGui {
 	content.setBackground(bgColor);
 	
 	frame.getContentPane().add(BorderLayout.EAST, content);
+
+	// ISSUE 30
+	//---------------------
+	//--Title
+	//---------------------
+	java.awt.Color welcomeColor = new java.awt.Color(000,204,255);  // R, G, B values.
+	welcomeLabel.setBackground(welcomeColor);
+	welcomeLabel.setOpaque(true);
+	welcomeLabel.setFont(welcomeLabel.getFont().deriveFont(32.0f));
+	frame.getContentPane().add(BorderLayout.NORTH,welcomeLabel);
+	// ISSUE 30 
 	
 	
 	//---------------------
 	//-- Window setup
 	//---------------------
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	frame.setSize(800,515);
+	frame.setSize(850,400);
 	frame.setVisible(true);
 	refreshHint();
 	
@@ -650,6 +683,7 @@ public class QuizGui {
 			numCorrect.setText((String.format("            0/%d", quiz.getNumQuestions())));
 			sidebar.setVisible(true);
 			userInput.setVisible(true);
+			modePanel.setVisible(true);
 			scorePanel.setVisible(false);
 			feedback.setText("");
 			
@@ -821,6 +855,7 @@ public class QuizGui {
 		    // If we're through with the questions, hide the inputs and show the final readout			
 		sidebar.setVisible(false);
 		userInput.setVisible(false);
+		modePanel.setVisible(false);
 		String result = "";
 		String worst = "";
 		if (correct){
@@ -1123,13 +1158,16 @@ public class QuizGui {
 	}
     }
     */
-	/**
+
+
+       /**
 	 * Build and run the GUI
 	 */
 	public static void main (String [] args) {		
 	    quizGui.start();
 	    //quizGui.build().ask();
 		
-  }
+	}
+    
 	
 }
