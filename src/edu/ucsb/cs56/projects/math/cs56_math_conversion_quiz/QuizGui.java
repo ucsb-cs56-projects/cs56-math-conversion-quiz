@@ -624,7 +624,7 @@ public class QuizGui {
 				    }
 				else
 				    {
-					feedback.setText("<html>Incorrect!<br> Previous Question: " + questionLabel.getText() + "<br> Answer was: " + currentQuestion.getAnswer());
+					feedback.setText("<html>Incorrect!<br> Previous Question:<br>" + questionLabel.getText() + "<br> Answer was: " + currentQuestion.getAnswer());
 					quiz.insertScore(false);
 					AskAgain = true;
 				    }
