@@ -458,7 +458,10 @@ public class QuizGui {
 		 // currentQuestion might be the issue for #16; may need to reference a new question when tryAgain button is pressed or something is wrong with the getAnswer method for question
 		 for(int i=0; i<currentQuestion.getAnswer().length(); i++)
 			h+="_ ";
-		 hintLable.setText("Hint: "+h+"  You hit: "+0+"/"+ currentQuestion.getAnswer().length());
+		 if (lvl == 2)
+		 	hintLable.setText("Hint: "+h+"  Not enough digits");
+		 else
+		 	hintLable.setText("Hint: "+h);
 	 }
 
     class easyListener implements ActionListener {
@@ -557,6 +560,10 @@ public class QuizGui {
 	    currentDifficulty.setText("           Easy");
 	    mode = 1;
 	    lvl = 1;
+	    userAnswer.setText("");
+	    hintLable.setVisible(false);
+					switchHint.setText("Show Hint");
+	    refreshHint();
 	}
     }
 
@@ -566,6 +573,10 @@ public class QuizGui {
 	    currentDifficulty.setText("        Regular");
 	    mode = 2;
 	    lvl = 2;
+	    userAnswer.setText("");
+	    hintLable.setVisible(false);
+					switchHint.setText("Show Hint");
+	    refreshHint();
 	}
     }
 
@@ -576,6 +587,10 @@ public class QuizGui {
 	    currentDifficulty.setText("           Hard");
 	    mode = 3;
 	    lvl = 3;
+	    userAnswer.setText("");
+	    hintLable.setVisible(false);
+					switchHint.setText("Show Hint");
+	    refreshHint();
 	}
     }
 	    
@@ -1028,30 +1043,58 @@ public class QuizGui {
 			}
 			String regex = "^" + answer +".*$";
 			String correctAnswer = currentQuestion.getAnswer();
-			if(correctAnswer.matches(regex) || answer == correctAnswer)	{
-				if(refresh)	{
-					refresh = false;
-					hint = answer;
-					maxMatch = answer.length();
-					for(int i=0; i<correctAnswer.length()-answer.length(); i++)
-						hint+="_ ";
-					hintLable.setText("Hint: "+hint+"  You hit: "+answer.length()+"/"+ currentQuestion.getAnswer().length());
-				}
-				
-				else
-				{
-					if(answer.length()>maxMatch)	{
+			int hit = 0;
+			if (lvl == 1){
+				if(correctAnswer.matches(regex) || answer == correctAnswer)	{
+					if(refresh)	{
+						refresh = false;
 						hint = answer;
 						maxMatch = answer.length();
 						for(int i=0; i<correctAnswer.length()-answer.length(); i++)
 							hint+="_ ";
-					
+						hintLable.setText("Hint: "+ hint);
 					}
-					hintLable.setText("Hint: "+hint+"  You hit: "+answer.length()+"/"+ currentQuestion.getAnswer().length());
 					
+					else
+					{
+						if(answer.length()>maxMatch)	{
+							hint = answer;
+							maxMatch = answer.length();
+							for(int i=0; i<correctAnswer.length()-answer.length(); i++)
+								hint+="_ ";
+						}
+						hintLable.setText("Hint: "+hint);
+					}
 				}
 			}
-				
+			if (lvl == 2){
+				if (refresh) refresh = false;
+				String h = "";
+				if (answer.length() == correctAnswer.length()){
+					for (int i=0; i<correctAnswer.length(); i++){
+						if (answer.charAt(i) == correctAnswer.charAt(i)){
+							h+= answer.charAt(i);	
+							++hit;
+						}
+						else if (h.endsWith("_"))
+							h+=" _";
+						else
+							h+="_";
+					}
+					if (hit == answer.length())
+						hintLable.setText("Hint: "+h+" Correct!");
+					else
+						hintLable.setText("Hint: "+h+"  You hit: "+ hit+"/"+ answer.length());
+				}
+				else{
+					for (int i=0; i<correctAnswer.length(); i++)
+						h+="_ ";
+					if (answer.length() > correctAnswer.length())
+						hintLable.setText("Hint: "+h+"  Too many digits");
+					else if (answer.length() < correctAnswer.length())
+						hintLable.setText("Hint: "+h+"  Not enough digits");	
+				}
+			}
 			}
 
 	}
