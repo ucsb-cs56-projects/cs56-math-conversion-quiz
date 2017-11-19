@@ -703,6 +703,7 @@ public class QuizGui {
 			feedback.setText("");
 			
 			// Restart the quiz
+			welcomeLabel.setText("<html><font color='white'>Welcome to the Math Conversion Quiz!");
 			current = 0;
 			currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
 			refreshHint(); // currentQuestion might be the issue #16; may need to reference new question object
@@ -871,6 +872,7 @@ public class QuizGui {
 		sidebar.setVisible(false);
 		userInput.setVisible(false);
 		modePanel.setVisible(false);
+		welcomeLabel.setText("<html><font color='white'>Your Results:");
 		String result = "";
 		String worst = "";
 		if (correct){
