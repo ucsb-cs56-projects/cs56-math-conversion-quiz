@@ -97,6 +97,13 @@ public class QuizGui {
     JPanel scorePanel   = new JPanel();
     JLabel scoreReadout = new JLabel("");
 
+    // NEW 
+    JButton binButton = new JButton("Binary");
+    JButton octButton = new JButton("Octal");
+    JButton decButton = new JButton("Decimal");
+    JButton hexButton = new JButton("Hexadecimal");
+    // END NEW
+
     // ISSUE 47 WORK
     JLabel newNumQuestionsLabel = new JLabel("<html>How many questions would you like for the new quiz? Select a number from 1 to 20");
     JTextField newNumQuestions = new JTextField(7);
@@ -387,6 +394,25 @@ public class QuizGui {
 	scorePanel.setBackground(bgColor);
 	
 	scorePanel.add(scoreReadout);
+
+	// NEW
+	scorePanel.add(box.createVerticalStrut(5));
+	scorePanel.add(binButton);
+	scorePanel.add(octButton);
+	scorePanel.add(decButton);
+	scorePanel.add(hexButton);
+
+	binButton.addActionListener(new binaryPracticeListener());
+	octButton.addActionListener(new octalPracticeListener());
+	decButton.addActionListener(new decimalPracticeListener());
+	hexButton.addActionListener(new hexadecimalPracticeListener());
+	
+	binButton.setVisible(false);
+	octButton.setVisible(false);
+	decButton.setVisible(false);
+	hexButton.setVisible(false);
+	// END NEW
+	
 	scorePanel.add(box.createVerticalStrut(20));
 	tryAgain.addActionListener(new tryAgainListener());
 
@@ -687,6 +713,7 @@ public class QuizGui {
 			newNumQuestions.setText("");
 			return;
 		    }   
+		    
 		    // END WORK FOR ISSUE 47 
 		    quiz = new Quiz(numQuestions);
 
@@ -701,6 +728,7 @@ public class QuizGui {
 			modePanel.setVisible(true);
 			scorePanel.setVisible(false);
 			feedback.setText("");
+			newNumQuestions.setText("");
 			
 			// Restart the quiz
 			welcomeLabel.setText("<html><font color='white'>Welcome to the Math Conversion Quiz!");
@@ -824,11 +852,115 @@ public class QuizGui {
 	}
     }
 
+    // NEW
+    class binaryPracticeListener implements ActionListener {
+	public void actionPerformed (ActionEvent e) {
+	    quiz = new Quiz(numQuestions);
+	    quiz.setMode(2);
+	    
+	    // Re-enable quiz inputs
+	    numCorrect.setText((String.format("            0/%d", quiz.getNumQuestions())));
+	    sidebar.setVisible(true);
+	    userInput.setVisible(true);
+	    scorePanel.setVisible(false);
+	    feedback.setText("");
+	    
+	    binButton.setVisible(false);
+	    octButton.setVisible(false);
+	    decButton.setVisible(false);
+	    hexButton.setVisible(false);
+	    
+	    // Restart the quiz
+	    current = 0;
+	    currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
+	    refreshHint();
+	    quizGui.ask();
+	}
+    }
+
+    class octalPracticeListener implements ActionListener {
+	public void actionPerformed (ActionEvent e) {
+	    quiz = new Quiz(numQuestions);
+	    quiz.setMode(8);
+	    
+	    // Re-enable quiz inputs
+	    numCorrect.setText((String.format("            0/%d", quiz.getNumQuestions())));
+	    sidebar.setVisible(true);
+	    userInput.setVisible(true);
+	    scorePanel.setVisible(false);
+	    feedback.setText("");
+	    
+	    binButton.setVisible(false);
+	    octButton.setVisible(false);
+	    decButton.setVisible(false);
+	    hexButton.setVisible(false);
+	    
+	    // Restart the quiz
+	    current = 0;
+	    currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
+	    refreshHint();
+	    quizGui.ask();
+	}
+    }
+
+    class decimalPracticeListener implements ActionListener {
+	public void actionPerformed (ActionEvent e) {
+	    quiz = new Quiz(numQuestions);
+	    quiz.setMode(10);
+	    
+	    // Re-enable quiz inputs
+	    numCorrect.setText((String.format("            0/%d", quiz.getNumQuestions())));
+	    sidebar.setVisible(true);
+	    userInput.setVisible(true);
+	    scorePanel.setVisible(false);
+	    feedback.setText("");
+	    
+	    binButton.setVisible(false);
+	    octButton.setVisible(false);
+	    decButton.setVisible(false);
+	    hexButton.setVisible(false);
+	    
+	    // Restart the quiz
+	    current = 0;
+	    currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
+	    refreshHint();
+	    quizGui.ask();
+	}
+    }
+
+    class hexadecimalPracticeListener implements ActionListener {
+	public void actionPerformed (ActionEvent e) {
+	    quiz = new Quiz(numQuestions);
+	    quiz.setMode(16);
+	    
+	    // Re-enable quiz inputs
+	    numCorrect.setText((String.format("            0/%d", quiz.getNumQuestions())));
+	    sidebar.setVisible(true);
+	    userInput.setVisible(true);
+	    scorePanel.setVisible(false);
+	    feedback.setText("");
+	    
+	    binButton.setVisible(false);
+	    octButton.setVisible(false);
+	    decButton.setVisible(false);
+	    hexButton.setVisible(false);
+	    
+	    // Restart the quiz
+	    current = 0;
+	    currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
+	    refreshHint();
+	    quizGui.ask();
+	}
+    }
+    // END NEW
+
+    /**                                                                                                                                                       
+     * Called when the user clicks the "Try Again" button at end of current quiz.                                                                             
+     * @param e ActionEvent object that gives information about the event and its source.                                                                     
+     */
+
+    /*
     class practiceListener implements ActionListener {
-	/**                                                                                                                                                       
-	 * Called when the user clicks the "Try Again" button at end of current quiz.                                                                             
-	 * @param e ActionEvent object that gives information about the event and its source.                                                                     
-	 */
 	public void actionPerformed (ActionEvent e) {
 	    quiz = new Quiz(numQuestions);
 	    quiz.setMode(lowest);
@@ -847,7 +979,7 @@ public class QuizGui {
 	    quizGui.ask();
 	}
     }
-
+*/
     /**
      * guiQuestions class
      * Creates a quiz based of the number of questions requested by user 
@@ -875,6 +1007,7 @@ public class QuizGui {
 		welcomeLabel.setText("<html><font color='white'>Your Results:");
 		String result = "";
 		String worst = "";
+		String recommend = "";
 		if (correct){
 		    result = "<html>Correct! <br>";
 		}
@@ -887,7 +1020,8 @@ public class QuizGui {
 			int octPercent = 0;
 			int decPercent = 0;
 			int hexPercent = 0;
-
+			recommend = "<html><br>Recommended modes to practice:<br>";
+			
 			ArrayList<Integer> percentages = new ArrayList<Integer>();
 			
 			if(binq != 0)
@@ -918,6 +1052,25 @@ public class QuizGui {
 				String hex = "<html>You scored " + hexPercent + "% on hexadecimal questions. <br>";
 				result = result + hex;
 			    }
+
+		       
+			
+			// NEW ISSUE 
+			if (binPercent < 70 && binq != 0)
+			    binButton.setVisible(true);
+			    //worst = worst + "<html>Binary<br>";
+			if (octPercent < 70 && octq != 0)
+			    octButton.setVisible(true);
+			    //worst = worst + "<html>Octal<br>";
+			if (decPercent < 70 && decq != 0)
+			    decButton.setVisible(true);
+			    //worst = worst + "<html>Decimal<br>";
+			if (hexPercent < 70 && hexq != 0)
+			    hexButton.setVisible(true);
+			    //worst = worst + "<html>Hexadecimal<br>";
+			// END NEW ISSUE 
+			
+			/*
 			
 			int lowestPercent = percentages.get(0);
 			for (int i = 1; i < percentages.size(); i++) {
@@ -928,11 +1081,11 @@ public class QuizGui {
 		       
 			
 			
-			    /*    
-			int lowestPercent = Math.min(binPercent, octPercent);
-			lowestPercent = Math.min(lowestPercent, decPercent);
-			lowestPercent = Math.min(lowestPercent, hexPercent);
-			    */
+			        
+			//int lowestPercent = Math.min(binPercent, octPercent);
+			//lowestPercent = Math.min(lowestPercent, decPercent);
+			//lowestPercent = Math.min(lowestPercent, hexPercent);
+			    
 			// Issue: Find a way that lowestPercent is a nonzero value...
 
 			if(lowestPercent == binPercent && binq != 0)
@@ -967,10 +1120,10 @@ public class QuizGui {
 				hexButton.addActionListener(new practiceListener());
 				scorePanel.add(hexButton);
 			    }
-			
+		*/	
 		    }
 				    
-		scoreReadout.setText(result + worst + quiz.getReadout());
+		scoreReadout.setText(result + worst + quiz.getReadout() + recommend);
 		scorePanel.setVisible(true);
 
 		// WORK FOR ISSUE 47

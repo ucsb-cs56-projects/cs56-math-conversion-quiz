@@ -130,7 +130,7 @@ public class Quiz {
      */
     public String getReadout() {
 	String readout = "";
-	readout = "Your score was " + this.getPercentage() + "%!";
+	readout = "<html>Your total score was " + this.getPercentage() + "%!<br>";
 	return readout;
     }
   
