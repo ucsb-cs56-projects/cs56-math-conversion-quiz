@@ -60,6 +60,8 @@ public class Quiz {
     public int getMode() {
     	return this.mode;
     }
+
+    public int currentQuestionNum;
     
     /**
      * Set the mode to a specific radix, e.g., 2, 8, 10, 16, 18
@@ -128,7 +130,7 @@ public class Quiz {
      */
     public String getReadout() {
 	String readout = "";
-	readout = "Your score was " + this.getPercentage() + "%!";
+	readout = "<html>Your total score was " + this.getPercentage() + "%!<br>";
 	return readout;
     }
   
@@ -142,7 +144,7 @@ public class Quiz {
 	
 	for (Question q : this.questions) {
 	    String Q = q.generatePrompt();
-	    System.out.println(Q);
+	    System.out.println("Question " + (++currentQuestionNum) + " of " + getNumQuestions() + ": " +  Q);
     		String userAnswer = scanner.next();
 	     
 		while(!(userAnswer.matches("^[a-fA-F0-9]+$")))
@@ -162,6 +164,27 @@ public class Quiz {
     		}
     	}
     	System.out.println("Your score was " + this.getPercentage() + "%!");
+
+	// NEW WORK FOR ISSUE 47: Will start a new quiz with the same mode
+	System.out.println("Enter number of questions to start a new quiz (enter 0 to quit):");
+
+	String s = scanner.next();
+	int newNumQuestions = Integer.parseInt(s);
+
+	if (newNumQuestions == 0) return;
+
+	currentQuestionNum = 0;
+	questions.clear();
+	scores.clear();
+	
+	for (int i=0; i<newNumQuestions; i++) {
+	    // Generate a random Question and push it to the beginning of the list
+	    Question q = new Question(this.mode);
+	    this.questions.add(0, q);
+	}
+	this.run();
+	// END WORK FOR ISSUE 47
+	
     }
 	
     /**

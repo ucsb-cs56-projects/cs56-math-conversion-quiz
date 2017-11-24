@@ -83,11 +83,36 @@ public class QuizTest {
 		q.insertScore(false);
 		assertEquals(50, q.getPercentage());
 	}
+    
     /**
      * test tryAgain button
      * See if quiz stats reset between quizzes
      */
-    
-  
+    @Test
+    public void testTryAgainButton1(){
+    	Quiz q = new Quiz(3);
+		q.insertScore(true);
+		q.insertScore(true);
+		q.insertScore(false);
+		q = new Quiz(4);
+		assertEquals(0, q.numCorrect());
+		assertEquals(0, q.getPercentage());
+		assertEquals(4, q.getNumQuestions());
+    }
+
+    /**
+     * test tryAgain button
+     * See if quiz stats reset between quizzes
+     */
+    @Test
+    public void testTryAgainButton2(){
+    	Quiz q = new Quiz(2);
+		q.insertScore(true);
+		q.insertScore(true);
+		q = new Quiz(1);
+		assertEquals(0, q.numCorrect());
+		assertEquals(0, q.getPercentage());
+		assertEquals(1, q.getNumQuestions());
+    }
 	
 }

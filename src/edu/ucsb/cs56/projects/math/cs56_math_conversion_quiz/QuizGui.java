@@ -21,13 +21,13 @@ import javax.swing.text.Document;
 
 public class QuizGui {
        
-	// Window components
-        JFrame frame = new JFrame("Binary/Decimal/Octal/Hex Conversion Quiz");
+    // Window components
+    JFrame frame = new JFrame("Binary/Decimal/Octal/Hex Conversion Quiz");
 
-        // Used for creating/inserting vertical structs to act as spacer margins
-	Box box = new Box(BoxLayout.X_AXIS);
-	//Runnable scanHint = new Hint();
-	
+    // Used for creating/inserting vertical structs to act as spacer margins
+    Box box = new Box(BoxLayout.X_AXIS);
+    //Runnable scanHint = new Hint();
+    
     int binq = 0;
     int octq = 0;
     int decq = 0;
@@ -42,7 +42,10 @@ public class QuizGui {
     
     static QuizGui quizGui = new QuizGui();
     private int numQuestions = 10;
+    boolean difficultySelected = false;
+    boolean readyForQuiz = true;
     boolean AskAgain = true;
+    String difficulty;
     int lvl; //global variable for mode
     int mode = 0;
     Quiz quiz = new Quiz(numQuestions);	
@@ -56,6 +59,15 @@ public class QuizGui {
     JLabel currentQuestionNum      = new JLabel(String.format("            %d/%d", current+1, quiz.getNumQuestions())); 
     JLabel numCorrectLabel         = new JLabel("  Number Correct: ");
     JLabel numCorrect              = new JLabel(String.format("            0/%d", quiz.getNumQuestions()));
+
+    JLabel currentDifficultyLabel = new JLabel("  Current Difficulty: ");
+    JLabel currentDifficulty = new JLabel("");
+
+    JPanel difficulties = new JPanel();
+    JLabel changeDifficulty = new JLabel("  Change Difficulty: ");
+    JButton easyButton = new JButton("Easy");
+    JButton regularButton = new JButton("Regular");
+    JButton hardButton = new JButton("Hard");
     
     JPanel modePanel        = new JPanel();
     JLabel practiceLabel    = new JLabel("  I want to practice: ");
@@ -74,325 +86,537 @@ public class QuizGui {
     JLabel hintLable = new JLabel("Hint: ");
     JButton submit = new JButton("Submit");
     JButton switchHint = new JButton("Show Hint");
+
+    // ISSUE 30 
+    JLabel welcomeLabel = new JLabel("<html><font color='white'>Welcome to the Math Conversion Quiz!",SwingConstants.CENTER);
+    // ISSUE 30 
     
     JPanel results  = new JPanel();
     JLabel feedback = new JLabel("");
     
     JPanel scorePanel   = new JPanel();
     JLabel scoreReadout = new JLabel("");
+
+    // NEW 
+    JButton binButton = new JButton("Binary");
+    JButton octButton = new JButton("Octal");
+    JButton decButton = new JButton("Decimal");
+    JButton hexButton = new JButton("Hexadecimal");
+    // END NEW
+
+    // ISSUE 47 WORK
+    JLabel newNumQuestionsLabel = new JLabel("<html>How many questions would you like for the new quiz? Select a number from 1 to 20");
+    JTextField newNumQuestions = new JTextField(7);
+    // END ISSUE 47 WORK
+    
     JButton tryAgain    = new JButton("Try Again!");
     
-    JFrame startWindow = new JFrame("Test");
-    JPanel startPanel = new JPanel();
+    JFrame startWindow = new JFrame("Welcome to the Math Conversion Quiz!");
+    JPanel startPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,10,30));
+    JLabel welcomeTitle = new JLabel("<html><font color='white'>Start a new Quiz!",SwingConstants.CENTER);
+
+   
     JButton startButton = new JButton("Start!");
-    JButton easyButton = new JButton("Easy");
-    JButton regularButton = new JButton("Regular");
-    JButton hardButton = new JButton("Hard");
+
+    JLabel chooseDifficultyLabel = new JLabel("Choose your difficulty:");
+    JCheckBox easyCheckBox = new JCheckBox("Easy");
+    JCheckBox regularCheckBox = new JCheckBox("Regular");
+    JCheckBox hardCheckBox = new JCheckBox("Hard");
+   
     JButton quitButton = new JButton("Quit");
-    
-    JFrame questionsWindow = new JFrame("Choose Number of Questions");
-    JPanel questionsPanel = new JPanel();
-    JLabel chooseQuestionsLabel = new JLabel("<html>How many questions would you like? <br> Select a number from 1 to 20");
+
+    JLabel chooseQuestionsLabel = new JLabel("<html>How many questions would you like? <br> Select a number from 1 to 20</html>");
     JTextField chooseQuestionsInput = new JTextField(7);
     
-	public QuizGui start() {
-	startWindow.setSize(400,200);
+    public QuizGui start() {
+	startWindow.setSize(400,250);
 	startWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	java.awt.Color startPanelColor = new java.awt.Color(245,222,179);  // R, G, B values.
+	startPanel.setBackground(startPanelColor);
 	startWindow.add(startPanel);
+	startPanel.add(welcomeTitle);
+	startPanel.add(chooseDifficultyLabel);
+	startPanel.add(easyCheckBox);
+	startPanel.add(regularCheckBox);
+	startPanel.add(hardCheckBox);
+
+	startWindow.getContentPane().add(BorderLayout.NORTH,welcomeTitle);
+	java.awt.Color welcomeColor = new java.awt.Color(000,204,255);  // R, G, B values.
+	welcomeTitle.setBackground(welcomeColor);
+	welcomeTitle.setOpaque(true);
+	welcomeTitle.setFont(welcomeLabel.getFont().deriveFont(25.0f));
+
+
+	java.awt.Color easyColor = new java.awt.Color(255,204,000);  // R, G, B values.
+	easyCheckBox.setBackground(easyColor);
+	java.awt.Color regColor = new java.awt.Color(255,153,000);  // R, G, B values.
+	regularCheckBox.setBackground(regColor);
+	java.awt.Color hardColor = new java.awt.Color(255,000,000);  // R, G, B values.
+	hardCheckBox.setBackground(hardColor);
+
 	
-	startPanel.add(easyButton);
-	startPanel.add(regularButton);
-	startPanel.add(hardButton);
-
+	
+	easyCheckBox.addActionListener(new easyListener());
+	regularCheckBox.addActionListener(new regularListener());
+	hardCheckBox.addActionListener(new hardListener());
+	
+	startPanel.add(chooseQuestionsLabel);
+	startPanel.add(chooseQuestionsInput);
+	java.awt.Color startColor = new java.awt.Color(255,255,000);   // R, G, B values.
+	java.awt.Color quitColor = new java.awt.Color(255,255,255);   // R, G, B values.
+	startButton.setBackground(startColor);
+	quitButton.setBackground(quitColor);
+	startPanel.add(startButton);
 	startPanel.add(quitButton);
-	easyButton.addActionListener(new easyListener());
-	regularButton.addActionListener(new regularListener());
-	hardButton.addActionListener(new hardListener());
-	quitButton.addActionListener(new quitListener());
-	startWindow.setVisible(true);
-	return this;
-	}
-
-    public QuizGui questions() {
-	questionsWindow.setSize(400,200);
-	questionsWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	questionsWindow.add(questionsPanel);
-
-	questionsPanel.add(chooseQuestionsLabel);
-	questionsPanel.add(chooseQuestionsInput);
-	questionsPanel.add(startButton);
+	
 	startButton.addActionListener(new questionsListener());
-	questionsWindow.setVisible(true);
+	quitButton.addActionListener(new quitListener());
+	
+	startWindow.setVisible(true);
 	return this;
     }
 	
-	// Specific question references
-	private static int current;
-	private Question currentQuestion = new Question();
+    // Specific question references
+    private static int current;
+    private Question currentQuestion = new Question();
+    
+    /**
+     * Build the Quiz GUI window
+     */
+    public QuizGui build(int mode) {
+	lvl = mode;
+	//	questionLabel.setPreferredSize(new Dimension(400, 20));
+	
+	int bottomMargin = 15;
+	
+	//---------------------
+	//-- Sidebar
+	//---------------------
+	sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
+	
+	// Adding color
+	java.awt.Color bgColor = new java.awt.Color(245,222,179);  // R, G, B values.
+	sidebar.setBackground(bgColor);
+	
+	sidebar.add(box.createVerticalStrut(bottomMargin-7));
+	
+	currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
+	numCorrect.setText(String.format("            0/%d", quiz.getNumQuestions()));
+	
+	sidebar.add(currentQuestionNumLabel);
+	sidebar.add(currentQuestionNum);
+	
+	sidebar.add(box.createVerticalStrut(bottomMargin));
+	
+	sidebar.add(numCorrectLabel);
+	sidebar.add(numCorrect);
 
-        /**
-	 * Build the Quiz GUI window
-	 */
-	public QuizGui build(int mode) {
-	    lvl = mode;
-	    questionLabel.setPreferredSize(new Dimension(400, 20));
-	    
-	    int bottomMargin = 15;
-	    
-		//---------------------
-		//-- Sidebar
-		//---------------------
-		sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
+	// WORK FOR ISSUE #46
+	sidebar.add(box.createVerticalStrut(bottomMargin));
+	
+       	if (mode == 1)
+	    difficulty = "           Easy";
+	else if (mode == 2)
+	    difficulty = "        Regular";
+	else if (mode == 3)
+	    difficulty = "           Hard";
+	
+	currentDifficulty.setText(difficulty);
 
-		// Adding color
-		java.awt.Color bgColor = new java.awt.Color(245,222,179);  // R, G, B values.
-		sidebar.setBackground(bgColor);
-		
-		sidebar.add(box.createVerticalStrut(bottomMargin-7));
-		    
-		currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
-		numCorrect.setText(String.format("            0/%d", quiz.getNumQuestions()));
-		
-		sidebar.add(currentQuestionNumLabel);
-		sidebar.add(currentQuestionNum);
-		
-		sidebar.add(box.createVerticalStrut(bottomMargin));
-		
-		sidebar.add(numCorrectLabel);
-		sidebar.add(numCorrect);
-		
-		modePanel.add(box.createVerticalStrut(bottomMargin));
-		
-		modePanel.setLayout(new BoxLayout(modePanel, BoxLayout.Y_AXIS));
-		
-		// Adding color
-		modePanel.setBackground(bgColor);
+	sidebar.add(currentDifficultyLabel);
+	sidebar.add(currentDifficulty);
+	sidebar.add(box.createVerticalStrut(bottomMargin));
 
-		sidebar.add(box.createVerticalStrut(bottomMargin*2+10));
+	sidebar.add(changeDifficulty);
+	sidebar.add(box.createVerticalStrut(bottomMargin));
+	easyButton.addActionListener(new easyClickListener());
 
-		modePanel.add(practiceLabel);
-		
-		modePanel.add(box.createVerticalStrut(bottomMargin));
+	// Adding color
+	java.awt.Color easyColor = new java.awt.Color(255,204,000);  // R, G, B values.
+	easyButton.setBackground(easyColor);
+	easyButton.setOpaque(true);
 
-		binaryMode.addActionListener(new binaryModeListener());
-		modePanel.add(binaryMode);
+	sidebar.add(easyButton);
+	sidebar.add(box.createVerticalStrut(bottomMargin-10));
+	regularButton.addActionListener(new regularClickListener());
 
-		// Adding color
-		java.awt.Color bColor = new java.awt.Color(102,255,153);  // R, G, B values.
-		binaryMode.setBackground(bColor);
-		binaryMode.setOpaque(true);
-		
-		modePanel.add(box.createVerticalStrut(bottomMargin-10));
-		
-		octalMode.addActionListener(new octalModeListener());
-		modePanel.add(octalMode);
-		
-		// Adding color
-		java.awt.Color oColor = new java.awt.Color(000,204,102);   // R, G, B values.
-		octalMode.setBackground(oColor);
-		octalMode.setOpaque(true);
-		
-		modePanel.add(box.createVerticalStrut(bottomMargin-10));
-		
-		decimalMode.addActionListener(new decimalModeListener());
-		modePanel.add(decimalMode);
+	// Adding color
+	java.awt.Color regColor = new java.awt.Color(255,153,000);  // R, G, B values.
+	regularButton.setBackground(regColor);
+	regularButton.setOpaque(true);
+	
+	sidebar.add(regularButton);
+	sidebar.add(box.createVerticalStrut(bottomMargin-10));
+	hardButton.addActionListener(new hardClickListener());
 
-		// Adding color
-		java.awt.Color dColor = new java.awt.Color(000,204,153);   // R, G, B values.
-		decimalMode.setBackground(dColor);
-		decimalMode.setOpaque(true);
-
-		modePanel.add(box.createVerticalStrut(bottomMargin-10));
-		
-		hexadecimalMode.addActionListener(new hexadecimalModeListener());
-		modePanel.add(hexadecimalMode);
-		
-		// Adding color
-		java.awt.Color hColor = new java.awt.Color(102,204,204);   // R, G, B values.
-		hexadecimalMode.setBackground(hColor);
-		hexadecimalMode.setOpaque(true);
-
-		modePanel.add(box.createVerticalStrut(bottomMargin-10));
-		
-		randomMode.addActionListener(new randomModeListener());
-		modePanel.add(randomMode);
-		
-		// Adding color
-		java.awt.Color rColor = new java.awt.Color(051,153,204);   // R, G, B values.
-		randomMode.setBackground(rColor);
-		randomMode.setOpaque(true);
-
-		modePanel.add(box.createVerticalStrut(bottomMargin-10));
-
-		maskMode.addActionListener(new maskModeListener());
-		modePanel.add(maskMode);
-
-		// Adding color
-		java.awt.Color mColor = new java.awt.Color(102,102,204);   // R, G, B values.
-		maskMode.setBackground(mColor);
-		maskMode.setOpaque(true);
-		
-		sidebar.add(modePanel);
-		
-		frame.getContentPane().add(BorderLayout.WEST, sidebar);
-		
-		//---------------------
-		//-- Main Content
-		//---------------------
-
-		// userInput sub-pane
-		userInput.setLayout(new BoxLayout(userInput, BoxLayout.Y_AXIS));
-
-		// Adding color
-		userInput.setBackground(bgColor);
-
-		userInput.add(questionLabel);
-		userInput.add(box.createVerticalStrut(5));
-
-		userAnswer.getDocument().addDocumentListener(new hintListener());
-		userInput.add(userAnswer); // ----------------------------------------------
-
-		userInput.add(box.createVerticalStrut(5));
-		userInput.add(hintLable);
-
-		hintLable.setVisible(false);
-
-		userInput.add(box.createVerticalStrut(5));
-		submit.addActionListener(new submitListener());
-		userInput.add(feedback);
-		userInput.add(box.createVerticalStrut(5));
-		userInput.add(submit);
-
-		// Adding color
-		java.awt.Color sColor = new java.awt.Color(255,255,000);   // R, G, B values.
-		submit.setBackground(sColor);
-		submit.setOpaque(true);
-
-		userInput.add(box.createVerticalStrut(5));
-		switchHint.addActionListener(new switchHintListener());
-		userInput.add(switchHint);
-
-		// Adding color
-		java.awt.Color hintColor = new java.awt.Color(255,255,255);   // R, G, B values.
-		switchHint.setBackground(hintColor);
-		switchHint.setOpaque(true);
-		if(mode == 3)
-		    switchHint.setVisible(false);
-
-		// Results sub-pane
-		results.setLayout(new BoxLayout(results, BoxLayout.Y_AXIS));
-
-		// Adding color
-		results.setBackground(bgColor);
-
-		// Score readout sub-pane (Visible at end)
-		scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
-
-		// Adding color
-		scorePanel.setBackground(bgColor);
-
-		scorePanel.add(scoreReadout);
-		scorePanel.add(box.createVerticalStrut(10));
-		tryAgain.addActionListener(new tryAgainListener());
-		scorePanel.add(tryAgain);
-
-		// Adding color
-		java.awt.Color tColor = new java.awt.Color(255,255,255);   // R, G, B values.
-		tryAgain.setBackground(tColor);
-		tryAgain.setOpaque(true);
-
-		scorePanel.setVisible(false); // Enabled at end of quiz
-		frame.getContentPane().add(BorderLayout.CENTER, scorePanel);
-
-		// Adding color
-		frame.getContentPane().setBackground(bgColor);
-
-		// Attach sub-panes to content pane
-		content.add(userInput);
-		content.add(results);
-
-		// Adding color
-		content.setBackground(bgColor);
-
-		frame.getContentPane().add(BorderLayout.EAST, content);
+	// Adding color
+	java.awt.Color hardColor = new java.awt.Color(255,000,000);  // R, G, B values.
+	hardButton.setBackground(hardColor);
+	hardButton.setOpaque(true);
+	
+	sidebar.add(hardButton);
+	// END WORK 
+	
+	// START ISSUE 30
+	//	modePanel.setLayout(new BoxLayout(modePanel, BoxLayout.Y_AXIS));
 
 
-		//---------------------
-		//-- Window setup
-		//---------------------
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(800,400);
-		frame.setVisible(true);
-		refreshHint();
+	// Adding color
+	modePanel.setBackground(bgColor);
+	
+	//	sidebar.add(box.createVerticalStrut(bottomMargin*2+10));
+	
+	//	modePanel.add(practiceLabel);
+	
+	//	modePanel.add(box.createVerticalStrut(bottomMargin));
+	
+	binaryMode.addActionListener(new binaryModeListener());
+	modePanel.add(binaryMode);
+	
+	// Adding color
+	java.awt.Color bColor = new java.awt.Color(102,255,153);  // R, G, B values.
+	binaryMode.setBackground(bColor);
+	binaryMode.setOpaque(true);
+	
+	//modePanel.add(box.createVerticalStrut(bottomMargin-10));
+	
+	octalMode.addActionListener(new octalModeListener());
+	modePanel.add(octalMode);
+	
+	// Adding color
+	java.awt.Color oColor = new java.awt.Color(000,204,102);   // R, G, B values.
+	octalMode.setBackground(oColor);
+	octalMode.setOpaque(true);
+	
+	//modePanel.add(box.createVerticalStrut(bottomMargin-10));
+	
+	decimalMode.addActionListener(new decimalModeListener());
+	modePanel.add(decimalMode);
+	
+	// Adding color
+	java.awt.Color dColor = new java.awt.Color(000,204,153);   // R, G, B values.
+	decimalMode.setBackground(dColor);
+	decimalMode.setOpaque(true);
+	
+	//modePanel.add(box.createVerticalStrut(bottomMargin-10));
+	
+	hexadecimalMode.addActionListener(new hexadecimalModeListener());
+	modePanel.add(hexadecimalMode);
+	
+	// Adding color
+	java.awt.Color hColor = new java.awt.Color(102,204,204);   // R, G, B values.
+	hexadecimalMode.setBackground(hColor);
+	hexadecimalMode.setOpaque(true);
+	
+	//modePanel.add(box.createVerticalStrut(bottomMargin-10));
+	
+	randomMode.addActionListener(new randomModeListener());
+	modePanel.add(randomMode);
+	
+	// Adding color
+	java.awt.Color rColor = new java.awt.Color(051,153,204);   // R, G, B values.
+	randomMode.setBackground(rColor);
+	randomMode.setOpaque(true);
+	
+	//modePanel.add(box.createVerticalStrut(bottomMargin-10));
+	
+	maskMode.addActionListener(new maskModeListener());
+	modePanel.add(maskMode);
+	
+	// Adding color
+	java.awt.Color mColor = new java.awt.Color(102,102,204);   // R, G, B values.
+	maskMode.setBackground(mColor);
+	maskMode.setOpaque(true);
+	
+	//sidebar.add(modePanel);
+	
+	frame.getContentPane().add(BorderLayout.WEST, sidebar);
 
-		center(frame);
+	// ADDING THIS
+	frame.getContentPane().add(BorderLayout.SOUTH,modePanel);
+	// END ISSUE 30 
+	//---------------------
+	//-- Main Content
+	//---------------------
+	
+	// userInput sub-pane
+	userInput.setLayout(new BoxLayout(userInput, BoxLayout.Y_AXIS));
+	
+	// Adding color
+	userInput.setBackground(bgColor);
+	
+	userInput.add(questionLabel);
+	userInput.add(box.createVerticalStrut(5));
+	
+	userAnswer.getDocument().addDocumentListener(new hintListener());
+	userInput.add(userAnswer); // ----------------------------------------------
+	
+	userInput.add(box.createVerticalStrut(5));
+	userInput.add(hintLable);
+	
+	hintLable.setVisible(false);
+	
+	userInput.add(box.createVerticalStrut(5));
+	submit.addActionListener(new submitListener());
+	userInput.add(feedback);
+	userInput.add(box.createVerticalStrut(5));
+	userInput.add(submit);
+	
+	// Adding color
+	java.awt.Color sColor = new java.awt.Color(255,255,000);   // R, G, B values.
+	submit.setBackground(sColor);
+	submit.setOpaque(true);
+	
+	userInput.add(box.createVerticalStrut(5));
+	switchHint.addActionListener(new switchHintListener());
+	userInput.add(switchHint);
 
-		return this; // For chaining method calls
-	}
+	
+	// Adding color
+	java.awt.Color hintColor = new java.awt.Color(255,255,255);   // R, G, B values.
+	switchHint.setBackground(hintColor);
+	switchHint.setOpaque(true);
+	if(mode == 3)
+	    switchHint.setVisible(false);
+ 
+	
+	// Results sub-pane
+	results.setLayout(new BoxLayout(results, BoxLayout.Y_AXIS));
+	
+	// Adding color
+	results.setBackground(bgColor);
+	
+	// Score readout sub-pane (Visible at end)
+
+	scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
+	
+	// Adding color
+	scorePanel.setBackground(bgColor);
+	
+	scorePanel.add(scoreReadout);
+
+	// NEW
+	scorePanel.add(box.createVerticalStrut(5));
+	scorePanel.add(binButton);
+	scorePanel.add(octButton);
+	scorePanel.add(decButton);
+	scorePanel.add(hexButton);
+
+	binButton.addActionListener(new binaryPracticeListener());
+	octButton.addActionListener(new octalPracticeListener());
+	decButton.addActionListener(new decimalPracticeListener());
+	hexButton.addActionListener(new hexadecimalPracticeListener());
+	
+	binButton.setVisible(false);
+	octButton.setVisible(false);
+	decButton.setVisible(false);
+	hexButton.setVisible(false);
+	// END NEW
+	
+	scorePanel.add(box.createVerticalStrut(20));
+	tryAgain.addActionListener(new tryAgainListener());
+
+	// WORK FOR ISSUE 47
+	newNumQuestions.setMaximumSize( newNumQuestions.getPreferredSize() );
+	scorePanel.add(newNumQuestionsLabel);
+	scorePanel.add(newNumQuestions);
+	scorePanel.add(box.createVerticalStrut(10));
+	// END WORK FOR ISSUE 47
+
+
+	scorePanel.add(tryAgain);
+	
+	// Adding color
+	java.awt.Color tColor = new java.awt.Color(255,255,255);   // R, G, B values.
+	tryAgain.setBackground(tColor);
+	tryAgain.setOpaque(true);
+	
+	scorePanel.setVisible(false); // Enabled at end of quiz
+	frame.getContentPane().add(BorderLayout.CENTER, scorePanel);
+	
+	// Adding color
+	frame.getContentPane().setBackground(bgColor);
+	
+	// Attach sub-panes to content pane
+	content.add(userInput);
+	content.add(results);
+	
+	// Adding color
+	content.setBackground(bgColor);
+	
+	frame.getContentPane().add(BorderLayout.EAST, content);
+
+	// ISSUE 30
+	//---------------------
+	//--Title
+	//---------------------
+	java.awt.Color welcomeColor = new java.awt.Color(000,204,255);  // R, G, B values.
+	welcomeLabel.setBackground(welcomeColor);
+	welcomeLabel.setOpaque(true);
+	welcomeLabel.setFont(welcomeLabel.getFont().deriveFont(32.0f));
+	frame.getContentPane().add(BorderLayout.NORTH,welcomeLabel);
+	// ISSUE 30 
+	
+	
+	//---------------------
+	//-- Window setup
+	//---------------------
+	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	frame.setSize(850,400);
+	frame.setVisible(true);
+	refreshHint();
+	
+	center(frame);
+	
+	return this; // For chaining method calls
+    }
 
     /**
      * When the user clicks submit, send feedback on their answer
      * and update appropriate counters
      */
-	 
+    
 	 public void refreshHint()
 	 {
 		 String h = "";
 		 refresh = true;
 		 maxMatch = 0;
+		 // currentQuestion might be the issue for #16; may need to reference a new question when tryAgain button is pressed or something is wrong with the getAnswer method for question
 		 for(int i=0; i<currentQuestion.getAnswer().length(); i++)
 			h+="_ ";
-		 hintLable.setText("Hint: "+h+"  You hit: "+0+"/"+ currentQuestion.getAnswer().length());
+		 if (lvl == 2)
+		 	hintLable.setText("Hint: "+h+"  Not enough digits");
+		 else
+		 	hintLable.setText("Hint: "+h);
 	 }
 
     class easyListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
-	    
-	    startWindow.setVisible(false);
-	    mode = 1;
-	    quizGui.questions();
-	    //quizGui.build(1).ask();
+
+	    if (easyCheckBox.isSelected()) {
+		regularCheckBox.setSelected(false);
+		hardCheckBox.setSelected(false);
+		mode = 1;
+		difficultySelected = true;
+	    } else {
+		difficultySelected = false;
+		mode = 0;
+	    } 
 	}
     }
     
     class regularListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
-	    startWindow.setVisible(false);
-	    mode = 2;
-	    quizGui.questions();
-	    //quizGui.build(2).ask();
+	    if (regularCheckBox.isSelected()) {
+		easyCheckBox.setSelected(false);
+		hardCheckBox.setSelected(false);
+		mode = 2;
+		difficultySelected = true;
+	    } else {
+		difficultySelected = false;
+		mode = 0;
+	    }
 	}
     }
 
     class hardListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
-	    startWindow.setVisible(false);
-	    mode = 3;
-	    quizGui.questions();
-	    //quizGui.build(3).ask();
+	    if (hardCheckBox.isSelected()) {
+		regularCheckBox.setSelected(false);
+		easyCheckBox.setSelected(false);
+		mode = 3;
+		difficultySelected = true;
+	    } else {
+		difficultySelected = false;
+		mode = 0;
+	    }
 	}
     }
     
     class quitListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
-
-	    System.exit(0); }
+	    
+	    System.exit(0);
+	}
     }
 
     class questionsListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
+
+	    readyForQuiz = true;
+	    
+	    if (!difficultySelected) {
+		chooseDifficultyLabel.setText("<html>Invalid input!<br>Choose your difficulty");
+		readyForQuiz = false;
+	    } else 
+		chooseDifficultyLabel.setText("Choose your difficulty");
+
 	    String response = chooseQuestionsInput.getText();
-	    numQuestions = Integer.parseInt(response);
-	    if (numQuestions < 1 || numQuestions > 20) {
-		chooseQuestionsLabel.setText("<html>Invalid input!<br>Please select a number from 1 to 20");
+
+	    try { 
+		numQuestions = Integer.parseInt(response);
+	    } catch (NumberFormatException ex) {
+		chooseQuestionsLabel.setText("<html>Invalid input! <br> Please select a number from 1 to 20</html>");
 		chooseQuestionsInput.setText("");
 		return;
 	    }
+
+	    if (numQuestions < 1 || numQuestions > 20 || response.length() == 0) {
+		chooseQuestionsLabel.setText("<html>Invalid input!<br>Please select a number from 1 to 20</html>");
+		chooseQuestionsInput.setText("");
+		readyForQuiz = false;
+	    } else {
+		chooseQuestionsLabel.setText("<html>How many questions would you like? <br> Select a number from 1 to 20</html>");
+	    }
+	    
+	    if (!readyForQuiz) return;
+	    
 	    quiz = new Quiz(numQuestions);
-	    questionsWindow.setVisible(false);
+	    startWindow.setVisible(false);
+	    
 	    quizGui.build(mode).ask();
+	}
+    }
+
+    class easyClickListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    switchHint.setVisible(true);
+	    currentDifficulty.setText("           Easy");
+	    mode = 1;
+	    lvl = 1;
+	    userAnswer.setText("");
+	    hintLable.setVisible(false);
+					switchHint.setText("Show Hint");
+	    refreshHint();
+	}
+    }
+
+    class regularClickListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    switchHint.setVisible(true);
+	    currentDifficulty.setText("        Regular");
+	    mode = 2;
+	    lvl = 2;
+	    userAnswer.setText("");
+	    hintLable.setVisible(false);
+					switchHint.setText("Show Hint");
+	    refreshHint();
+	}
+    }
+
+    class hardClickListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    switchHint.setVisible(false);
+	    hintLable.setVisible(false);
+	    currentDifficulty.setText("           Hard");
+	    mode = 3;
+	    lvl = 3;
+	    userAnswer.setText("");
+	    hintLable.setVisible(false);
+					switchHint.setText("Show Hint");
+	    refreshHint();
 	}
     }
 	    
@@ -441,7 +665,7 @@ public class QuizGui {
 				    }
 				else
 				    {
-					feedback.setText("<html>Incorrect!<br> Previous Question: " + questionLabel.getText() + "<br> Answer was: " + currentQuestion.getAnswer());
+					feedback.setText("<html>Incorrect!<br> Previous Question:<br>" + questionLabel.getText() + "<br> Answer was: " + currentQuestion.getAnswer());
 					quiz.insertScore(false);
 					AskAgain = true;
 				    }
@@ -455,6 +679,7 @@ public class QuizGui {
 			    currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
 			    
 			    currentQuestion = new Question(quiz.getMode());
+
 			    refreshHint();
 			    quizGui.ask();
 			    correct = false;
@@ -471,19 +696,45 @@ public class QuizGui {
 	     * @param e ActionEvent object that gives information about the event and its source.
 	     */
 		public void actionPerformed (ActionEvent e) {
-			quiz = new Quiz(numQuestions);
+
+		    // WORK FOR ISSUE 47 
+		    String response = newNumQuestions.getText();
+
+		    try { 
+			numQuestions = Integer.parseInt(response);
+		    } catch (NumberFormatException ex) {
+			newNumQuestionsLabel.setText("<html>Invalid input! Please select a number from 1 to 20</html>");
+			newNumQuestions.setText("");
+			return;
+		    }
+		    
+		    if (numQuestions < 1 || numQuestions > 20 || response.length() == 0) {
+			newNumQuestionsLabel.setText("<html>Invalid input! Please select a number from 1 to 20</html>");
+			newNumQuestions.setText("");
+			return;
+		    }   
+		    
+		    // END WORK FOR ISSUE 47 
+		    quiz = new Quiz(numQuestions);
+
+		    // THINK THIS WILL SOLVE ISSUE 16
+		    currentQuestion = new Question();
+		    // THINK THIS WILL SOLVE ISSUE 16 
 			
 			// Re-enable quiz inputs		
 			numCorrect.setText((String.format("            0/%d", quiz.getNumQuestions())));
 			sidebar.setVisible(true);
 			userInput.setVisible(true);
+			modePanel.setVisible(true);
 			scorePanel.setVisible(false);
 			feedback.setText("");
+			newNumQuestions.setText("");
 			
 			// Restart the quiz
+			welcomeLabel.setText("<html><font color='white'>Welcome to the Math Conversion Quiz!");
 			current = 0;
 			currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
-			refreshHint();
+			refreshHint(); // currentQuestion might be the issue #16; may need to reference new question object
 			quizGui.ask();
 		}
 	}
@@ -601,11 +852,115 @@ public class QuizGui {
 	}
     }
 
+    // NEW
+    class binaryPracticeListener implements ActionListener {
+	public void actionPerformed (ActionEvent e) {
+	    quiz = new Quiz(numQuestions);
+	    quiz.setMode(2);
+	    
+	    // Re-enable quiz inputs
+	    numCorrect.setText((String.format("            0/%d", quiz.getNumQuestions())));
+	    sidebar.setVisible(true);
+	    userInput.setVisible(true);
+	    scorePanel.setVisible(false);
+	    feedback.setText("");
+	    
+	    binButton.setVisible(false);
+	    octButton.setVisible(false);
+	    decButton.setVisible(false);
+	    hexButton.setVisible(false);
+	    
+	    // Restart the quiz
+	    current = 0;
+	    currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
+	    refreshHint();
+	    quizGui.ask();
+	}
+    }
+
+    class octalPracticeListener implements ActionListener {
+	public void actionPerformed (ActionEvent e) {
+	    quiz = new Quiz(numQuestions);
+	    quiz.setMode(8);
+	    
+	    // Re-enable quiz inputs
+	    numCorrect.setText((String.format("            0/%d", quiz.getNumQuestions())));
+	    sidebar.setVisible(true);
+	    userInput.setVisible(true);
+	    scorePanel.setVisible(false);
+	    feedback.setText("");
+	    
+	    binButton.setVisible(false);
+	    octButton.setVisible(false);
+	    decButton.setVisible(false);
+	    hexButton.setVisible(false);
+	    
+	    // Restart the quiz
+	    current = 0;
+	    currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
+	    refreshHint();
+	    quizGui.ask();
+	}
+    }
+
+    class decimalPracticeListener implements ActionListener {
+	public void actionPerformed (ActionEvent e) {
+	    quiz = new Quiz(numQuestions);
+	    quiz.setMode(10);
+	    
+	    // Re-enable quiz inputs
+	    numCorrect.setText((String.format("            0/%d", quiz.getNumQuestions())));
+	    sidebar.setVisible(true);
+	    userInput.setVisible(true);
+	    scorePanel.setVisible(false);
+	    feedback.setText("");
+	    
+	    binButton.setVisible(false);
+	    octButton.setVisible(false);
+	    decButton.setVisible(false);
+	    hexButton.setVisible(false);
+	    
+	    // Restart the quiz
+	    current = 0;
+	    currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
+	    refreshHint();
+	    quizGui.ask();
+	}
+    }
+
+    class hexadecimalPracticeListener implements ActionListener {
+	public void actionPerformed (ActionEvent e) {
+	    quiz = new Quiz(numQuestions);
+	    quiz.setMode(16);
+	    
+	    // Re-enable quiz inputs
+	    numCorrect.setText((String.format("            0/%d", quiz.getNumQuestions())));
+	    sidebar.setVisible(true);
+	    userInput.setVisible(true);
+	    scorePanel.setVisible(false);
+	    feedback.setText("");
+	    
+	    binButton.setVisible(false);
+	    octButton.setVisible(false);
+	    decButton.setVisible(false);
+	    hexButton.setVisible(false);
+	    
+	    // Restart the quiz
+	    current = 0;
+	    currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
+	    refreshHint();
+	    quizGui.ask();
+	}
+    }
+    // END NEW
+
+    /**                                                                                                                                                       
+     * Called when the user clicks the "Try Again" button at end of current quiz.                                                                             
+     * @param e ActionEvent object that gives information about the event and its source.                                                                     
+     */
+
+    /*
     class practiceListener implements ActionListener {
-	/**                                                                                                                                                       
-	 * Called when the user clicks the "Try Again" button at end of current quiz.                                                                             
-	 * @param e ActionEvent object that gives information about the event and its source.                                                                     
-	 */
 	public void actionPerformed (ActionEvent e) {
 	    quiz = new Quiz(numQuestions);
 	    quiz.setMode(lowest);
@@ -624,7 +979,7 @@ public class QuizGui {
 	    quizGui.ask();
 	}
     }
-
+*/
     /**
      * guiQuestions class
      * Creates a quiz based of the number of questions requested by user 
@@ -648,8 +1003,11 @@ public class QuizGui {
 		    // If we're through with the questions, hide the inputs and show the final readout			
 		sidebar.setVisible(false);
 		userInput.setVisible(false);
+		modePanel.setVisible(false);
+		welcomeLabel.setText("<html><font color='white'>Your Results:");
 		String result = "";
 		String worst = "";
+		String recommend = "";
 		if (correct){
 		    result = "<html>Correct! <br>";
 		}
@@ -662,7 +1020,8 @@ public class QuizGui {
 			int octPercent = 0;
 			int decPercent = 0;
 			int hexPercent = 0;
-
+			recommend = "<html><br>Recommended modes to practice:<br>";
+			
 			ArrayList<Integer> percentages = new ArrayList<Integer>();
 			
 			if(binq != 0)
@@ -693,6 +1052,25 @@ public class QuizGui {
 				String hex = "<html>You scored " + hexPercent + "% on hexadecimal questions. <br>";
 				result = result + hex;
 			    }
+
+		       
+			
+			// NEW ISSUE 
+			if (binPercent < 70 && binq != 0)
+			    binButton.setVisible(true);
+			    //worst = worst + "<html>Binary<br>";
+			if (octPercent < 70 && octq != 0)
+			    octButton.setVisible(true);
+			    //worst = worst + "<html>Octal<br>";
+			if (decPercent < 70 && decq != 0)
+			    decButton.setVisible(true);
+			    //worst = worst + "<html>Decimal<br>";
+			if (hexPercent < 70 && hexq != 0)
+			    hexButton.setVisible(true);
+			    //worst = worst + "<html>Hexadecimal<br>";
+			// END NEW ISSUE 
+			
+			/*
 			
 			int lowestPercent = percentages.get(0);
 			for (int i = 1; i < percentages.size(); i++) {
@@ -703,11 +1081,11 @@ public class QuizGui {
 		       
 			
 			
-			    /*    
-			int lowestPercent = Math.min(binPercent, octPercent);
-			lowestPercent = Math.min(lowestPercent, decPercent);
-			lowestPercent = Math.min(lowestPercent, hexPercent);
-			    */
+			        
+			//int lowestPercent = Math.min(binPercent, octPercent);
+			//lowestPercent = Math.min(lowestPercent, decPercent);
+			//lowestPercent = Math.min(lowestPercent, hexPercent);
+			    
 			// Issue: Find a way that lowestPercent is a nonzero value...
 
 			if(lowestPercent == binPercent && binq != 0)
@@ -742,11 +1120,17 @@ public class QuizGui {
 				hexButton.addActionListener(new practiceListener());
 				scorePanel.add(hexButton);
 			    }
-			
+		*/	
 		    }
 				    
-		scoreReadout.setText(result + worst + quiz.getReadout());
+		scoreReadout.setText(result + worst + quiz.getReadout() + recommend);
 		scorePanel.setVisible(true);
+
+		// WORK FOR ISSUE 47
+		
+		// END WORK FOR ISSUE 47
+		
+
 	    } else {
 		    // Else ask the current question
 		String prompt = currentQuestion.generatePrompt(quiz.getMode());
@@ -814,30 +1198,58 @@ public class QuizGui {
 			}
 			String regex = "^" + answer +".*$";
 			String correctAnswer = currentQuestion.getAnswer();
-			if(correctAnswer.matches(regex) || answer == correctAnswer)	{
-				if(refresh)	{
-					refresh = false;
-					hint = answer;
-					maxMatch = answer.length();
-					for(int i=0; i<correctAnswer.length()-answer.length(); i++)
-						hint+="_ ";
-					hintLable.setText("Hint: "+hint+"  You hit: "+answer.length()+"/"+ currentQuestion.getAnswer().length());
-				}
-				
-				else
-				{
-					if(answer.length()>maxMatch)	{
+			int hit = 0;
+			if (lvl == 1){
+				if(correctAnswer.matches(regex) || answer == correctAnswer)	{
+					if(refresh)	{
+						refresh = false;
 						hint = answer;
 						maxMatch = answer.length();
 						for(int i=0; i<correctAnswer.length()-answer.length(); i++)
 							hint+="_ ";
-					
+						hintLable.setText("Hint: "+ hint);
 					}
-					hintLable.setText("Hint: "+hint+"  You hit: "+answer.length()+"/"+ currentQuestion.getAnswer().length());
 					
+					else
+					{
+						if(answer.length()>maxMatch)	{
+							hint = answer;
+							maxMatch = answer.length();
+							for(int i=0; i<correctAnswer.length()-answer.length(); i++)
+								hint+="_ ";
+						}
+						hintLable.setText("Hint: "+hint);
+					}
 				}
 			}
-				
+			if (lvl == 2){
+				if (refresh) refresh = false;
+				String h = "";
+				if (answer.length() == correctAnswer.length()){
+					for (int i=0; i<correctAnswer.length(); i++){
+						if (answer.charAt(i) == correctAnswer.charAt(i)){
+							h+= answer.charAt(i);	
+							++hit;
+						}
+						else if (h.endsWith("_"))
+							h+=" _";
+						else
+							h+="_";
+					}
+					if (hit == answer.length())
+						hintLable.setText("Hint: "+h+" Correct!");
+					else
+						hintLable.setText("Hint: "+h+"  You hit: "+ hit+"/"+ answer.length());
+				}
+				else{
+					for (int i=0; i<correctAnswer.length(); i++)
+						h+="_ ";
+					if (answer.length() > correctAnswer.length())
+						hintLable.setText("Hint: "+h+"  Too many digits");
+					else if (answer.length() < correctAnswer.length())
+						hintLable.setText("Hint: "+h+"  Not enough digits");	
+				}
+			}
 			}
 
 	}
@@ -944,13 +1356,16 @@ public class QuizGui {
 	}
     }
     */
-	/**
+
+
+       /**
 	 * Build and run the GUI
 	 */
 	public static void main (String [] args) {		
 	    quizGui.start();
 	    //quizGui.build().ask();
 		
-  }
+	}
+    
 	
 }

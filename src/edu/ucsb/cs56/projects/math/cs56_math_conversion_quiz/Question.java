@@ -35,7 +35,7 @@ public class Question {
 	 * @param radix The radix to set as an integer
 	 */
 	public Question(int radix) {
-
+	    
 	    if(radix == -1){
 		int num = this.getRandomNum();
 		this.num = num;
@@ -287,7 +287,7 @@ public class Question {
 	 */
 	public String getAnswer() {
 	    if(this.intRadix == 18){
-		Integer mask = this.num & this.num2;
+		Integer mask = this.num & this.num2;		
 		String answer = Integer.toBinaryString(mask);
 		return answer;
 	    }else{
