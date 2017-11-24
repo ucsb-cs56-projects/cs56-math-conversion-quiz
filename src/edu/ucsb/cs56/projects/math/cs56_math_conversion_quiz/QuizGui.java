@@ -87,6 +87,10 @@ public class QuizGui {
     JButton submit = new JButton("Submit");
     JButton switchHint = new JButton("Show Hint");
 
+    // ISSUE 59
+    JButton doneButton = new JButton("Show My Results");
+    // END ISSUE 59 
+    
     // ISSUE 30 
     JLabel welcomeLabel = new JLabel("<html><font color='white'>Welcome to the Math Conversion Quiz!",SwingConstants.CENTER);
     // ISSUE 30 
@@ -378,7 +382,15 @@ public class QuizGui {
 	switchHint.setOpaque(true);
 	if(mode == 3)
 	    switchHint.setVisible(false);
- 
+	
+	// ISSUE 59
+	userInput.add(doneButton);
+	doneButton.addActionListener(new doneButtonListener());
+	doneButton.setVisible(false);
+	java.awt.Color doneColor = new java.awt.Color(255,255,000);   // R, G, B values.
+	doneButton.setBackground(sColor);
+	doneButton.setOpaque(true);
+	// END ISSUE 59
 	
 	// Results sub-pane
 	results.setLayout(new BoxLayout(results, BoxLayout.Y_AXIS));
@@ -619,8 +631,21 @@ public class QuizGui {
 	    refreshHint();
 	}
     }
-	    
-	     
+
+    // ISSUE 59
+    class doneButtonListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    doneButton.setVisible(false);
+	    questionLabel.setVisible(true);
+	    userAnswer.setVisible(true);
+	    //hintLable.setVisible(true);
+	    submit.setVisible(true);
+	    switchHint.setVisible(true);
+	    quizGui.ask();
+	}
+    }
+    // END ISSUE 59 
+    
 	class submitListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {			
 		    String answer = userAnswer.getText();
@@ -672,7 +697,7 @@ public class QuizGui {
 			    }
 
 			    lastAnswer = currentQuestion.getAnswer();
-		
+			    
 			    String numCorrectStr = String.format("            %d/%d", quiz.numCorrect(), quiz.getNumQuestions());
 			    numCorrect.setText(numCorrectStr);
 			    current++;
@@ -681,7 +706,20 @@ public class QuizGui {
 			    currentQuestion = new Question(quiz.getMode());
 
 			    refreshHint();
-			    quizGui.ask();
+
+			    // ISSUE 59
+			    if (current >= quiz.getNumQuestions()) {
+				currentQuestionNum.setText(String.format("            %d/%d", current, quiz.getNumQuestions()));
+				doneButton.setVisible(true);
+				questionLabel.setVisible(false);
+				userAnswer.setVisible(false);
+				hintLable.setVisible(false);
+				submit.setVisible(false);
+				switchHint.setVisible(false);				
+			    } else {
+				quizGui.ask();
+			    }
+			    // END ISSUE 59 
 			    correct = false;
 		}
 	}
@@ -732,6 +770,8 @@ public class QuizGui {
 			
 			// Restart the quiz
 			welcomeLabel.setText("<html><font color='white'>Welcome to the Math Conversion Quiz!");
+			if (mode == 3)
+			    switchHint.setVisible(false);
 			current = 0;
 			currentQuestionNum.setText(String.format("            %d/%d", current+1, quiz.getNumQuestions()));
 			refreshHint(); // currentQuestion might be the issue #16; may need to reference new question object
@@ -869,6 +909,12 @@ public class QuizGui {
 	    octButton.setVisible(false);
 	    decButton.setVisible(false);
 	    hexButton.setVisible(false);
+
+	    modePanel.setVisible(true);
+	    welcomeLabel.setText("<html><font color='white'>Welcome to the Math Conversion Quiz!");
+	    if (mode == 3)
+		switchHint.setVisible(false);
+	    
 	    
 	    // Restart the quiz
 	    current = 0;
@@ -894,6 +940,11 @@ public class QuizGui {
 	    octButton.setVisible(false);
 	    decButton.setVisible(false);
 	    hexButton.setVisible(false);
+
+	    modePanel.setVisible(true);
+	    welcomeLabel.setText("<html><font color='white'>Welcome to the Math Conversion Quiz!");
+	    if (mode == 3)
+		switchHint.setVisible(false);
 	    
 	    // Restart the quiz
 	    current = 0;
@@ -919,6 +970,11 @@ public class QuizGui {
 	    octButton.setVisible(false);
 	    decButton.setVisible(false);
 	    hexButton.setVisible(false);
+
+	    modePanel.setVisible(true);
+	    welcomeLabel.setText("<html><font color='white'>Welcome to the Math Conversion Quiz!");
+	      if (mode == 3)
+		switchHint.setVisible(false);
 	    
 	    // Restart the quiz
 	    current = 0;
@@ -944,6 +1000,12 @@ public class QuizGui {
 	    octButton.setVisible(false);
 	    decButton.setVisible(false);
 	    hexButton.setVisible(false);
+
+	    modePanel.setVisible(true);
+	    welcomeLabel.setText("<html><font color='white'>Welcome to the Math Conversion Quiz!");
+	      if (mode == 3)
+		switchHint.setVisible(false);
+
 	    
 	    // Restart the quiz
 	    current = 0;
@@ -1008,12 +1070,14 @@ public class QuizGui {
 		String result = "";
 		String worst = "";
 		String recommend = "";
+		/*
 		if (correct){
 		    result = "<html>Correct! <br>";
 		}
 		else {
 		    result = "<html>Incorrect!<br> Previous Question: " + questionLabel.getText() + "<br>Correct answer was: " + lastAnswer + "<br>";
 		}
+		*/
 		if(quiz.getMode() == -1)
 		    {
 			int binPercent  = 0;
