@@ -26,18 +26,15 @@ Important Information for Future Developers:
 
 * The QuizGUI files depend on the Quiz files. The QuizGui.java mainly contain window presentaion of the data produced by Quiz.java. QuizGui.java has very little funcitionality besides accepting and displaying user feedback.
 
-* Current issues include not being able to check the user's input and print a line explaining that the format of the submission was incorrect in the GUI version, and after playing a full 10 question quiz in masking mode of the GUI version, the first question when beginning a new quiz always has the answer an incorrect answer of "0".
+* One current issue with the code is the layout of the results page. The results page could use some improvements to the layout. Compared to the other parts of the quiz, the results page lacks the same overall design/layout.
  
-F16 Final Remarks (Nikhil Patil & Aryaman Das)
+F17 Final Remarks (Kai Labasan & Roberto Nares)
 
-As stated above in the section "Important Information for Future Developers", the directory src/edu/ucsb/cs56/projects/math/cs56_math_conversion_quiz contains the main files responsible for the operation of this program. The main files responsible for the math conversion quiz are Question.java, Quiz.java, and QuizGui.java.
-The Question.java file is responsible for the creation of each type of question that will appear during a quiz.
-The Quiz.java file contains the code responsible for generating and running a commandline version of the quiz.
-The QuizGui.java file relies on the methods and behavior of Quiz objects (implemented in Quiz.java) in order to run the GUI version of the quiz.
-We recommend browsing through and understanding the code in these files in the order written. Reviewing these files in such an order will make it easier to understand the hierarchy that exists relative to Question objects, Quiz objects, and QuizGui objects. A Quiz object consists of Question objects, and a QuizGui object consists of both Question and Quiz objects. Spend time understanding the state and behavior of each object (instance variables and methods) and how these are used to generate particular aspects of the quiz. Ultimately, this will make life easier when it comes to tracking down which portions of code need to be modified when addressing future issues.
+Despite the several improvements added to this legacy code, there are many improvements that could be made to improve the program. The layout and overall appearance of the GUI can be improved. A suggestion would be possibly adding a .jpg file of something that pertains to math to make the quiz more fun. In addition, it would drastically increase the user’s experience if sound effects were added when entering an answer and finishing the quiz. There could be different sounds for getting questions wrong and right. 
 
-For the next developer(s) who approach this project, there are several issues and ideas that could implemented in order to ameliorate both the performance of the quiz and the experience of the user. Several features that can be added and modified revolve around the current GUI format of the frames and widgets.
-For example, the quiz's opening window currently requires the user to select a difficulty mode, and then a separate window pops up requesting the user to then select the length of the quiz. A possible task would be to redesign the start of the quiz so that there is only ONE opening window that allows the user to select both the quiz difficulty and the quiz length.
-Two other tasks could enhance the current performance of the quiz by creating widgets (like buttons) that allow the user to change the difficulty of the quiz and the length of the quiz. Currently, once a quiz is created and runs, the difficulty mode remains locked on whatever the user entered in the opening menu and so does the length of the quiz. Currently, these aspects can only be changed by running a new quiz (closing out current quiz and entering "ant runGui" from commandline). 
+Another suggestion would be to port all of the functionality from the GUI to the command-line version such as being able to change modes mid-quiz. On the same note, further improvements could be made to the GUI version such as adding more statistics on how the user is doing to improve their abilities. More modes could also be added such as addition, multiplication, or two’s complement. 
+
+As you will find out, the quiz questions are made to stay within a certain bounds. After using the program several times, it gets repetitive and easy to complete the quiz with a good score. The different difficulties in the GUI do not increase the numbers but rather just provides less of a hint and less tolerance in incorrect answers. A great addition would be to fix it so different difficulties also affects the questions.
+
 
 
