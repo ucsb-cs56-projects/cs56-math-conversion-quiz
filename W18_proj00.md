@@ -27,3 +27,8 @@ Roderic Deichler
   * The README.md is quite well put together. There is a lot of information about the project and how it has improved over the years. One thing that would be nice to improve, however, would be to bold font or emphasize the commands needed to run the code, because it took some close reading to find that. Also, Immediately under the project history are two lines of command line code that we do not understand.
   
   
+### Build.XML
+  * The build.xml file is in good shape (some comments could be removed). It is based on Ant and all targets currently have descriptions. Ant compiles/builds the program and there is a command to run it in terminal or in gui. Complete build sequence is  [compile, javadoc, clean, runGui, jar, run, test,]. There is no leftover JWS legacy code to be removed.
+
+
+### Current Issues
