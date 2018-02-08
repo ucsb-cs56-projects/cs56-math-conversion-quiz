@@ -33,3 +33,11 @@ Roderic Deichler
 
 ### Current Issues
   * There are no current issues to speak of, nor are there any documented in the README.md
+ 
+### Additional Issues
+  * There are no additional issues we can forsee.
+  
+### Assessment of the Code
+
+
+### Test Coverage
