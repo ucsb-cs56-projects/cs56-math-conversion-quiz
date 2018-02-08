@@ -40,7 +40,7 @@
 ### Assessment of the Code
   * Initial looks: Question.java sets a radix to be generated which will randomly initialize radix to either 2, 8, 10, 16, or 42. It is odd that 42 would even be an option, and even weirder is that many of the methods test whether the radix is 18 or -1. Upon further inspection we see that the radix is set to 18 whenever the masking mode is selected which always returns to binary. It is set to -1 whenever the mode is random (which is the default) This is somewhat counterintuitive and still does not explain the 42.
   
-  Advice to anyone wanting to understand the code:
+#####  Advice to anyone wanting to understand the code:
   * The code itself doesn't have any major malfunctions at first glance, but it could be rewritten to be more intuitive for the next programmer. For example, the switch statements could contain strings instead of numbers that way -1 would be represented by "Random" and 18 "Masking" which is far more intuitive.
   * The overall layout of the code could be revamped as well. Having getters and setters appear in the middle of the file can be a nuissance. 
   * Look at the Question.java first and see what the game modes are (-1 - Random, 2 - Binary, 8 - Octal, 10 - Decimal, 16 - Hex, 18 - Masking Mode).
