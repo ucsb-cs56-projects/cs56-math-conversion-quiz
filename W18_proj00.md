@@ -44,6 +44,6 @@
   * The code itself doesn't have any major malfunctions at first glance, but it could be rewritten to be more intuitive for the next programmer. For example, the switch statements could contain strings instead of numbers that way -1 would be represented by "Random" and 18 "Masking" which is far more intuitive.
   * The overall layout of the code could be revamped as well. Having getters and setters appear in the middle of the file can be a nuissance. 
   * Look at the Question.java first and see what the game modes are (-1 - Random, 2 - Binary, 8 - Octal, 10 - Decimal, 16 - Hex, 18 - Masking Mode).
-  
+  * The reason they use a string radix and int radix is because they want to be able to not only send information to the program (the int radix which is used to determine the number base to convert to), but also to the user. The string radix is printed to inform the user of the string version of the number base i.e. "Binary" or "Hexadecimal". This variable could be renamed to something along the lines of game_mode or number_base. This would make the program a lot easier to understand.
 
 ### Test Coverage
