@@ -47,4 +47,4 @@
   * The reason they use a string radix and int radix is because they want to be able to not only send information to the program (the int radix which is used to determine the number base to convert to), but also to the user. The string radix is printed to inform the user of the string version of the number base i.e. "Binary" or "Hexadecimal". This variable could be renamed to something along the lines of game_mode or number_base. This would make the program a lot easier to understand. Unfortunately they store the string version of radix (e.g. "Binary"), but never use that variable in the code. Instead they call a method every time they want to return strRadix that determines what the mode is, which is unintuitive and confusing.
 
 ### Test Coverage
-There are unit tests and they cover every class method in both the Quiz class and the Question class.  I cannot foresee any additional tests for the project at this time.
+There are unit tests and they cover every class method in both the Quiz class and the Question class. We do not see any opportunities to meaningfully expand test coverage at this time.
